@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import LatestEntries from "./LatestEntries.vue";
 import DataTable from "./DataTable.vue";
 import NavButton from "./NavButton.vue";
 import StatsPanel from "./StatsPanel.vue";
 
-import timeline from "../assets/svg/timeline.svg?component";
+import {dataStore} from "../store"
+
 import TheLatestEntries from "./TheLatestEntries.vue";
 
 const emits = defineEmits<{
@@ -55,6 +55,7 @@ window.addEventListener("popstate", (e) => {
     <Transition name="slide-left">
       <TheLatestEntries
         class="absolute w-full"
+        v-if="dataStore.data.length > 0"
         v-show="botPanel == 'latest'"
       ></TheLatestEntries
     ></Transition>
