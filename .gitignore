@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 diagram.mmd
 diagram.svg
+
+# typescript output
+*.js.map
+*.js

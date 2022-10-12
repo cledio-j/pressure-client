@@ -74,17 +74,18 @@ function makeModal(data: Reading | undefined) {
 </script>
 <template>
   <div>
-    <div class="grid md:grid-cols-6 grid-cols-1">
+    <div class="grid grid-cols-1 md:grid-cols-6">
       <BaseFromToDatePicker
-        class="align-middle col-span-2"
+        class="col-span-2 align-middle"
         @new-date="(newVal, field) => updateDate(newVal, field)"
         :buttonVals="[7, 30, 365]"
         :from-date-minus="7"
         :to-date-plus="0"
       ></BaseFromToDatePicker>
       <div class="grid grid-cols-3 content-center justify-items-center">
-        <span class="material-symbols-sharp text-4xl col-start-2 align-middle my-2"
+        <span class="material-symbols-sharp col-start-2 my-2 align-middle text-4xl"
           ><BaseIconButton
+            label="disabled"
             class="cursor-default"
             :icon="isMobile() ? 'south' : 'start'"
             color="fill-gray-800"
@@ -97,36 +98,36 @@ function makeModal(data: Reading | undefined) {
       >
         <thead>
           <th class="border"></th>
-          <th class="p-1 border cursor-default">{{ $t("header.systolic_bp") }}</th>
-          <th class="p-1 border cursor-default">{{ $t("header.diastolic_bp") }}</th>
+          <th class="cursor-default border p-1">{{ $t("header.systolic_bp") }}</th>
+          <th class="cursor-default border p-1">{{ $t("header.diastolic_bp") }}</th>
         </thead>
         <tbody>
           <tr>
-            <th class="p-1 border cursor-default">max</th>
+            <th class="cursor-default border p-1">max</th>
             <td
-              class="p-1 border cursor-pointer w-24 hover:font-semibold hover:bg-rose-100"
+              class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
               @click="makeModal(data?.max_systolic_bp)"
             >
               {{ data.max_systolic_bp.systolic_bp }}
             </td>
             <td
-              class="p-1 border cursor-pointer w-24 hover:font-semibold hover:bg-rose-100"
+              class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
               @click="makeModal(data?.max_diastolic_bp)"
             >
               {{ data.max_diastolic_bp.diastolic_bp }}
             </td>
           </tr>
           <tr>
-            <th class="p-1 border cursor-default">min</th>
+            <th class="cursor-default border p-1">min</th>
             <td
-              class="p-1 border cursor-pointer w-24 hover:font-semibold hover:bg-rose-100"
+              class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
               @click="makeModal(data?.min_systolic_bp)"
             >
               {{ data.min_systolic_bp.systolic_bp }}
             </td>
             <td
               @click="makeModal(data?.min_diastolic_bp)"
-              class="p-1 border cursor-pointer w-24 hover:font-semibold hover:bg-rose-100"
+              class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
             >
               {{ data.min_diastolic_bp.diastolic_bp }}
             </td>

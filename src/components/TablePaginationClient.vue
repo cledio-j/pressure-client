@@ -56,6 +56,7 @@ function navigate(to: number) {
         @click="navigate(currentPage - 1)"
         ><BaseIconButton
           icon="arrowForward"
+          label="previous"
           :extra-classes="'scale-75 rotate-180'"
           :color="!isAvail(currentPage - 1) ? 'cursor-not-allowed fill-gray-400' : ''"
       /></a>
@@ -66,6 +67,7 @@ function navigate(to: number) {
         @click="navigate(currentPage + 1)"
         ><BaseIconButton
           icon="arrowForward"
+          label="next"
           :color="!isAvail(currentPage + 1) ? 'cursor-not-allowed fill-gray-400' : ''"
           :extra-classes="'scale-75'"
       /></a>

@@ -49,7 +49,7 @@ function handleError(err: ErrorObj) {
 </script>
 
 <template>
-  <div class="container mx-auto px-1 max-w-screen-lg h-full">
+  <div class="container mx-auto h-full max-w-screen-lg px-1">
     <BaseLocaleChanger></BaseLocaleChanger>
     <ErrorModal
       :error="errorInfo"

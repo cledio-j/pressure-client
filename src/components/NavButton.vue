@@ -16,8 +16,8 @@ defineProps<{
 }>();
 </script>
 <template>
-  <li
-    class="list-none text-lg cursor-pointer px-2 transition-all flex items-center hover:shadow-md hover:shadow-rose-400"
+  <button
+    class="flex cursor-pointer list-none items-center px-2 text-lg transition-all hover:shadow-md hover:shadow-rose-400"
     :class="{ 'font-bold shadow-md shadow-rose-300': isSelected }"
   >
     <component
@@ -27,5 +27,5 @@ defineProps<{
     ></component>
 
     <span>{{ butText }}</span>
-  </li>
+  </button>
 </template>

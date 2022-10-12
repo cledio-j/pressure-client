@@ -4,7 +4,7 @@ import DataTable from "./DataTable.vue";
 import NavButton from "./NavButton.vue";
 import StatsPanel from "./StatsPanel.vue";
 
-import {dataStore} from "../store"
+import { dataStore } from "../store";
 
 import TheLatestEntries from "./TheLatestEntries.vue";
 

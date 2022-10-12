@@ -10,14 +10,13 @@
   },
   "dependencies": {
     "@types/plotly.js-basic-dist": "^1.54.1",
-    "material-icons": "^1.11.11",
-    "material-symbols": "^0.2.11",
     "plotly.js-basic-dist": "^2.15.0",
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^6.0.1",
+    "@types/node": "18.8.0",
     "@vitejs/plugin-vue": "^3.1.0",
     "autoprefixer": "^10.4.11",
     "postcss": "^8.4.16",
@@ -28,6 +27,6 @@
     "vite": "^3.1.0",
     "vite-plugin-mkcert": "^1.9.0",
     "vite-svg-loader": "^3.6.0",
-    "vue-tsc": "^0.40.4"
+    "vue-tsc": "^1.0.3"
   }
 }

@@ -32,10 +32,10 @@ function reset() {
 </script>
 <template>
   <div class="p-1">
-    <h1 class="text-red-900 text-xl font-semibold border-b border-rose-300 border-dashed pb-1 my-1">
+    <h1 class="my-1 border-b border-dashed border-rose-300 pb-1 text-xl font-semibold text-red-900">
       {{ $t("messages.reading_from") + " " + $d(new Date(data.timestamp), "long") }}
     </h1>
-    <h2 class="text-lg text-red-900 font-semibold">{{ $t("messages.values") }}</h2>
+    <h2 class="text-lg font-semibold text-red-900">{{ $t("messages.values") }}</h2>
     <ReadingInputForm
       :modified="modified"
       @interface:reset="getChildResetter"
@@ -50,33 +50,36 @@ function reset() {
     <transition name="slide-fade">
       <div
         v-if="edit && modified"
-        class="border border-dashed border-rose-300 p-2 bg-rose-50"
+        class="border border-dashed border-rose-300 bg-rose-50 p-2"
       >
-        <h2 class="text-lg text-red-900 font-semibold">{{ $t("messages.edit_reading") }}</h2>
-        <div class="grid grid-cols-2 mt-1">
+        <h2 class="text-lg font-semibold text-red-900">{{ $t("messages.edit_reading") }}</h2>
+        <div class="mt-1 grid grid-cols-2">
           <BaseIconButton
             @click="reset"
-            class="shadow-sm shadow-rose-400 hover:bg-rose-200 bg-rose-100 text-gray-900 hover:text-black hover:scale-105 pt-1 hover:font-semibold px-1"
+            class="bg-rose-100 px-1 pt-1 text-gray-900 shadow-sm shadow-rose-400 hover:scale-105 hover:bg-rose-200 hover:font-semibold hover:text-black"
             icon="undo"
+            label="reset form"
             :text="$t('controls.reset')"
             color="text-red-900 hover:text-red-800"
           ></BaseIconButton>
           <BaseIconButton
             @click="$emit('modify')"
-            class="shadow-sm shadow-rose-400 hover:bg-rose-200 bg-rose-100 text-gray-900 hover:text-black hover:scale-105 pt-1 hover:font-semibold px-1 justify-self-end"
+            label="submit form"
+            class="justify-self-end bg-rose-100 px-1 pt-1 text-gray-900 shadow-sm shadow-rose-400 hover:scale-105 hover:bg-rose-200 hover:font-semibold hover:text-black"
             icon="check"
             :text="$t('controls.confirm')"
             color="fill-green-700"
           ></BaseIconButton>
         </div></div
     ></transition>
-    <div class="mt-2 pt-1 grid grid-cols-1">
+    <div class="mt-2 grid grid-cols-1 pt-1">
       <BaseIconButton
         icon="delete"
         @click="$emit('delete-entry')"
-        class="shadow-sm shadow-rose-400 hover:bg-rose-200 bg-rose-100 text-gray-900 hover:text-black hover:scale-105 pt-1 hover:font-semibold px-1 text-lg font-semibold justify-self-center"
+        class="justify-self-center bg-rose-100 px-1 pt-1 text-lg font-semibold text-gray-900 shadow-sm shadow-rose-400 hover:scale-105 hover:bg-rose-200 hover:font-semibold hover:text-black"
         :extra-classes="'scale-75'"
         :text="$t('controls.delete_entry')"
+        label="delete item"
         color="fill-red-700"
       ></BaseIconButton>
     </div>

@@ -36,12 +36,13 @@ function getComparison(index: number, item: Reading, val: ReadingValStr) {
 }
 </script>
 <template>
-  <div v-if="dataStore.data.length > 0" class="grid grid-cols-1">
+  <div
+    v-if="dataStore.data.length > 0"
+    class="grid grid-cols-1"
+  >
     <button
       class="absolute top-0 left-0 border-2 border-red-700"
-      @click="
-        compareTo == 'last' ? (compareTo = 'dayBefore') : (compareTo = 'last')
-      "
+      @click="compareTo == 'last' ? (compareTo = 'dayBefore') : (compareTo = 'last')"
     >
       {{ compareTo == "last" ? "Letzter" : "Gestern" }}
     </button>
@@ -50,24 +51,23 @@ function getComparison(index: number, item: Reading, val: ReadingValStr) {
       :key="item.id"
     >
       <div
-        class="my-1 grid grid-cols-1 grid-rows-4 rounded-xl  shadow-md shadow-rose-200 md:grid-cols-3"
-        :class="{ 'h-12 grid-rows-1 bg-slate-200': !cardState[item.id], 'bg-gradient-to-b from-slate-200 via-pink-50 to-rose-100': cardState[item.id] }"
+        class="my-1 grid grid-cols-1 grid-rows-4 rounded-xl shadow-md shadow-rose-200 md:grid-cols-3"
+        :class="{
+          'h-12 grid-rows-1 bg-slate-200': !cardState[item.id],
+          'bg-gradient-to-b from-slate-200 via-pink-50 to-rose-100': cardState[item.id],
+        }"
       >
         <h2
           class="col-span-3 mb-1 w-full place-self-center justify-self-center border-b border-dashed border-b-rose-400 text-center text-lg font-semibold text-rose-900"
           @click="cardState[item.id] = !cardState[item.id]"
         >
-          {{
-            $d(item.timestamp, "long") + " - " + $t("daytime." + item.day_time)
-          }}
+          {{ $d(new Date(item.timestamp), "long") + " - " + $t("daytime." + item.day_time) }}
         </h2>
         <div
           class="col-start-1 row-span-3 row-start-2 mb-2 ml-2 bg-slate-50 shadow-sm shadow-gray-300"
           v-if="cardState[item.id]"
         >
-          <h3
-            class="border-b border-dashed border-b-gray-400 font-semibold text-rose-900"
-          >
+          <h3 class="border-b border-dashed border-b-gray-400 font-semibold text-rose-900">
             {{ $t("messages.values") }}
           </h3>
           <table class="border-collapse">
@@ -81,14 +81,13 @@ function getComparison(index: number, item: Reading, val: ReadingValStr) {
                 <td class="w-24">{{ $t("header." + val) + ": " }}</td>
                 <td class="w-24">{{ item[val] }}</td>
                 <td class="grid h-8 w-16 grid-cols-2 place-items-center">
-                  <span class="p-0 pb-3">{{
-                    comparison > 0 ? "+" + comparison : comparison
-                  }}</span
+                  <span class="p-0 pb-3">{{ comparison > 0 ? "+" + comparison : comparison }}</span
                   ><BaseIconButton
                     icon="south"
                     class="mb-2 h-8 -translate-y-0.5 scale-[0.35]"
                     :class="{ 'rotate-180': comparison > 0 }"
                     :color="comparison >= 0 ? 'fill-red-500' : 'fill-green-500'"
+                    label="disabled"
                   ></BaseIconButton>
                 </td>
               </tr>

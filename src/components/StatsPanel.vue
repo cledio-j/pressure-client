@@ -12,14 +12,14 @@ const showMinMax = ref(true);
 <template>
   <div class="grid grid-cols-1">
     <button
-      class="justify-self-center flex flex-row items-center"
+      class="flex flex-row items-center justify-self-center"
       @click="showMinMax = !showMinMax"
     >
-      <h1 class="text-xl text-rose-900 font-sans font-semibold justify-self-center">
+      <h1 class="justify-self-center font-sans text-xl font-semibold text-rose-900">
         {{ $t("header.min_max") }}
       </h1>
       <expand_more
-        class="transition-all scale-75 fill-rose-900"
+        class="scale-75 fill-rose-900 transition-all"
         :class="{ 'rotate-180 ease-in': !showMinMax }"
       />
     </button>
@@ -32,7 +32,7 @@ const showMinMax = ref(true);
     <TransitionSlideFadeUp>
       <StatsGraphs
         class="transition-all"
-        v-if="dataStore.data.length > 1"
+        v-if="dataStore.data.length > 1 && false"
       ></StatsGraphs
     ></TransitionSlideFadeUp>
   </div>

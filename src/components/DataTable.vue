@@ -93,11 +93,11 @@ function updateDate(value: string, field: string) {
 </script>
 <template>
   <div @keydown.esc="showSettings = false">
-    <div class="grid grid-col-1 justify-items-center mb-2">
-      <div class="outline outline-gray-300 rounded-2xl p-1 pt-2">
+    <div class="grid-col-1 mb-2 grid justify-items-center">
+      <div class="rounded-2xl p-1 pt-2 outline outline-gray-300">
         <select
           v-model="mode"
-          class="border border-gray-300 rounded-lg text-lg"
+          class="rounded-lg border border-gray-300 text-lg"
         >
           <option value="entries">{{ $t("header.entries") }}</option>
           <option value="days">{{ $t("header.days") }}</option>
@@ -110,12 +110,14 @@ function updateDate(value: string, field: string) {
           :extra-classes="'hover:scale-105'"
           @click="tableData.color = !tableData.color"
           icon="paint"
+          label="Toggle color"
         ></BaseIconButton>
         <BaseIconButton
           class="px-1"
           @click="showSettings = true"
           :extra-classes="'hover:scale-105'"
           icon="settings"
+          label="settings"
         ></BaseIconButton>
         <DataTableSettingsModal
           :showing="showSettings"

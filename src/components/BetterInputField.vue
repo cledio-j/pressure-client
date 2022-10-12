@@ -44,22 +44,22 @@ onMounted(() => {
 });
 </script>
 <template>
-  <div class="grid grid-cols-3 mb-2 gap-2 justify-items-center">
+  <div class="mb-2 grid grid-cols-3 justify-items-center gap-2">
     <label
-      class="relative text-md font-medium text-gray-900 p-2 justify-self-end"
-      for="sysInput"
+      class="text-md relative justify-self-end p-2 font-medium text-gray-900"
+      :for="name"
       >{{ name }}
       <span
         v-if="validated == 'error'"
-        class="absolute top-2 md:-right-44 -right-56 material-symbols-outlined text-red-800"
+        class="material-symbols-outlined absolute top-2 -right-56 text-red-800 md:-right-44"
         >warning</span
       ></label
     >
     <input
       :value="modelValue"
-      id="sysInput"
+      :id="name"
       type="number"
-      class="p-1 border border-gray-300 rounded-lg bg-gray-50 w-full justify-self-center col-start-2 col-span-2 lg:col-span-1"
+      class="col-span-2 col-start-2 w-full justify-self-center rounded-lg border border-gray-300 bg-gray-50 p-1 lg:col-span-1"
       :class="{
         'bg-red-300': validated == 'error',
         'bg-green-200': validated == 'yes',

@@ -29,13 +29,15 @@ const props = withDefaults(
     extraClasses?: string; //if classes are needed on the inner span
     icon: string;
     text?: string;
+    label: string;
   }>(),
   { color: "fill-gray-600 hover:fill-gray-500" }
 );
 </script>
 <template>
   <button
-    class="rounded-md p-0 justify-self-start align-middle"
+    class="justify-self-start rounded-md p-0 align-middle"
+    :aria-label="label"
     :class="[fontSize, { 'flex flex-row items-center': text }]"
   >
     <component

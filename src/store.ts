@@ -7,7 +7,7 @@ export const authStore = reactive({ authorized: false, token: "" });
 export const dataStore = reactive({
   data: [] as Reading[],
   currentPage: 1,
-  perPage: 1000,
+  perPage: 100,
   totalPages: 1,
   currentDirection: "desc",
   currentOrderBy: "timestamp",

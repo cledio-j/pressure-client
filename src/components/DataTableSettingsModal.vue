@@ -10,6 +10,8 @@ const { d } = useI18n();
 let childInterface: () => void;
 const props = defineProps<{
   showing: boolean;
+  fromDateMinus: number;
+  toDatePlus: number;
 }>();
 
 const initialHeaders = [
@@ -59,7 +61,7 @@ onMounted(() => {
     :showing="showing"
   >
     <h1
-      class="text-red-900 text-2xl curso font-semibold border-b border-rose-300 border-dashed pb-1 my-1"
+      class="curso my-1 border-b border-dashed border-rose-300 pb-1 text-2xl font-semibold text-red-900"
     >
       {{ $t("messages.settings") }}
     </h1>
@@ -68,10 +70,10 @@ onMounted(() => {
         @change="$emit('new-settings', headers)"
         class=""
       >
-        <legend class="text-lg text-red-900 font-semibold">
+        <legend class="text-lg font-semibold text-red-900">
           {{ $t("messages.choose_header") }}
         </legend>
-        <div class="grid grid-cols-2 ml-2">
+        <div class="ml-2 grid grid-cols-2">
           <template v-for="item in headers"
             ><div>
               <input
@@ -92,25 +94,26 @@ onMounted(() => {
     </div>
     <BaseFromToDatePicker
       class="my-1"
-      v-bind="$attrs"
+      :from-date-minus="fromDateMinus"
+      :to-date-plus="toDatePlus"
       @interface="getChildInterface"
     >
-      <h5 class="text-lg text-red-900 font-semibold">
+      <h5 class="text-lg font-semibold text-red-900">
         {{ $t("controls.filter_by_date") }}
       </h5>
     </BaseFromToDatePicker>
-    <div class="grid grid-cols-3 mt-2">
+    <div class="mt-2 grid grid-cols-3">
       <BaseIconButton
-        aria-label="reset"
+        label="reset-form"
         @click="reset"
         icon="undo"
       ></BaseIconButton>
       <BaseIconButton
-        aria-label="confirm"
+        label="submit-form"
         @click="$emit('close')"
         color="fill-green-700 hover:fill-green-500 hover:scale-110 transition-all"
         font-size="text-4xl"
-        class="col-start-3 justify-self-end mr-4"
+        class="col-start-3 mr-4 justify-self-end"
         icon="check"
       ></BaseIconButton>
     </div>

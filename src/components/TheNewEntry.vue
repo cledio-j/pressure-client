@@ -112,17 +112,18 @@ onMounted(() => {
 </script>
 <template>
   <div
-    class="container bg-gradient-to-l from-rose-100 via-rose-50 to-rose-100 shadow-md shadow-gray-300 mt-1 transition-all duration-300"
+    class="container mt-1 bg-gradient-to-l from-rose-100 via-rose-50 to-rose-100 shadow-md shadow-gray-300 transition-all duration-300"
     :class="{ 'do-magic ease-out': collapsed, 'h-22-5 ease-in': !collapsed }"
   >
     <div class="grid grid-cols-4 justify-items-center py-2">
-      <h1 class="text-2xl ml-2 col-span-2 lg:col-span-1 justify-self-start lg:justify-self-end">
+      <h1 class="col-span-2 ml-2 justify-self-start text-2xl lg:col-span-1 lg:justify-self-end">
         Neuer Eintrag
       </h1>
       <button
         class="material-symbols-outlined justify-self-center text-3xl hover:text-gray-700"
+        aria-label="toggle image input"
         :class="{
-          'fill-blue-800 hover:fill-blue-600 animate-pulse': wantOcr,
+          'animate-pulse fill-blue-800 hover:fill-blue-600': wantOcr,
           shake: animatingSymbol,
         }"
         @click="switchOcr()"
@@ -130,7 +131,8 @@ onMounted(() => {
         <camera class="scale-75" />
       </button>
       <button
-        class="material-symbols-outlined justify-self-end mr-2 text-2xl"
+        class="material-symbols-outlined mr-2 justify-self-end text-2xl"
+        aria-label="toggle collapse"
         @click="collapsed = !collapsed"
       >
         <expand_more
@@ -145,7 +147,7 @@ onMounted(() => {
         <form
           method="dialog"
           ref="entryForm"
-          class="w-full p-2 grid justify-center"
+          class="grid w-full justify-center p-2"
           v-if="!wantOcr"
           @submit.prevent="handleSubmit"
         >
@@ -153,19 +155,20 @@ onMounted(() => {
             :data="input"
             :modified="false"
           ></ReadingInputForm>
-          <div class="grid grid-cols-3 my-2">
-            <button class="h-10 rounded-md p-0 justify-self-start ml-4">
+          <div class="my-2 grid grid-cols-3">
+            <button class="ml-4 h-10 justify-self-start rounded-md p-0">
               <BaseIconButton
                 @click.prevent="
                   Object.assign(input, getInitial());
                   reset = !reset;
                 "
                 icon="undo"
+                label="reset form"
               ></BaseIconButton>
             </button>
             <button
               type="submit"
-              class="h-10 w-32 px-4 rounded-md bg-rose-200 text-lg font-semibold hover:bg-rose-300 justify-self-end mr-1"
+              class="mr-1 h-10 w-32 justify-self-end rounded-md bg-rose-200 px-4 text-lg font-semibold hover:bg-rose-300"
               :class="{ 'be-angry': angryButton }"
             >
               <span v-if="!waitingForFetch">{{ $t("controls.enter") }}</span>
