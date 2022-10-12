@@ -19,6 +19,7 @@ export const messages = {
       days: "Days",
       values: "Days by values",
       min_max: "Minimums and maximums",
+      temperature: "Temperature",
     },
     daytime: {
       morning: "Morning",
@@ -36,7 +37,8 @@ export const messages = {
       network_error_title: "Network error",
       network_error_info: "Server is unavailable or unreachable.",
       invalid_response: "Invalid response",
-      invalid_response_details: "Server is reachable but response was unexpected.",
+      invalid_response_details:
+        "Server is reachable but response was unexpected.",
       edit_reading: "Edit entry",
       select_daytime: "Select time of day",
       days: "Days",
@@ -76,6 +78,7 @@ export const messages = {
       days: "Tage",
       values: "Tage nach Wert",
       min_max: "Maximal- und Minimalwerte",
+      temperature: "Temperatur",
     },
     daytime: {
       morning: "Morgen",
@@ -91,7 +94,8 @@ export const messages = {
       values: "Werte:",
       additional_data: "Zusätzliche Daten",
       network_error_title: "Netzwerk Fehler",
-      network_error_info: "Server kann nicht erreicht werden oder ist nicht verfügbar.",
+      network_error_info:
+        "Server kann nicht erreicht werden oder ist nicht verfügbar.",
       invalid_response: "Ungültige Antwortmeldung",
       invalid_response_details:
         "Server ist erreichbar, hat aber eine ungültige Antwort gesendet. Bitte Fehlermeldung oben notieren und Clemens informieren :).",

@@ -8,17 +8,19 @@ interface Reading {
   timestamp: string;
   user_id: number;
   id: number;
-  weather: {
-    cloud_cover: number;
-    condition: string;
-    icon: string;
-    precipitation: number;
-    pressure: number;
-    reading_id: number;
-    relative_humidity: number;
-    temperature: number;
-    timestamp?: string;
-  };
+  weather: WeatherReading;
+}
+
+interface WeatherReading {
+  cloud_cover: number;
+  condition: string;
+  icon: string;
+  precipitation: number;
+  pressure: number;
+  reading_id: number;
+  relative_humidity: number;
+  temperature: number;
+  timestamp?: string;
 }
 
 interface ReadingInput {
