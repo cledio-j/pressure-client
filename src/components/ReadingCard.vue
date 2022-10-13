@@ -85,7 +85,7 @@ function reset() {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .slide-fade-enter-active {
   transition: all 0.3s ease-out;
 }

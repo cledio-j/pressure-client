@@ -131,7 +131,7 @@ onMounted(() => {
         <camera class="scale-75" />
       </button>
       <button
-        class="material-symbols-outlined mr-2 justify-self-end text-2xl"
+        class="mr-2 justify-self-end text-2xl"
         aria-label="toggle collapse"
         @click="collapsed = !collapsed"
       >

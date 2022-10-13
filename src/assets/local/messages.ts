@@ -20,6 +20,10 @@ export const messages = {
       values: "Days by values",
       min_max: "Minimums and maximums",
       temperature: "Temperature",
+      pressure: "Pressure: ",
+      humidity: "Humidity: ",
+      precipitation: "Precipitation: ",
+      cloud_cover: "Cloud cover: ",
     },
     daytime: {
       morning: "Morning",
@@ -37,13 +41,13 @@ export const messages = {
       network_error_title: "Network error",
       network_error_info: "Server is unavailable or unreachable.",
       invalid_response: "Invalid response",
-      invalid_response_details:
-        "Server is reachable but response was unexpected.",
+      invalid_response_details: "Server is reachable but response was unexpected.",
       edit_reading: "Edit entry",
       select_daytime: "Select time of day",
       days: "Days",
       last: "Last...",
       per_page: "Rows per page:",
+      dry: "Trocken",
     },
     controls: {
       from: "From...",
@@ -79,6 +83,10 @@ export const messages = {
       values: "Tage nach Wert",
       min_max: "Maximal- und Minimalwerte",
       temperature: "Temperatur",
+      pressure: "Druck: ",
+      humidity: "Luftfeuchtigkeit: ",
+      precipitation: "Niederschlag: ",
+      cloud_cover: "Wolken: ",
     },
     daytime: {
       morning: "Morgen",
@@ -94,8 +102,7 @@ export const messages = {
       values: "Werte:",
       additional_data: "Zusätzliche Daten",
       network_error_title: "Netzwerk Fehler",
-      network_error_info:
-        "Server kann nicht erreicht werden oder ist nicht verfügbar.",
+      network_error_info: "Server kann nicht erreicht werden oder ist nicht verfügbar.",
       invalid_response: "Ungültige Antwortmeldung",
       invalid_response_details:
         "Server ist erreichbar, hat aber eine ungültige Antwort gesendet. Bitte Fehlermeldung oben notieren und Clemens informieren :).",
@@ -104,6 +111,7 @@ export const messages = {
       days: "Tage",
       last: "Letzte...",
       per_page: "Reien per Seite:",
+      dry: "Trocken",
     },
     controls: {
       from: "Von...",

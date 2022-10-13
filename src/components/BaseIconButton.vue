@@ -9,6 +9,7 @@ import Undo from "../assets/svg/undo.svg?component";
 import Check from "../assets/svg/check.svg?component";
 import Close from "../assets/svg/close.svg?component";
 import Delete from "../assets/svg/delete.svg?component";
+import Edit from "../assets/svg/edit.svg?component";
 
 const icons: { [index: string]: FunctionalComponent } = {
   paint: Paint,
@@ -20,6 +21,7 @@ const icons: { [index: string]: FunctionalComponent } = {
   check: Check,
   close: Close,
   delete: Delete,
+  edit: Edit,
 };
 
 const props = withDefaults(

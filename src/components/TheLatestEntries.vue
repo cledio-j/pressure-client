@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { onMounted, reactive, Ref, ref } from "vue";
 import { dataStore } from "../store";
-import BaseIconButton from "./BaseIconButton.vue";
+
 import DataWeatherCard from "./DataWeatherCard.vue";
+import ExpandMore from "../assets/svg/expand-more.svg?component";
+import TransitionSlideFadeUp from "./TransitionSlideFadeUp.vue";
+import DataValuesCard from "./DataValuesCard.vue";
+import BaseIconButton from "./BaseIconButton.vue";
 
 const compareTo: Ref<"dayBefore" | "last"> = ref("dayBefore");
-
-let comparison: number;
 
 const cardState: { [index: number]: boolean } = reactive({});
 onMounted(() => {
@@ -19,30 +21,15 @@ onMounted(() => {
     } else cardState[e.id] = false;
   });
 });
-
-function getComparison(index: number, item: Reading, val: ReadingValStr) {
-  let previous;
-  if (compareTo.value == "dayBefore") {
-    for (let i = index + 1; i >= 0; i++) {
-      if (dataStore.data[i].day_time == item.day_time) {
-        previous = dataStore.data[i];
-        break;
-      }
-    }
-  } else {
-    previous = dataStore.data[index + 1];
-  }
-  if (!previous) return 0;
-  return item[val] - previous[val];
-}
 </script>
 <template>
-  <div v-if="dataStore.data.length > 0" class="grid grid-cols-1">
+  <div
+    v-if="dataStore.data.length > 0"
+    class="grid grid-cols-1 transition-all"
+  >
     <button
-      class="absolute top-0 left-0 border-2 border-red-700"
-      @click="
-        compareTo == 'last' ? (compareTo = 'dayBefore') : (compareTo = 'last')
-      "
+      class="absolute -top-10 -left-20 z-50 border-2 border-red-700"
+      @click="compareTo == 'last' ? (compareTo = 'dayBefore') : (compareTo = 'last')"
     >
       {{ compareTo == "last" ? "Letzter" : "Gestern" }}
     </button>
@@ -51,63 +38,128 @@ function getComparison(index: number, item: Reading, val: ReadingValStr) {
       :key="item.id"
     >
       <div
-        class="my-1 grid grid-cols-1 grid-rows-4 rounded-xl shadow-md shadow-rose-200 md:grid-cols-3"
+        class="container relative my-1 border-t-rose-200 bg-gradient-to-b from-slate-100 via-pink-50 to-rose-100 shadow-md shadow-rose-300 transition-all duration-200"
         :class="{
-          'h-12 grid-rows-1 bg-slate-200': !cardState[item.id],
-          'bg-gradient-to-b from-slate-200 via-pink-50 to-rose-100':
-            cardState[item.id],
+          'do-magic ease-out': !cardState[item.id],
+          ' h-80 ease-in md:h-48': cardState[item.id],
         }"
       >
-        <h2
-          class="col-span-3 mb-1 w-full place-self-center justify-self-center border-b border-dashed border-b-rose-400 text-center text-lg font-semibold text-rose-900"
+        <button
+          class="absolute right-2 top-0 z-50 text-2xl"
+          aria-label="toggle collapse"
           @click="cardState[item.id] = !cardState[item.id]"
         >
-          {{
-            $d(new Date(item.timestamp), "long") +
-            " - " +
-            $t("daytime." + item.day_time)
-          }}
-        </h2>
+          <ExpandMore
+            class="scale-75 fill-gray-700 transition-all hover:scale-90"
+            :class="{ 'rotate-180 ease-in': cardState[item.id] }"
+          />
+        </button>
         <div
-          class="col-start-1 row-span-3 row-start-2 mb-2 ml-2 bg-slate-50 shadow-sm shadow-gray-300"
-          v-if="cardState[item.id]"
+          class="absolute top-0 z-40 w-full border-t border-rose-200 py-2"
+          :class="{ 'shadow-md shadow-rose-300': !cardState[item.id] }"
         >
-          <h3
-            class="border-b border-dashed border-b-gray-400 font-semibold text-rose-900"
+          <h2
+            class="z-50 mb-1 cursor-pointer place-self-center justify-self-center text-center text-lg font-semibold text-rose-900 md:col-span-3"
+            :class="{
+              'border-b border-dashed border-b-rose-900  md:py-1 md:pt-0': cardState[item.id],
+            }"
+            @click="cardState[item.id] = !cardState[item.id]"
           >
-            {{ $t("messages.values") }}
-          </h3>
-          <table class="border-collapse">
-            <tbody>
-              <tr
-                v-for="val in (['systolic_bp', 'diastolic_bp', 'heart_rate'] as ReadingValStr[])"
-                class="h-8 w-full p-0"
-                :class="{ 'border-b border-gray-400': val != 'heart_rate' }"
-                :set="(comparison = getComparison(index, item, val))"
-              >
-                <td class="w-24">{{ $t("header." + val) + ": " }}</td>
-                <td class="w-24">{{ item[val] }}</td>
-                <td class="grid h-8 w-16 grid-cols-2 place-items-center">
-                  <span class="p-0 pb-3">{{
-                    comparison > 0 ? "+" + comparison : comparison
-                  }}</span
-                  ><BaseIconButton
-                    icon="south"
-                    class="mb-2 h-8 -translate-y-0.5 scale-[0.35]"
-                    :class="{ 'rotate-180': comparison > 0 }"
-                    :color="comparison >= 0 ? 'fill-red-500' : 'fill-green-500'"
-                    label="disabled"
-                  ></BaseIconButton>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            {{ $d(new Date(item.timestamp), "long") + " - " + $t("daytime." + item.day_time) }}
+          </h2>
         </div>
-        <DataWeatherCard
-          v-if="cardState[item.id]"
-          class="col-start-2 row-span-3 ml-2 mb-2 gap-2"
-          :weather="item.weather"
-        ></DataWeatherCard></div
+        <TransitionSlideFadeUp>
+          <div
+            v-if="cardState[item.id]"
+            class="my-grid my-1 rounded-xl border-t-2"
+          >
+            <div>
+              <!-- leave this because I'm terrible at grid and it works like this-->
+            </div>
+            <DataValuesCard
+              :index="index"
+              :item="item"
+              :compare-to="compareTo"
+            ></DataValuesCard>
+            <DataWeatherCard
+              class="z-50 ml-2 mb-2 gap-2 md:col-start-2 md:row-start-2"
+              :weather="item.weather"
+            ></DataWeatherCard>
+            <div
+              class="col-start-3 row-start-2 hidden content-center justify-center justify-items-center gap-2 md:grid"
+            >
+              <BaseIconButton
+                icon="close"
+                class="justify-self-start bg-rose-200 px-2 shadow-sm shadow-gray-500 hover:scale-105 hover:bg-rose-300"
+                label="delete-entry"
+                color="fill-red-600"
+                :extra-classes="'scale-75'"
+                :text="$t('controls.delete_entry')"
+              />
+              <BaseIconButton
+                class="justify-self-start bg-rose-200 px-3 shadow-sm shadow-gray-500 hover:scale-105 hover:bg-rose-300"
+                icon="edit"
+                label="modify-entry"
+                color="fill-blue-600"
+                :extra-classes="'scale-75'"
+                :text="$t('header.edit')"
+              />
+            </div>
+          </div>
+        </TransitionSlideFadeUp></div
     ></template>
   </div>
 </template>
+<style scoped>
+@media screen and (min-width: 900px) {
+  .my-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 39px 1fr;
+    grid-gap: 3px;
+  }
+}
+@media screen and (max-width: 900px) {
+  .my-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 38px 1fr 1fr;
+    grid-gap: 1px;
+  }
+}
+.do-magic {
+  height: 50px;
+}
+
+.slide-fade-enter-active,
+.drop-fade-enter-active {
+  transition: all 0.5s ease-out;
+}
+.drop-fade-leave-active {
+  transition: all 0.5s ease-out;
+}
+.slide-fade-leave-active {
+  transition: all 0.2s ease-in;
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  scale: 0%;
+}
+
+.drop-fade-enter-from {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(-50px);
+}
+.drop-fade-leave-to {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(-50px);
+}
+</style>
