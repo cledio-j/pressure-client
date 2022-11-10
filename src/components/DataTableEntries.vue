@@ -2,8 +2,7 @@
 import { getStr } from "../utils/tableFuncs";
 import { useI18n } from "vue-i18n";
 import { decideColor } from "../utils/tableFuncs";
-import TablePagination from "./TablePagination.vue";
-import { computed, inject, reactive, Ref, ref } from "vue";
+import { inject, reactive, Ref, ref, watch } from "vue";
 import ReadingCard from "./ReadingCard.vue";
 import BaseModal from "./BaseModal.vue";
 
@@ -13,7 +12,6 @@ const { t } = useI18n();
 const { d } = useI18n();
 
 const props = defineProps<{
-  // tableData: TableDataObj;
   headers: { name: string; show: boolean }[] | undefined;
   color: boolean;
 }>();
@@ -23,18 +21,25 @@ const tableData = reactive({
   perPage: 10,
 });
 
-const firstRow = computed(() => {
-  return (tableData.currentPage - 1) * tableData.perPage + 1;
+const firstRow = ref(0);
+
+watch(firstRow, (newVal) => {
+  if (
+    newVal > dataStore.data.length - tableData.perPage &&
+    dataStore.data.length < dataStore.total
+  ) {
+    emits("more-data");
+  }
 });
-const totalRows = computed(() => {
-  return dataStore.data.length;
-});
-const totalPages = computed(() => {
-  return dataStore.data.length / tableData.perPage;
-});
+
+watch(
+  () => tableData.perPage,
+  (newVal) => {}
+);
 
 const emits = defineEmits<{
   (e: "update", data: Reading, index: number): void;
+  (e: "more-data"): void;
 }>();
 
 const token = inject<Ref<string>>("token");
@@ -98,13 +103,13 @@ function reset(data: Reading) {
 </script>
 <template>
   <div class="max-h-screen">
-    <table class="border-collapse w-full">
+    <table class="w-full border-collapse">
       <thead>
         <template v-for="item in headers">
           <th
             v-if="item.show"
             scope="col"
-            class="px-2 py-2 border border-gray-400"
+            class="border border-gray-400 px-2 py-2"
           >
             {{ $t("header." + item.name) }}
           </th>
@@ -114,14 +119,14 @@ function reset(data: Reading) {
         <template
           v-for="(item, index) in dataStore.data.slice(firstRow, firstRow + tableData.perPage)"
           ><tr
-            class="hover:bg-gray-200 cursor-pointer"
+            class="cursor-pointer hover:bg-gray-200"
             @click="showCard(item, index)"
           >
             <template v-for="value in headers">
               <td
                 :scope="value.name == 'date' ? 'row' : ''"
-                class="px-2 border border-gray-400 transition-colors duration-300"
-                :class="{ 'font-semibold font-mono': value.name == 'date' }"
+                class="border border-gray-400 px-2 transition-colors duration-300"
+                :class="{ 'font-mono font-semibold': value.name == 'date' }"
                 :style="{
                   backgroundColor: color ? decideColor(value.name, item) : '',
                 }"
@@ -147,19 +152,12 @@ function reset(data: Reading) {
         v-if="viewCard && cardData"
       ></ReadingCard
     ></BaseModal>
-    <!-- <div class="grid grid-col-1 justify-items-center mt-1">
-    <TablePagination
-      :current-page="tableData.currentPage"
-      :total-pages="tableData.totalPages"
-      :getter="tableData.getter"
-    ></TablePagination>
-  </div> -->
     <TablePaginationClient
       v-model:current-page="tableData.currentPage"
-      :total-pages="totalPages"
+      :real-total="dataStore.total"
       v-model:per-page="tableData.perPage"
-      :total-rows="totalRows"
-      :first-row="firstRow"
+      :total-rows="dataStore.data.length"
+      v-model:first-row="firstRow"
     ></TablePaginationClient>
   </div>
 </template>

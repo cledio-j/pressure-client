@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { findReading } from "../utils/tableFuncs";
+import { computed, reactive, ref } from "vue";
 import { decideColor } from "../utils/tableFuncs";
+
+import TablePaginationClient from "./TablePaginationClient.vue";
 
 import { dataStore } from "../store";
 
 const props = defineProps<{
-  tableData: TableDataObj;
+  color: boolean;
 }>();
+
+const emits = defineEmits<{
+  (e: "more-data"): void;
+}>();
+
+const firstRow = ref(0);
+const tableData = reactive({
+  currentPage: 1,
+  perPage: 10,
+});
 
 const dates = computed(() => {
   let arr: string[] = [];
@@ -45,20 +56,20 @@ const rows = computed(() => {
       <tr>
         <th
           scope="col"
-          class="px-1 border-2 border-gray-200 border-b-gray-500 border-r-gray-500 border-t-0"
+          class="border-2 border-t-0 border-gray-200 border-b-gray-500 border-r-gray-500 px-1"
         ></th>
         <th
           v-for="item in ['systolic_bp', 'diastolic_bp', 'heart_rate']"
           colspan="3"
           scope="col"
-          class="px-1 border-2 border-gray-500 border-b-gray-500 border-t-0"
+          class="border-2 border-t-0 border-gray-500 border-b-gray-500 px-1"
         >
           {{ $t("header." + item) }}
         </th>
       </tr>
       <tr>
         <th
-          class="px-1 border border-b-2 border-r-2 border-b-gray-500 border-r-gray-500 border-t-0"
+          class="border border-b-2 border-r-2 border-t-0 border-b-gray-500 border-r-gray-500 px-1"
           scope="col"
         >
           {{ $t("header.date") }}
@@ -67,7 +78,7 @@ const rows = computed(() => {
           <th
             v-for="item in ['morning', 'lunch', 'evening']"
             :class="{ 'border-r-2 border-r-gray-500': item == 'evening' }"
-            class="px-1 border border-b-2 border-b-gray-500"
+            class="border border-b-2 border-b-gray-500 px-1"
             scope="col"
           >
             {{ $t("daytime." + item) }}
@@ -76,7 +87,7 @@ const rows = computed(() => {
       </tr>
     </thead>
     <tbody>
-      <template v-for="item in rows"
+      <template v-for="item in rows.slice(firstRow, firstRow + tableData.perPage)"
         ><tr>
           <td class="border border-gray-400">{{ $d(new Date(item.date), "short") }}</td>
           <td
@@ -84,7 +95,7 @@ const rows = computed(() => {
             :class="{ 'border-r-2 border-r-gray-500': index == 2 }"
             class="border border-gray-400"
             :style="{
-              backgroundColor: tableData.color ? decideColor('systolic_bp', x) : '',
+              backgroundColor: color ? decideColor('systolic_bp', x) : '',
             }"
           >
             {{ x ? x : "" }}
@@ -94,7 +105,7 @@ const rows = computed(() => {
             :class="{ 'border-r-2 border-r-gray-500': index == 2 }"
             class="border border-gray-400"
             :style="{
-              backgroundColor: tableData.color ? decideColor('diastolic_bp', x) : '',
+              backgroundColor: color ? decideColor('diastolic_bp', x) : '',
             }"
           >
             {{ x }}
@@ -109,6 +120,14 @@ const rows = computed(() => {
       >
     </tbody>
   </table>
+  <TablePaginationClient
+    v-model:current-page="tableData.currentPage"
+    :real-total="30 * dataStore.totalPages"
+    v-model:per-page="tableData.perPage"
+    :total-rows="rows.length"
+    v-model:first-row="firstRow"
+    :approx="true"
+  ></TablePaginationClient>
 </template>
 <style scoped>
 td {

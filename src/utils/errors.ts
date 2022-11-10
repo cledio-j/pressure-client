@@ -24,3 +24,16 @@ export function invalidResponse(t: any, retryFn: () => void, res: Response): Err
     ],
   };
 }
+export function notAuthorized(t: any, retryFn: () => void, res?: Response): ErrorObj {
+  return {
+    severity: "fatal",
+    active: true,
+    title: t("messages.unauthorized"),
+    message: res ? res.statusText + " " + res.status : "",
+    details: t("messages.unauthorized_details"),
+    options: [
+      { name: "cancel", func: () => {} },
+      { name: "retry", func: retryFn },
+    ],
+  };
+}

@@ -1,8 +1,19 @@
 import { reactive } from "vue";
+import { networkError } from "./utils/errors";
 
 const apiUrl = "http://192.168.178.11:5000/";
 
 export const authStore = reactive({ authorized: false, token: "" });
+
+export const errorStore = reactive({
+  error: {} as ErrorObj,
+  toggleActive() {
+    this.error.active = !this.error.active;
+  },
+  newError(err: ErrorObj) {
+    this.error = err;
+  },
+});
 
 export const dataStore = reactive({
   data: [] as Reading[],
@@ -14,14 +25,22 @@ export const dataStore = reactive({
   fromDate: new Date(),
   toDate: new Date(),
   total_pages: 1,
-  fixTsFormat() {
-    this.data.forEach((e) => (e.timestamp = e.timestamp.slice(0, -3)));
-  },
+  total: 0,
   updateReading(modifiedReading: Reading, index: number) {
     this.data[index] = modifiedReading;
   },
   deleteReading(index: number) {
     this.data.splice(index, 1);
+  },
+  addReading(newReading: Reading) {
+    //todo: this shouldn't just go to index 0 -- ideally respect sorting
+    this.data.unshift(newReading);
+  },
+  updateData(data: Reading[], meta: MetaData) {
+    data.forEach((e) => (e.timestamp = e.timestamp.slice(0, -3)));
+    this.data = this.data.concat(data);
+    this.totalPages = meta.total_pages;
+    this.total = meta.total;
   },
   updateParamsFromBody(body: GetDataRequestBody) {
     this.perPage = body.per_page;

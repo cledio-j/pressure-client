@@ -1,8 +1,12 @@
 import { createApp } from "vue";
 import { createI18n, useI18n } from "vue-i18n";
 import App from "./App.vue";
-import { datetimeFormats, messages } from "./assets/local/messages";
+import de from "./assets/local/de.json";
+import en from "./assets/local/en.json";
+import { datetimeFormats } from "./assets/local/messages";
 import "./style.css";
+
+const messages = { en: en, de: de };
 
 // 2. Create i18n instance with options
 

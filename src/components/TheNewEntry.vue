@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { inject, onMounted, reactive, Ref, ref } from "vue";
 import { getDayTime, getTodayIsoStr } from "../utils/dateUtils";
-import { invalidResponse, networkError } from "../utils/errors";
+import { invalidResponse, networkError, notAuthorized } from "../utils/errors";
 import { useI18n } from "vue-i18n";
 import OcrInput from "./OcrInput.vue";
 import BaseLoadingSpinner from "./BaseLoadingSpinner.vue";
 import ReadingInputForm from "./ReadingInputForm.vue";
 import TransitionSlideFadeUp from "./TransitionSlideFadeUp.vue";
+
+import { dataStore, errorStore } from "../store";
 
 import camera from "../assets/svg/camera.svg?component";
 import expand_more from "../assets/svg/expand-more.svg?component";
@@ -59,13 +61,18 @@ function validateReadings() {
 }
 
 async function handleSubmit() {
-  console.log("submitting");
   if (!authorized || !token) {
-    console.log("not authorized");
+    errorStore.newError(notAuthorized(t, handleSubmit));
     return;
   }
-  if (validateReadings()) {
-    waitingForFetch.value = true;
+  if (!validateReadings()) {
+    angryButton.value = true;
+    needValidation.value = true;
+    setTimeout(() => (angryButton.value = false), 500);
+    return;
+  }
+  waitingForFetch.value = true;
+  try {
     const res = await fetch(apiUrl + "reading/put", {
       method: "PUT",
       headers: {
@@ -73,18 +80,17 @@ async function handleSubmit() {
         Authorization: "Bearer " + token.value,
       },
       body: JSON.stringify(makeRequestBody()),
-    }).catch((_error) => {
-      console.log(_error);
-      emits("report-error", networkError(t, handleSubmit));
     });
-    if (res && !res.ok) {
-      emits("report-error", invalidResponse(t, handleSubmit, res));
+    if (res) {
+      if (!res.ok) errorStore.newError(invalidResponse(t, handleSubmit, res));
+      else {
+        const data = await res.json();
+        dataStore.addReading(data.reading);
+      }
     }
-  } else {
-    angryButton.value = true;
-    needValidation.value = true;
-    setTimeout(() => (angryButton.value = false), 500);
-    return;
+  } catch (_error) {
+    //fetch only throws on network error
+    errorStore.newError(networkError(t, handleSubmit));
   }
   waitingForFetch.value = false;
 }
@@ -99,7 +105,6 @@ function switchOcr() {
 }
 
 const emits = defineEmits<{
-  (e: "report-error", errorInfo: ErrorObj): void;
   (e: "interface:collapse", fn: () => void): void;
 }>();
 
@@ -117,7 +122,7 @@ onMounted(() => {
   >
     <div class="grid grid-cols-4 justify-items-center py-2">
       <h1 class="col-span-2 ml-2 justify-self-start text-2xl lg:col-span-1 lg:justify-self-end">
-        Neuer Eintrag
+        {{ $t("controls.new_entry") }}
       </h1>
       <button
         class="material-symbols-outlined justify-self-center text-3xl hover:text-gray-700"

@@ -51,10 +51,7 @@ interface MinMaxApiResponse {
 }
 
 interface MinMaxResult {
-  max_systolic_bp: Reading;
-  min_systolic_bp: Reading;
-  max_diastolic_bp: Reading;
-  min_diastolic_bp: Reading;
+  [index: string]: Reading;
 }
 
 interface TableDataObj {

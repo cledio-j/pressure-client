@@ -47,7 +47,10 @@ export const messages = {
       days: "Days",
       last: "Last...",
       per_page: "Rows per page:",
-      dry: "Trocken",
+      dry: "Dry",
+      fog: "Fog",
+      rain: "Rain",
+      total: "Total",
     },
     controls: {
       from: "From...",
@@ -112,6 +115,9 @@ export const messages = {
       last: "Letzte...",
       per_page: "Reien per Seite:",
       dry: "Trocken",
+      fog: "Nebel",
+      rain: "Regen",
+      total: "Alle",
     },
     controls: {
       from: "Von...",

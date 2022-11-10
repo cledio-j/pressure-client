@@ -1,16 +1,24 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { findReading } from "../utils/tableFuncs";
+import { computed, reactive, ref, watch } from "vue";
 import { decideColor } from "../utils/tableFuncs";
-import TablePagination from "./TablePagination.vue";
 
 import { dataStore } from "../store";
+import TablePaginationClient from "./TablePaginationClient.vue";
 
 const props = defineProps<{
-  tableData: TableDataObj;
+  color: boolean;
+}>();
+
+const emits = defineEmits<{
+  (e: "more-data"): void;
 }>();
 
 const vals = ["systolic_bp", "diastolic_bp", "heart_rate"];
+const firstRow = ref(0);
+const tableData = reactive({
+  currentPage: 1,
+  perPage: 10,
+});
 
 const dates = computed(() => {
   let arr: string[] = [];
@@ -33,6 +41,12 @@ const rows = computed(() => {
   });
   return rowsArr;
 });
+
+watch(firstRow, (newVal) => {
+  if (newVal > rows.value.length - tableData.perPage && dataStore.data.length < dataStore.total) {
+    emits("more-data");
+  }
+});
 </script>
 <template>
   <table class="border-collapse">
@@ -53,7 +67,7 @@ const rows = computed(() => {
       </tr>
       <tr>
         <th
-          class="px-1 border-2 border-b-2 border-b-gray-500 border-gray-500 border-t-2"
+          class="border-2 border-b-2 border-t-2 border-gray-500 border-b-gray-500 px-1"
           scope="col"
         >
           {{ $t("header.date") }}
@@ -61,7 +75,7 @@ const rows = computed(() => {
         <template v-for="i in 3">
           <th
             v-for="(item, index) in ['systolic_bp', 'diastolic_bp', 'heart_rate']"
-            class="px-1 border border-b-2 border-b-gray-500 border-t-0 border-gray-400"
+            class="border border-b-2 border-t-0 border-gray-400 border-b-gray-500 px-1"
             :class="{ 'border-r-2 border-r-gray-500': index == 2 }"
             scope="col"
           >
@@ -71,9 +85,9 @@ const rows = computed(() => {
       </tr>
     </thead>
     <tbody>
-      <template v-for="item in rows"
+      <template v-for="item in rows.slice(firstRow, firstRow + tableData.perPage)"
         ><tr class="hover:bg-gray-200">
-          <td class="border border-l-0 border-r-2 border-r-gray-500 border-gray-400">
+          <td class="border border-l-0 border-r-2 border-gray-400 border-r-gray-500">
             {{ $d(new Date(item.date), "short") }}
           </td>
           <td
@@ -81,7 +95,7 @@ const rows = computed(() => {
             :class="{ 'border-r-2 border-r-gray-500': index == 2 }"
             class="border border-t-0 border-gray-400"
             :style="{
-              backgroundColor: tableData.color ? decideColor(vals[index], x) : '',
+              backgroundColor: color ? decideColor(vals[index], x) : '',
             }"
           >
             {{ x ? x : "" }}
@@ -91,7 +105,7 @@ const rows = computed(() => {
             :class="{ 'border-r-2 border-r-gray-500': index == 2 }"
             class="border border-t-0 border-gray-400"
             :style="{
-              backgroundColor: tableData.color ? decideColor(vals[index], x) : '',
+              backgroundColor: color ? decideColor(vals[index], x) : '',
             }"
           >
             {{ x }}
@@ -100,7 +114,7 @@ const rows = computed(() => {
             v-for="(x, index) in item.evening"
             class="border border-t-0 border-gray-400"
             :style="{
-              backgroundColor: tableData.color ? decideColor(vals[index], x) : '',
+              backgroundColor: color ? decideColor(vals[index], x) : '',
             }"
           >
             {{ x ? x : "" }}
@@ -109,11 +123,14 @@ const rows = computed(() => {
       >
     </tbody>
   </table>
-  <TablePagination
-    :current-page="tableData.currentPage"
-    :total-pages="tableData.totalPages"
-    :getter="tableData.getter"
-  ></TablePagination>
+  <TablePaginationClient
+    v-model:current-page="tableData.currentPage"
+    :real-total="30 * dataStore.totalPages"
+    v-model:per-page="tableData.perPage"
+    :total-rows="rows.length"
+    v-model:first-row="firstRow"
+    :approx="true"
+  ></TablePaginationClient>
 </template>
 <style scoped>
 td {

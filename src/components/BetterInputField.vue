@@ -4,6 +4,7 @@ import { onMounted, ref } from "vue";
 const props = defineProps<{
   name: string;
   modelValue: number;
+  frozen?: boolean;
 }>();
 
 const emits = defineEmits<{
@@ -57,6 +58,7 @@ onMounted(() => {
     >
     <input
       :value="modelValue"
+      :disabled="frozen"
       :id="name"
       type="number"
       class="col-span-2 col-start-2 w-full justify-self-center rounded-lg border border-gray-300 bg-gray-50 p-1 lg:col-span-1"

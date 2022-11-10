@@ -10,6 +10,11 @@ import Check from "../assets/svg/check.svg?component";
 import Close from "../assets/svg/close.svg?component";
 import Delete from "../assets/svg/delete.svg?component";
 import Edit from "../assets/svg/edit.svg?component";
+import Refresh from "../assets/svg/refresh.svg?component";
+import Cancel from "../assets/svg/cancel.svg?component";
+import Error from "../assets/svg/error.svg?component";
+import ToggleOn from "../assets/svg/toggle_on.svg?component";
+import ToggleOff from "../assets/svg/toggle_off.svg?component";
 
 const icons: { [index: string]: FunctionalComponent } = {
   paint: Paint,
@@ -22,6 +27,11 @@ const icons: { [index: string]: FunctionalComponent } = {
   close: Close,
   delete: Delete,
   edit: Edit,
+  refresh: Refresh,
+  cancel: Cancel,
+  error: Error,
+  toggle_on: ToggleOn,
+  toggle_off: ToggleOff,
 };
 
 const props = withDefaults(
@@ -31,7 +41,7 @@ const props = withDefaults(
     extraClasses?: string; //if classes are needed on the inner span
     icon: string;
     text?: string;
-    label: string;
+    label?: string;
   }>(),
   { color: "fill-gray-600 hover:fill-gray-500" }
 );

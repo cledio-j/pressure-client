@@ -74,9 +74,8 @@ async function getData(toPage?: number) {
     return;
   }
   const result = (await response.json()) as ReadingApiResponse;
-  dataStore.data = result.data;
+  dataStore.updateData(result.data, result.meta);
   dataStore.updateParamsFromBody(reqBody);
-  dataStore.fixTsFormat();
 }
 
 function updateSettings(newHeaders: any) {
@@ -137,18 +136,26 @@ function updateDate(value: string, field: string) {
       <DataTableEntries
         v-if="mode == 'entries'"
         :headers="headers"
+        @more-data="getData(dataStore.currentPage + 1)"
         :color="tableData.color"
       ></DataTableEntries>
       <DataTableDays
         v-else-if="mode == 'days'"
-        :tableData="tableData"
+        @more-data="getData(dataStore.currentPage + 1)"
+        :color="tableData.color"
       ></DataTableDays>
       <DataTableValues
-        :tableData="tableData"
+        :color="tableData.color"
+        @more-data="getData(dataStore.currentPage + 1)"
         v-else-if="mode == 'values'"
       ></DataTableValues>
     </div>
-    <BaseLoadingSpinner v-else></BaseLoadingSpinner>
+    <div
+      class="grid"
+      v-else
+    >
+      <BaseLoadingSpinner class="justify-self-center"></BaseLoadingSpinner>
+    </div>
     <svg
       style="width: 0; height: 0; position: absolute"
       aria-hidden="true"

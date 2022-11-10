@@ -8,8 +8,8 @@ const emits = defineEmits<{
 }>();
 
 const attrsForAction = {
-  retry: { icon: "refresh", color: "text-blue-900 hover:text-blue-500" },
-  cancel: { icon: "cancel", color: "text-red-900 hover:text-red-700" },
+  retry: { icon: "refresh", color: "fill-blue-900 hover:fill-blue-500" },
+  cancel: { icon: "cancel", color: "fill-red-900 hover:fill-red-700" },
 };
 
 function doErrorAction(error: ErrorAction) {
@@ -20,36 +20,37 @@ function doErrorAction(error: ErrorAction) {
 <template>
   <BaseModal :showing="error.active">
     <h1
-      class="curso my-1 border-b border-dashed border-rose-300 pb-1 align-middle text-2xl font-semibold text-red-900"
+      class="curso my-1 select-none border-b border-dashed border-rose-300 pb-1 align-middle text-2xl font-semibold text-red-900"
     >
-      <span
+      <BaseIconButton
         v-if="error.severity == 'fatal'"
-        class="material-symbols-outlined pb-1 align-middle text-3xl text-red-600"
-        >error</span
+        class="cursor-default pb-1 align-middle text-3xl"
+        color="fill-red-600"
+        icon="error"
+        >error</BaseIconButton
       >
       <span
         v-else-if="error.severity == 'warn'"
-        class="material-symbols-outlined pb-1 align-middle text-3xl text-yellow-400"
+        class="pb-1 align-middle text-3xl text-yellow-400"
         >warning</span
       >
       <span
         v-else
-        class="material-symbols-outlined pb-1 align-middle text-3xl text-blue-600"
+        class="pb-1 align-middle text-3xl text-blue-600"
         >info</span
       >
       {{ error.title }}
     </h1>
     <p class="ml-1">{{ error.message }}</p>
     {{ error.details }}
-    <div class="mt-2 flex flex-row">
+    <div class="mt-2 flex flex-row justify-between">
       <template v-for="item in error.options"
         ><BaseIconButton
           :icon="attrsForAction[item.name].icon"
           :text="$t('controls.' + item.name)"
-          class="border bg-rose-100 px-2 shadow-sm shadow-gray-200 hover:bg-rose-200"
+          class="border bg-rose-100 text-lg font-semibold text-red-900 shadow-sm shadow-gray-200 hover:scale-105 hover:bg-rose-200"
           :color="attrsForAction[item.name].color"
-          extra-classes="pr-1 pb-0.5"
-          font-size="text-2xl"
+          extra-classes="pr-1 pb-0.5 scale-75"
           :label="item.name"
           @click.stop.prevent="doErrorAction(item)"
         ></BaseIconButton>

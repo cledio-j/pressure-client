@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   modelValue: string;
+  frozen?: boolean;
 }>();
 
 const emits = defineEmits<{
@@ -9,16 +10,17 @@ const emits = defineEmits<{
 }>();
 </script>
 <template>
-  <div class="grid grid-cols-3 mb-2 gap-2 justify-items-center">
+  <div class="mb-2 grid grid-cols-3 justify-items-center gap-2">
     <label
-      class="text-md font-medium text-gray-900 p-2 justify-self-end"
+      class="text-md justify-self-end p-2 font-medium text-gray-900"
       for="dateInput"
       >{{ $t("header.timestamp") }}</label
     >
     <input
+      :disabled="frozen"
       id="dateInput"
       type="datetime-local"
-      class="p-1 border border-gray-300 rounded-lg bg-gray-50 w-30 col-span-2 justify-self-start col-start-2"
+      class="w-30 col-span-2 col-start-2 justify-self-start rounded-lg border border-gray-300 bg-gray-50 p-1"
       :value="modelValue"
       @change="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     />

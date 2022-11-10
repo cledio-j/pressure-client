@@ -2,6 +2,7 @@
 import { computed, watch } from "vue";
 import ReadingInputForm from "./ReadingInputForm.vue";
 import BaseIconButton from "./BaseIconButton.vue";
+import DataWeatherCard from "./DataWeatherCard.vue";
 
 const emits = defineEmits<{
   (e: "reset", data: Reading): void;
@@ -37,16 +38,15 @@ function reset() {
     </h1>
     <h2 class="text-lg font-semibold text-red-900">{{ $t("messages.values") }}</h2>
     <ReadingInputForm
+      :frozen="!edit"
       :modified="modified"
       @interface:reset="getChildResetter"
       :data="data"
     ></ReadingInputForm>
-    <details>
-      <summary>{{ $t("header.weather") }}</summary>
-      <div class="ml-2">
-        <p v-for="(value, key) in data.weather">{{ key + ": " + value }}</p>
-      </div>
-    </details>
+    <DataWeatherCard
+      v-if="data.weather"
+      :weather="data.weather"
+    ></DataWeatherCard>
     <transition name="slide-fade">
       <div
         v-if="edit && modified"
@@ -72,7 +72,10 @@ function reset() {
           ></BaseIconButton>
         </div></div
     ></transition>
-    <div class="mt-2 grid grid-cols-1 pt-1">
+    <div
+      v-if="edit"
+      class="mt-2 grid grid-cols-1 pt-1"
+    >
       <BaseIconButton
         icon="delete"
         @click="$emit('delete-entry')"

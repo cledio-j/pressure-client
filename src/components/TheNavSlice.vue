@@ -16,7 +16,7 @@ const botPanel = ref("latest");
 
 function navigate(to: string) {
   botPanel.value = to;
-  history.pushState({ botPanel: botPanel.value }, "", `/static/${to}`);
+  history.pushState({ botPanel: botPanel.value }, "", `/${to}`);
   emits("did-navigation");
 }
 

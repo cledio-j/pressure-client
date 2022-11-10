@@ -7,6 +7,7 @@ import ReadingDaytimeInput from "./ReadingDaytimeInput.vue";
 const props = defineProps<{
   data: Reading | ReadingInput;
   modified: boolean;
+  frozen?: boolean;
 }>();
 
 const emits = defineEmits<{
@@ -29,14 +30,21 @@ onMounted(() => {
     class="ml-2 grid grid-rows-3"
     :class="{ 'border-gray-600 bg-gray-200': modified }"
   >
-    <BaseDateInput v-model="data.timestamp"></BaseDateInput>
+    <BaseDateInput
+      v-model="data.timestamp"
+      :frozen="frozen"
+    ></BaseDateInput>
     <template v-for="str in ['systolic_bp', 'diastolic_bp', 'heart_rate']">
       <BetterInputField
+        :frozen="frozen"
         :name="$t('header.' + str)"
         v-model="data[str as ReadingValStr]"
         @interface="(fn) => inputFieldResetFns.push(fn)"
       ></BetterInputField>
     </template>
-    <ReadingDaytimeInput v-model="data.day_time"></ReadingDaytimeInput>
+    <ReadingDaytimeInput
+      v-model="data.day_time"
+      :frozen="frozen"
+    ></ReadingDaytimeInput>
   </div>
 </template>

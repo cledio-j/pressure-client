@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { dataStore } from "../store";
 import BaseIconButton from "./BaseIconButton.vue";
 

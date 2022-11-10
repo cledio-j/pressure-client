@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted, ref, Ref } from "vue";
+import { computed, inject, onMounted, ref, Ref } from "vue";
 import { xDaysAgo, xDaysFromNow } from "../utils/dateUtils";
 import BaseFromToDatePicker from "./BaseFromToDatePicker.vue";
 import BaseLoadingSpinner from "./BaseLoadingSpinner.vue";
@@ -13,10 +13,14 @@ const token = inject<Ref<string>>("token");
 const from: Ref<number | Date> = ref(7);
 const to: Ref<number | Date> = ref(1);
 
-const data: Ref<MinMaxResult | undefined> = ref();
+const data = ref() as Ref<MinMaxResult>; //because v-if='data' doesn't correctly narrow this
 const meta: Ref<{ from: string; to: string } | undefined> = ref();
 const modalData: Ref<Reading | undefined> = ref();
 const showModal = ref(false);
+const minMax: Ref<"min" | "max"> = ref("max");
+const showMin = computed(() => {
+  return minMax.value == "max" ? false : true;
+});
 
 async function getMinMax() {
   if (typeof from.value == "number") {
@@ -92,44 +96,55 @@ function makeModal(data: Reading | undefined) {
           ></BaseIconButton
         ></span>
       </div>
+      <BaseIconButton
+        :icon="showMin ? 'toggle_on' : 'toggle_off'"
+        @click="showMin ? (minMax = 'max') : (minMax = 'min')"
+        label="Toggle-min-max"
+      ></BaseIconButton>
       <table
         class="col-span-2"
         v-if="data"
       >
         <thead>
-          <th class="border"></th>
+          <th class="cursor-default border border-r-2 border-r-gray-400 p-1"></th>
           <th class="cursor-default border p-1">{{ $t("header.systolic_bp") }}</th>
           <th class="cursor-default border p-1">{{ $t("header.diastolic_bp") }}</th>
         </thead>
         <tbody>
-          <tr>
-            <th class="cursor-default border p-1">max</th>
+          <template v-for="item in (['morning', 'lunch', 'evening'] as DayTimeStr[])">
+            <tr class="hover:bg-gray-50">
+              <th class="cursor-default border border-r-2 border-r-gray-400 p-1">
+                {{ $t("daytime." + item) }}
+              </th>
+              <td
+                class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
+                @click="makeModal(data[`${item}_${minMax}_systolic_bp`])"
+              >
+                {{ data[`${item}_${minMax}_systolic_bp`].systolic_bp }}
+              </td>
+              <td
+                class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
+                @click="makeModal(data[`${item}_${minMax}_diastolic_bp`])"
+              >
+                {{ data[`${item}_${minMax}_diastolic_bp`].diastolic_bp }}
+              </td>
+            </tr>
+          </template>
+          <tr class="broder-t border-t-2 border-t-gray-400">
+            <th class="cursor-default border border-r-2 border-r-gray-400 p-1">
+              {{ $t("messages.total") }}
+            </th>
             <td
-              class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
-              @click="makeModal(data?.max_systolic_bp)"
+              class="w-24 cursor-pointer border p-1 font-semibold hover:bg-rose-100 hover:font-bold"
+              @click="makeModal(data[`total_${minMax}_systolic_bp`])"
             >
-              {{ data.max_systolic_bp.systolic_bp }}
+              {{ data[`total_${minMax}_systolic_bp`].systolic_bp }}
             </td>
             <td
-              class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
-              @click="makeModal(data?.max_diastolic_bp)"
+              class="w-24 cursor-pointer border p-1 font-semibold hover:bg-rose-100 hover:font-bold"
+              @click="makeModal(data[`total_${minMax}_diastolic_bp`])"
             >
-              {{ data.max_diastolic_bp.diastolic_bp }}
-            </td>
-          </tr>
-          <tr>
-            <th class="cursor-default border p-1">min</th>
-            <td
-              class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
-              @click="makeModal(data?.min_systolic_bp)"
-            >
-              {{ data.min_systolic_bp.systolic_bp }}
-            </td>
-            <td
-              @click="makeModal(data?.min_diastolic_bp)"
-              class="w-24 cursor-pointer border p-1 hover:bg-rose-100 hover:font-semibold"
-            >
-              {{ data.min_diastolic_bp.diastolic_bp }}
+              {{ data[`total_${minMax}_diastolic_bp`].diastolic_bp }}
             </td>
           </tr>
         </tbody>
@@ -140,6 +155,7 @@ function makeModal(data: Reading | undefined) {
         v-if="modalData"
         :showing="showModal"
         ><ReadingCard
+          :frozen="true"
           :data="modalData"
           :edit="false"
         ></ReadingCard
