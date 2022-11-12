@@ -21,6 +21,7 @@ const emits = defineEmits<{ (e: "close"): void; (e: "action"): void }>();
         <button
           v-if="actionText"
           class="underline"
+          @click="$emit('action')"
         >
           {{ actionText }}
         </button>

@@ -1,21 +1,19 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching";
+import { registerRoute, Route } from "workbox-routing";
+import { CacheFirst } from "workbox-strategies";
+
 declare let self: ServiceWorkerGlobalScope;
 
 cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
 
-self.addEventListener("install", (event) => {
-  console.log("Service worker installed");
-});
-self.addEventListener("activate", (event) => {
-  console.log("Service worker activated");
-});
+const getReadingsRoute = new Route(({ request }) => {
+  return request.url.includes("/readings/get");
+}, new CacheFirst());
 
-self.addEventListener("fetch", (event) => {
-  if (event.request.url.startsWith("http://192.168.178.11:5000/api/")) {
-    console.log(event);
-    caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
-    });
-  }
-});
+const getIconRoute = new Route(({ request }) => {
+  return request.url.includes("assets/svg");
+}, new CacheFirst());
+
+registerRoute(getReadingsRoute);
+registerRoute(getIconRoute);

@@ -1,12 +1,16 @@
+import { dataStore } from "../store";
+
 export function xDaysFromNow(days: number) {
   const date = new Date();
   date.setDate(date.getDate() + days);
+  date.setHours(0, 0, 0, 0);
   return date;
 }
 
 export function xDaysAgo(days: number) {
   const date = new Date();
   date.setDate(date.getDate() - days);
+  date.setHours(0, 0, 0, 0);
   return date;
 }
 

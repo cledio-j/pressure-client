@@ -17,7 +17,7 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.ts",
       injectRegister: "inline",
-      devOptions: { enabled: true, type: "module" },
+      devOptions: { enabled: false, type: "module" },
     }),
   ],
   build: {

@@ -1,3 +1,5 @@
+import MyWorker from "../workers/sort.worker?worker&inline";
+
 export function getStr(key: HeaderKey, item: Reading, t: any, d: any) {
   //t and d are translation stuff from useI18n
   //gets the right string rep for Reading values (i.e. splitting timestamp to time and date)
@@ -54,4 +56,25 @@ export function decideColor(
     const c = a + hueStart;
     return `hsl(${c}, 80%, 70%)`;
   } else return "";
+}
+
+export function sortReadings(
+  data: Reading[],
+  sort_by: Sortable = "timestamp",
+  order: "asc" | "desc" = "desc"
+) {
+  let x = performance.now();
+  console.log(sort_by, order);
+  data.sort((a: Reading, b: Reading) => {
+    if (a[sort_by] > b[sort_by]) {
+      if (order == "desc") return -1;
+      else return 1;
+    } else if (a[sort_by] < a[sort_by]) {
+      if (order == "desc") return 1;
+      else return -1;
+    }
+    return 0;
+  });
+  console.log(`Sorting took ${performance.now() - x}ms`);
+  return data;
 }

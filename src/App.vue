@@ -32,6 +32,7 @@ provide("authorized", authorized);
 provide("apiUrl", apiUrl);
 
 async function checkStorage() {
+  console.log(localStorage.tokenExpiration);
   if (!localStorage.tokenExpiration) {
     authorized.value = false;
   } else {

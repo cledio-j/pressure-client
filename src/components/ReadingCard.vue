@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { computed, inject, Ref, watch } from "vue";
 import ReadingInputForm from "./ReadingInputForm.vue";
 import BaseIconButton from "./BaseIconButton.vue";
 import DataWeatherCard from "./DataWeatherCard.vue";
+import ReadingDeleteButton from "./ReadingDeleteButton.vue";
+import { modifyReading } from "../utils/apiFuncs";
+import { dataStore } from "../store";
 
 const emits = defineEmits<{
   (e: "reset", data: Reading): void;
   (e: "modify"): void;
-  (e: "delete-entry"): void;
+  (e: "delete-entry", data: Reading, index: number): void;
 }>();
 
-const props = defineProps<{ data: Reading; edit: boolean }>();
+const token = inject<Ref<string>>("token");
+
+const props = defineProps<{ data: Reading; edit: boolean; index: number }>();
 const initialData: Reading = { ...props.data };
 Object.freeze(initialData);
 
@@ -29,6 +34,16 @@ function getChildResetter(resetFn: () => void) {
 function reset() {
   resetForm();
   emits("reset", initialData);
+}
+
+async function handleModify() {
+  if (!token) {
+    console.log("not authorized");
+    return;
+  }
+  const response = modifyReading(props.data.id, token.value, props.data);
+  dataStore.updateReading(props.data, props.index);
+  emits("modify");
 }
 </script>
 <template>
@@ -63,7 +78,7 @@ function reset() {
             color="text-red-900 hover:text-red-800"
           ></BaseIconButton>
           <BaseIconButton
-            @click="$emit('modify')"
+            @click="handleModify"
             label="submit form"
             class="justify-self-end bg-rose-100 px-1 pt-1 text-gray-900 shadow-sm shadow-rose-400 hover:scale-105 hover:bg-rose-200 hover:font-semibold hover:text-black"
             icon="check"
@@ -76,15 +91,12 @@ function reset() {
       v-if="edit"
       class="mt-2 grid grid-cols-1 pt-1"
     >
-      <BaseIconButton
-        icon="delete"
-        @click="$emit('delete-entry')"
-        class="justify-self-center bg-rose-100 px-1 pt-1 text-lg font-semibold text-gray-900 shadow-sm shadow-rose-400 hover:scale-105 hover:bg-rose-200 hover:font-semibold hover:text-black"
-        :extra-classes="'scale-75'"
-        :text="$t('controls.delete_entry')"
-        label="delete item"
-        color="fill-red-700"
-      ></BaseIconButton>
+      <ReadingDeleteButton
+        class="justify-self-center"
+        @delete-entry="(data, index) => $emit('delete-entry', data, index)"
+        :item="data"
+        :index="index"
+      ></ReadingDeleteButton>
     </div>
   </div>
 </template>

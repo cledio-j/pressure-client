@@ -37,9 +37,19 @@ interface MetaData {
   total: number;
 }
 
+interface GetParams {
+  from_date: string;
+  to_date: string;
+  page: number;
+  per_page: number;
+  order: string;
+  sort_by: string;
+}
+
 interface ReadingApiResponse {
   data: Reading[];
   meta: MetaData;
+  params: GetParams;
 }
 
 interface MinMaxApiResponse {
@@ -104,3 +114,4 @@ type HeaderKey =
 type ReadingVal = "diastolic_bp" | "systolic_bp" | "pulse";
 type DayTimeStr = "morning" | "lunch" | "evening";
 type ReadingValStr = "diastolic_bp" | "systolic_bp" | "heart_rate";
+type Sortable = "timestamp" | ReadingValStr | "id";

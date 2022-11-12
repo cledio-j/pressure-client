@@ -10,6 +10,7 @@ import DataTableEntries from "./DataTableEntries.vue";
 import DataTableValues from "./DataTableValues.vue";
 import DataTableDays from "./DataTableDays.vue";
 import BaseLoadingSpinner from "./BaseLoadingSpinner.vue";
+import { sortReadings } from "../utils/tableFuncs";
 
 const apiUrl = inject("apiUrl");
 const token = inject<Ref<string>>("token");
@@ -50,22 +51,16 @@ async function getData(toPage?: number) {
     setTimeout(getData, 1000);
     return;
   }
-  const reqBody: GetDataRequestBody = {
-    per_page: dataStore.perPage,
-    page: toPage ? toPage : 1,
-    order: dataStore.currentDirection,
-    sort_by: dataStore.currentOrderBy,
-    to_date: toDate.value,
-    from_date: fromDate.value,
-  };
-  const response = await fetch(apiUrl + "readings/get", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token.value,
-    },
-    body: JSON.stringify(reqBody),
-  }).catch((error) => {
+  const response = await fetch(
+    apiUrl + "readings/get" + `?page=${toPage ? toPage : 1}` + `&per_page=${dataStore.perPage}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token.value,
+      },
+    }
+  ).catch((error) => {
     console.log(error);
     return;
   });
@@ -74,8 +69,10 @@ async function getData(toPage?: number) {
     return;
   }
   const result = (await response.json()) as ReadingApiResponse;
+
   dataStore.updateData(result.data, result.meta);
-  dataStore.updateParamsFromBody(reqBody);
+  dataStore.updateParams(result.params);
+  dataStore.sortStore();
 }
 
 function updateSettings(newHeaders: any) {
@@ -88,6 +85,9 @@ function updateDate(value: string, field: string) {
   } else if (field == "to") {
     toDate.value = new Date(value);
   }
+}
+function handleSort(sort_by: string, order: string) {
+  console.log("Sorting... ...");
 }
 </script>
 <template>
@@ -137,6 +137,7 @@ function updateDate(value: string, field: string) {
         v-if="mode == 'entries'"
         :headers="headers"
         @more-data="getData(dataStore.currentPage + 1)"
+        @request-sort="(sort_by, order) => handleSort(sort_by, order)"
         :color="tableData.color"
       ></DataTableEntries>
       <DataTableDays

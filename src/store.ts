@@ -1,7 +1,5 @@
 import { reactive } from "vue";
-import { networkError } from "./utils/errors";
-
-const apiUrl = "http://192.168.178.11:5000/";
+import { sortReadings } from "./utils/tableFuncs";
 
 export const authStore = reactive({ authorized: false, token: "" });
 
@@ -21,34 +19,55 @@ export const dataStore = reactive({
   perPage: 100,
   totalPages: 1,
   currentDirection: "desc",
-  currentOrderBy: "timestamp",
+  currentOrderBy: "diastolic_bp",
   fromDate: new Date(),
   toDate: new Date(),
   total_pages: 1,
   total: 0,
+  initialized: false,
+  sortStore() {
+    this.data = sortReadings(
+      this.data,
+      this.currentOrderBy as Sortable,
+      this.currentDirection as "asc" | "desc"
+    );
+  },
+  deDupe() {
+    //filter out duplicates, which might happen due to weird caching/sorting/fetch interactions
+    const ids = this.data.map((reading) => reading.id);
+    this.data = this.data.filter(({ id }, index) => !ids.includes(id, index + 1));
+  },
   updateReading(modifiedReading: Reading, index: number) {
     this.data[index] = modifiedReading;
   },
   deleteReading(index: number) {
     this.data.splice(index, 1);
   },
-  addReading(newReading: Reading) {
+  addReading(newReading: Reading, index: number = 0) {
     //todo: this shouldn't just go to index 0 -- ideally respect sorting
-    this.data.unshift(newReading);
+    if (index == 0) {
+      this.data.unshift(newReading);
+    } else {
+      this.data.splice(index, 0, newReading);
+    }
+  },
+  addReadingAtIndex(newReading: Reading, index: number) {
+    this.data.splice(index, 0, newReading);
   },
   updateData(data: Reading[], meta: MetaData) {
     data.forEach((e) => (e.timestamp = e.timestamp.slice(0, -3)));
+
     this.data = this.data.concat(data);
     this.totalPages = meta.total_pages;
     this.total = meta.total;
   },
-  updateParamsFromBody(body: GetDataRequestBody) {
-    this.perPage = body.per_page;
-    this.fromDate = body.from_date;
-    this.toDate = body.to_date;
-    this.currentDirection = body.order;
-    this.currentOrderBy = body.sort_by;
-    this.currentPage = body.page;
+  updateParams(params: GetParams) {
+    this.perPage = params.per_page;
+    this.fromDate = new Date(params.from_date);
+    this.toDate = new Date(params.to_date);
+    this.currentDirection = params.order;
+    this.currentOrderBy = params.sort_by;
+    this.currentPage = params.page;
   },
   findReadingByDateDayTime(date: string, dayTime: DayTimeStr) {
     let reading = this.data.find((e) => {
