@@ -1,64 +1,58 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
-import BaseIconButton from "./BaseIconButton.vue";
-import BaseModal from "./BaseModal.vue";
-import { useI18n } from "vue-i18n";
-import BaseFromToDatePicker from "./BaseFromToDatePicker.vue";
+import { onMounted, ref } from 'vue'
+import Undo from '../assets/svg/undo.svg?component'
+import Check from '../assets/svg/check.svg?component'
+import BaseModal from './BaseModal.vue'
+import BaseFromToDatePicker from './BaseFromToDatePicker.vue'
 
-const { t } = useI18n();
-const { d } = useI18n();
-let childInterface: () => void;
 const props = defineProps<{
-  showing: boolean;
-  fromDateMinus: number;
-  toDatePlus: number;
-}>();
-
-const initialHeaders = [
-  { name: "date", show: true },
-  { name: "time", show: true },
-  { name: "timestamp", show: false },
-  { name: "systolic_bp", show: true },
-  { name: "diastolic_bp", show: true },
-  { name: "heart_rate", show: true },
-  { name: "day_time", show: true },
-  { name: "user_id", show: false },
-  { name: "id", show: false },
-  { name: "weather", show: false },
-];
-Object.freeze(initialHeaders);
-
-const headers = ref(structuredClone(initialHeaders));
+  showing: boolean
+  fromDateMinus: number
+  toDatePlus: number
+}>()
 
 const emits = defineEmits<{
-  (e: "new-settings", headers: any): void;
-  (e: "close"): void;
-}>();
+  (e: 'newSettings', headers: any): void
+  (e: 'close'): void
+}>()
 
-// watch(
-//   () => props.showing,
-//   (newVal, oldVal) => {
-//     if (oldVal && !newVal) emits("new-settings", headers.value);
-//   }
-// );
+let childInterface: () => void
+const online = ref(navigator.onLine)
+
+const initialHeaders = [
+  { name: 'date', show: true },
+  { name: 'time', show: true },
+  { name: 'timestamp', show: false },
+  { name: 'systolic_bp', show: true },
+  { name: 'diastolic_bp', show: true },
+  { name: 'heart_rate', show: true },
+  { name: 'day_time', show: true },
+  { name: 'user_id', show: false },
+  { name: 'id', show: false },
+  { name: 'weather', show: false },
+]
+Object.freeze(initialHeaders)
+
+const headers = ref(structuredClone(initialHeaders))
 
 function reset() {
-  headers.value = structuredClone(initialHeaders);
-  childInterface();
-  emits("new-settings", headers.value);
+  headers.value = structuredClone(initialHeaders)
+  childInterface()
+  emits('newSettings', headers.value)
 }
 function getChildInterface(resetFn: () => void) {
-  //grabbing child method
-  childInterface = resetFn;
+  // grabbing child method
+  childInterface = resetFn
 }
 onMounted(() => {
-  emits("new-settings", headers.value);
-});
+  emits('newSettings', headers.value)
+})
 </script>
+
 <template>
   <BaseModal
-    @close="$emit('close')"
     :showing="showing"
+    @close="$emit('close')"
   >
     <h1
       class="curso my-1 border-b border-dashed border-rose-300 pb-1 text-2xl font-semibold text-red-900"
@@ -67,55 +61,53 @@ onMounted(() => {
     </h1>
     <div>
       <fieldset
-        @change="$emit('new-settings', headers)"
         class=""
+        @change="$emit('newSettings', headers)"
       >
         <legend class="text-lg font-semibold text-red-900">
           {{ $t("messages.choose_header") }}
         </legend>
         <div class="ml-2 grid grid-cols-2">
-          <template v-for="item in headers"
-            ><div>
+          <template v-for="item in headers" :key="item.name">
+            <div>
               <input
-                :id="'input-' + item.name"
+                :id="`input-${item.name}`"
+                v-model="item.show"
                 type="checkbox"
                 class="accent-red-400"
-                v-model="item.show"
-              />
-              <label
-                class="pl-1"
-                :for="'input-' + item.name"
-                >{{ $t("header." + item.name) }}</label
               >
+              <label class="pl-1" :for="`input-${item.name}`">
+                {{ $t(`header.${item.name}`) }}
+              </label>
             </div>
           </template>
         </div>
       </fieldset>
     </div>
+    <h5 class="text-lg font-semibold text-red-900">
+      {{ online ? $t("controls.filter_by_date") : $t("messages.offline_not_avail") }}
+    </h5>
     <BaseFromToDatePicker
+      v-if="online"
       class="my-1"
       :from-date-minus="fromDateMinus"
       :to-date-plus="toDatePlus"
       @interface="getChildInterface"
-    >
-      <h5 class="text-lg font-semibold text-red-900">
-        {{ $t("controls.filter_by_date") }}
-      </h5>
-    </BaseFromToDatePicker>
+    />
     <div class="mt-2 grid grid-cols-3">
-      <BaseIconButton
-        label="reset-form"
-        @click="reset"
-        icon="undo"
-      ></BaseIconButton>
-      <BaseIconButton
-        label="submit-form"
+      <button class="justify-self-start rounded-md p-0 align-middle" @click="reset">
+        <Undo
+          class="fill-gray-600 hover:fill-gray-500"
+          label="reset-form"
+          icon="undo"
+        />
+      </button>
+      <button
+        class="rounded-md p-0 align-middle col-start-3 mr-4 justify-self-end"
         @click="$emit('close')"
-        color="fill-green-700 hover:fill-green-500 hover:scale-110 transition-all"
-        font-size="text-4xl"
-        class="col-start-3 mr-4 justify-self-end"
-        icon="check"
-      ></BaseIconButton>
+      >
+        <Check class="fill-green-700 hover:fill-green-500 hover:scale-110 transition-all" />
+      </button>
     </div>
   </BaseModal>
 </template>

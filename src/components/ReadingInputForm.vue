@@ -1,30 +1,31 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
-import BetterInputField from "./BetterInputField.vue";
-import BaseDateInput from "./BaseDateInput.vue";
-import ReadingDaytimeInput from "./ReadingDaytimeInput.vue";
+import { onMounted } from 'vue'
+import BetterInputField from './BetterInputField.vue'
+import BaseDateInput from './BaseDateInput.vue'
+import ReadingDaytimeInput from './ReadingDaytimeInput.vue'
 
 const props = defineProps<{
-  data: Reading | ReadingInput;
-  modified: boolean;
-  frozen?: boolean;
-}>();
+  data: Reading | ReadingInput
+  modified: boolean
+  frozen?: boolean
+}>()
 
 const emits = defineEmits<{
-  (e: "reset", data: Reading): void;
-  (e: "interface:reset", fn: () => void): void;
-}>();
+  (e: 'reset', data: Reading): void
+  (e: 'interface:reset', fn: () => void): void
+}>()
 
-const inputFieldResetFns: (() => void)[] = [];
+const inputFieldResetFns: (() => void)[] = []
 
 function reset() {
-  inputFieldResetFns.forEach((reset) => reset());
+  inputFieldResetFns.forEach(reset => reset())
 }
 
 onMounted(() => {
-  emits("interface:reset", reset);
-});
+  emits('interface:reset', reset)
+})
 </script>
+
 <template>
   <div
     class="ml-2 grid grid-rows-3"
@@ -33,18 +34,18 @@ onMounted(() => {
     <BaseDateInput
       v-model="data.timestamp"
       :frozen="frozen"
-    ></BaseDateInput>
-    <template v-for="str in ['systolic_bp', 'diastolic_bp', 'heart_rate']">
+    />
+    <template v-for="str in ['systolic_bp', 'diastolic_bp', 'heart_rate']" :key="str">
       <BetterInputField
-        :frozen="frozen"
-        :name="$t('header.' + str)"
         v-model="data[str as ReadingValStr]"
+        :frozen="frozen"
+        :name="$t(`header.${str}`)"
         @interface="(fn) => inputFieldResetFns.push(fn)"
-      ></BetterInputField>
+      />
     </template>
     <ReadingDaytimeInput
       v-model="data.day_time"
       :frozen="frozen"
-    ></ReadingDaytimeInput>
+    />
   </div>
 </template>

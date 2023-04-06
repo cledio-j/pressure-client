@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import BaseIconButton from "./BaseIconButton.vue";
+import BaseIconButton from './BaseIconButton.vue'
 
 const props = defineProps<{
-  show: boolean;
-  infoText: string;
-  actionText?: string;
-}>();
-const emits = defineEmits<{ (e: "close"): void; (e: "action"): void }>();
+  show: boolean
+  infoText: string
+  actionText?: string
+}>()
+const emits = defineEmits<{ (e: 'close'): void; (e: 'action'): void }>()
 </script>
+
 <template>
   <Transition name="slide-in">
     <div
@@ -17,7 +18,9 @@ const emits = defineEmits<{ (e: "close"): void; (e: "action"): void }>();
       <div
         class="flex flex-row gap-2 rounded-md bg-gray-300 bg-opacity-95 px-4 shadow-sm shadow-gray-600"
       >
-        <button class="cursor-default">{{ infoText }}</button>
+        <button class="cursor-default">
+          {{ infoText }}
+        </button>
         <button
           v-if="actionText"
           class="underline"
@@ -29,10 +32,12 @@ const emits = defineEmits<{ (e: "close"): void; (e: "action"): void }>();
           icon="close"
           class="scale-75 p-0"
           @click="$emit('close')"
-        ></BaseIconButton>
-      </div></div
-  ></Transition>
+        />
+      </div>
+    </div>
+  </Transition>
 </template>
+
 <style scoped>
 .slide-in-enter-active,
 .slide-in-leave-active {

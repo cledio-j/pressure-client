@@ -1,4 +1,5 @@
 <script setup lang="ts"></script>
+
 <template>
   <Transition name="slide-fade">
     <slot>
@@ -6,6 +7,7 @@
     </slot>
   </Transition>
 </template>
+
 <style scoped>
 .slide-fade-enter-active {
   transition: all 0.1s ease-out;

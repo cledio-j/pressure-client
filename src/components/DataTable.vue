@@ -1,26 +1,24 @@
 <script setup lang="ts">
-import { inject, onMounted, reactive, Ref, ref } from "vue";
-import { xDaysFromNow, xDaysAgo } from "../utils/dateUtils";
+import { type Ref, inject, onMounted, reactive, ref } from 'vue'
+import { xDaysAgo, xDaysFromNow } from '../utils/dateUtils'
+import { authStore, useDataStore } from '../store'
+import DataTableSettingsModal from './DataTableSettingsModal.vue'
+import BaseIconButton from './BaseIconButton.vue'
+import DataTableEntries from './DataTableEntries.vue'
+import DataTableValues from './DataTableValues.vue'
+import DataTableDays from './DataTableDays.vue'
+import BaseLoadingSpinner from './BaseLoadingSpinner.vue'
+import { type fetchOptions, useFetch } from '@/composables/fetch'
 
-import { dataStore } from "../store";
+const apiUrl = inject('apiUrl')
 
-import DataTableSettingsModal from "./DataTableSettingsModal.vue";
-import BaseIconButton from "./BaseIconButton.vue";
-import DataTableEntries from "./DataTableEntries.vue";
-import DataTableValues from "./DataTableValues.vue";
-import DataTableDays from "./DataTableDays.vue";
-import BaseLoadingSpinner from "./BaseLoadingSpinner.vue";
-import { sortReadings } from "../utils/tableFuncs";
+const toDate = ref(xDaysFromNow(1))
+const fromDate = ref(xDaysAgo(365))
+const mode: Ref<'entries' | 'days' | 'values'> = ref('entries')
+const headers: Ref<{ name: string; show: boolean }[] | undefined> = ref()
+const showSettings = ref(false)
 
-const apiUrl = inject("apiUrl");
-const token = inject<Ref<string>>("token");
-const authorized = inject<Ref<boolean>>("authorized");
-
-const toDate = ref(xDaysFromNow(1));
-const fromDate = ref(xDaysAgo(365));
-const mode: Ref<"entries" | "days" | "values"> = ref("entries");
-const headers: Ref<{ name: string; show: boolean }[] | undefined> = ref();
-const showSettings = ref(false);
+const dataStore = useDataStore()
 
 const tableData: TableDataObj = reactive({
   data: [],
@@ -28,134 +26,165 @@ const tableData: TableDataObj = reactive({
   currentPage: 1,
   perPage: 200,
   totalPages: 1,
-  currentDirection: "desc",
-  currentOrderBy: "timestamp",
+  currentDirection: 'desc',
+  currentOrderBy: 'timestamp',
   getter: getData,
-});
+})
 
 onMounted(() => {
-  tryGetData();
-});
+  tryGetData()
+})
 
 function tryGetData() {
-  if (token && token.value) {
-    getData();
-  } else {
-    setTimeout(tryGetData, 1000);
+  if (authStore.authorized)
+    getData()
+
+  else
+    setTimeout(tryGetData, 1000)
+}
+
+function getRangeArray(n: number, first = 1) {
+  const arr = [...Array(n).keys()]
+  if (first === 0)
+    return arr
+  return arr.map(i => i + first)
+}
+
+// function preventUnhandled(...promises: Promise<any>[]) {
+//   // this keeps the whole thing from exploding when one of the fetches errors
+//   for (const p of promises) p.catch(() => {})
+// }
+
+async function getDataGradual(pages: number, per_page: number) {
+  const urls = getRangeArray(pages - 1, 2).map(n => `readings/get?page=${n}&per_page=${per_page}`)
+  const opts: fetchOptions = { auth: true, method: 'GET' }
+  const responses: Promise<ReadingApiResponse>[] = urls.map(async (url) => {
+    const res = await useFetch(url, opts)
+    const data = res?.json()
+    return data
+  })
+  try {
+    for await (const r of responses)
+      dataStore.updateData(r.data, r.meta)
   }
+  catch (err) { console.error(err) }
 }
 
 async function getData(toPage?: number) {
-  if (!authorized || !token || !token.value || !authorized.value) {
-    console.log("not authorized");
-    setTimeout(getData, 1000);
-    return;
+  if (!authStore.authorized) {
+    console.error('not authorized')
+    setTimeout(getData, 1000)
+    return
   }
   const response = await fetch(
-    apiUrl + "readings/get" + `?page=${toPage ? toPage : 1}` + `&per_page=${dataStore.perPage}`,
+    `${apiUrl
+    }readings/get`
+      + `?page=${toPage || 1}`
+      + `&per_page=${dataStore.params.perPage}`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token.value,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`,
       },
-    }
+    },
   ).catch((error) => {
-    console.log(error);
-    return;
-  });
+    console.error(error)
+  })
   if (!response?.ok) {
-    console.log("Something went wrong. Status:" + response?.status);
-    return;
+    console.error(`Something went wrong. Status:${response?.status}`)
+    return
   }
-  const result = (await response.json()) as ReadingApiResponse;
+  const result = (await response.json()) as ReadingApiResponse
 
-  dataStore.updateData(result.data, result.meta);
-  dataStore.updateParams(result.params);
-  dataStore.sortStore();
+  dataStore.updateData(result.data, result.meta)
+  dataStore.updateParams(result.params)
+  dataStore.totalPages = result.meta.total_pages
+  getDataGradual(dataStore.totalPages, dataStore.params.perPage)
+}
+
+async function getSortedData(sort_by: string, order: string, toPage = 1) {
+  if (!authStore.authorized) {
+    console.error('not authorized')
+    return
+  }
+  try {
+    const response = await fetch(
+      `${apiUrl
+      }readings/get?${
+        new URLSearchParams({
+          page: toPage.toString(),
+          per_page: dataStore.params.perPage.toString(),
+          sort_by,
+          order,
+        })}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authStore.token}`,
+        },
+      },
+    )
+    if (!response?.ok) {
+      console.error(`Something went wrong. Status:${response?.status}`)
+      return
+    }
+    const result = (await response.json()) as ReadingApiResponse
+    dataStore.replaceData(result.data, result.meta)
+    dataStore.updateParams(result.params)
+    dataStore.totalPages = result.meta.total_pages
+  }
+  catch (_error) {
+    console.error(_error)
+  }
 }
 
 function updateSettings(newHeaders: any) {
-  headers.value = newHeaders;
+  headers.value = newHeaders
 }
 
 function updateDate(value: string, field: string) {
-  if (field == "from") {
-    fromDate.value = new Date(value);
-  } else if (field == "to") {
-    toDate.value = new Date(value);
-  }
+  if (field === 'from')
+    fromDate.value = new Date(value)
+
+  else if (field === 'to')
+    toDate.value = new Date(value)
 }
 function handleSort(sort_by: string, order: string) {
-  console.log("Sorting... ...");
+  getSortedData(sort_by, order)
 }
 </script>
+
 <template>
   <div @keydown.esc="showSettings = false">
-    <div class="grid-col-1 mb-2 grid justify-items-center">
-      <div class="rounded-2xl p-1 pt-2 outline outline-gray-300">
-        <select
-          v-model="mode"
-          class="rounded-lg border border-gray-300 text-lg"
-        >
-          <option value="entries">{{ $t("header.entries") }}</option>
-          <option value="days">{{ $t("header.days") }}</option>
-          <option value="values">{{ $t("header.values") }}</option>
-        </select>
-        <BaseIconButton
-          class="px-1"
-          :color="tableData.color ? 'rainbow-font' : 'fill-gray-600'"
-          :class="{ 'scale-[0.9]': true }"
-          :extra-classes="'hover:scale-105'"
-          @click="tableData.color = !tableData.color"
-          icon="paint"
-          label="Toggle color"
-        ></BaseIconButton>
-        <BaseIconButton
-          class="px-1"
-          @click="showSettings = true"
-          :extra-classes="'hover:scale-105'"
-          icon="settings"
-          label="settings"
-        ></BaseIconButton>
-        <DataTableSettingsModal
-          :showing="showSettings"
-          :fromDateMinus="365"
-          :toDatePlus="1"
-          @close="showSettings = false"
-          @new-settings="(headers) => updateSettings(headers)"
-          @new-date="(v: string, f: string) => updateDate(v, f)"
-        ></DataTableSettingsModal>
-      </div>
-    </div>
-
     <div
       v-if="dataStore.data.length && headers"
       class="grid grid-cols-1"
     >
       <DataTableEntries
-        v-if="mode == 'entries'"
+        v-if="mode === 'entries'"
         :headers="headers"
-        @more-data="getData(dataStore.currentPage + 1)"
+        :color="tableData.color"
+        @more-data="getData(dataStore.params.currentPage + 1)"
         @request-sort="(sort_by, order) => handleSort(sort_by, order)"
-        :color="tableData.color"
-      ></DataTableEntries>
+      />
       <DataTableDays
-        v-else-if="mode == 'days'"
-        @more-data="getData(dataStore.currentPage + 1)"
+        v-else-if="mode === 'days'"
         :color="tableData.color"
-      ></DataTableDays>
+        @more-data="getData(dataStore.params.currentPage + 1)"
+      />
       <DataTableValues
+        v-else-if="mode === 'values'"
         :color="tableData.color"
-        @more-data="getData(dataStore.currentPage + 1)"
-        v-else-if="mode == 'values'"
-      ></DataTableValues>
+        @more-data="getData(dataStore.params.currentPage + 1)"
+      />
     </div>
     <div
-      class="grid"
       v-else
+      class="grid"
     >
-      <BaseLoadingSpinner class="justify-self-center"></BaseLoadingSpinner>
+      <BaseLoadingSpinner class="justify-self-center" />
     </div>
     <svg
       style="width: 0; height: 0; position: absolute"
@@ -181,8 +210,51 @@ function handleSort(sort_by: string, order: string) {
         />
       </linearGradient>
     </svg>
+    <div class="grid-col-1 mt-1 grid justify-items-center w-full">
+      <div class="w-full md:w-fit rounded-2xl p-1 pt-2 outline outline-gray-300 flex flex-row justify-center">
+        <select
+          v-model="mode"
+          class="rounded-lg border border-gray-300 text-lg"
+        >
+          <option value="entries">
+            {{ $t("header.entries") }}
+          </option>
+          <option value="days">
+            {{ $t("header.days") }}
+          </option>
+          <option value="values">
+            {{ $t("header.values") }}
+          </option>
+        </select>
+        <BaseIconButton
+          class="px-1 scale-[0.9]"
+          :color="tableData.color ? 'rainbow-font' : 'fill-gray-600'"
+
+          extra-classes="hover:scale-105"
+          icon="paint"
+          label="Toggle color"
+          @click="tableData.color = !tableData.color"
+        />
+        <BaseIconButton
+          class="px-1"
+          extra-classes="hover:scale-105"
+          icon="settings"
+          label="settings"
+          @click="showSettings = true"
+        />
+        <DataTableSettingsModal
+          :showing="showSettings"
+          :from-date-minus="365"
+          :to-date-plus="1"
+          @close="showSettings = false"
+          @new-settings="(headers) => updateSettings(headers)"
+          @new-date="(v: string, f: string) => updateDate(v, f)"
+        />
+      </div>
+    </div>
   </div>
 </template>
+
 <style>
 .rainbow-font {
   fill: url(#my-cool-gradient);

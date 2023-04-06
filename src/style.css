@@ -5,3 +5,7 @@
 html {
 	scrollbar-gutter: stable
 }
+
+.modal-open {
+	overflow: hidden;
+}

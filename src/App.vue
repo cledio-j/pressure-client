@@ -1,109 +1,81 @@
 <script setup lang="ts">
-import { onMounted, provide, reactive, ref } from "vue";
-import NewEntry from "./components/TheNewEntry.vue";
-import NavSlice from "./components/TheNavSlice.vue";
-import ErrorModal from "./components/ErrorModal.vue";
-import BaseLocaleChanger from "./components/BaseLocaleChanger.vue";
-import AuthSplash from "./components/AuthSplash.vue";
-import { networkError, notAuthorized } from "./utils/errors";
-import { useI18n } from "vue-i18n";
+import { onMounted, provide, reactive, ref } from 'vue'
+import NewEntry from './components/TheNewEntry.vue'
+import NavSlice from './components/TheNavSlice.vue'
+import AuthSplash from './components/AuthSplash.vue'
+import ErrorModal from './components/ErrorModal.vue'
+import { authStore, errorStore } from './store'
+import { useBreakpoints } from './composables/breakpoints'
 
-import { errorStore } from "./store";
+import { apiUrl } from './utils/apiFuncs'
+import ErrorNotification from './components/ErrorNotification.vue'
 
-import { apiUrl } from "./utils/apiFuncs";
+const { width, breakpoint } = useBreakpoints()
+const token = ref('')
 
-const { t } = useI18n();
-const authorized = ref(false);
-const token = ref("");
+// const isMobile = computed(
+//   () => {
+//     if (navigator.maxTouchPoints > 0) {
+//     }
+//   })
 
-let theNewEntryCollapse: () => void;
+let theNewEntryCollapse: () => void
 
-const errorInfo: ErrorObj = reactive({
-  severity: "info",
-  active: false,
-  title: "",
-  message: "",
-  options: [],
-  details: "",
-});
+provide('token', token)
+provide('apiUrl', apiUrl)
+provide('width', width)
+provide('breakpoint', breakpoint)
 
-provide("token", token);
-provide("authorized", authorized);
-provide("apiUrl", apiUrl);
-
-async function checkStorage() {
-  console.log(localStorage.tokenExpiration);
-  if (!localStorage.tokenExpiration) {
-    authorized.value = false;
-  } else {
-    const expiration = new Date(localStorage.tokenExpiration);
-    if (expiration <= new Date()) {
-      authorized.value = false;
-    } else {
-      token.value = localStorage.token;
-      authorized.value = true;
-    }
+function getToken() {
+  if (localStorage.token && new Date(localStorage.tokenExpiration) > new Date()) {
+    authStore.authorized = true
+    authStore.token = localStorage.token
+    return localStorage.token
   }
-}
-
-async function getNewToken(name: string, pwd: string) {
-  try {
-    const response = await fetch(apiUrl + "user/get-token", {
-      method: "POST",
-      headers: {
-        Authorization: "Basic " + window.btoa(`${name}:${pwd}`),
-      },
-    });
-    if (response && !response.ok) {
-      if (response.status == 401) {
-        authorized.value = false;
-        // handleError(notAuthorized(t, getNewToken, response));
-        return;
-      }
-    }
-    const data = await response.json();
-    if (data) {
-      token.value = data.token;
-      localStorage.tokenExpiration = data.expires;
-      localStorage.token = data.token;
-      authorized.value = true;
-    } else {
-      console.log("auth error");
-      authorized.value = false;
-    }
-  } catch (error) {
-    authorized.value = false;
-    // handleError(networkError(t, () => getNewToken(name, pwd)));
-  }
+  return false
 }
 
 onMounted(async () => {
-  history.pushState({ botPanel: "latest" }, "", `/latest`);
-  checkStorage();
-});
-
-function handleError(err: ErrorObj) {
-  Object.assign(errorInfo, err);
-}
+  history.pushState({ botPanel: 'latest' }, '', '/#latest')
+  getToken()
+})
 </script>
 
 <template>
   <div class="container mx-auto h-full max-w-screen-lg px-1">
+    <!-- <button @click="authStore.authorized = false, authStore.token = ''">
+      LOGout
+    </button> -->
     <!-- <BaseLocaleChanger></BaseLocaleChanger> -->
-    <!-- <ErrorModal
+    <ErrorNotification />
+    <ErrorModal
       :error="errorStore.error"
       @close="errorStore.toggleActive()"
       @user-responded="errorStore.toggleActive()"
-    ></ErrorModal> -->
-    <div v-if="authorized">
-      <NewEntry @interface:collapse="(fn) => (theNewEntryCollapse = fn)"></NewEntry>
-      <NavSlice @did-navigation="() => theNewEntryCollapse()"></NavSlice>
-    </div>
-    <AuthSplash
-      v-else
-      @auth:submit="(name, pwd) => getNewToken(name, pwd)"
-    ></AuthSplash>
+    />
+    <Transition name="fade">
+      <div v-if="authStore.authorized">
+        <NewEntry @interface:collapse="(fn) => (theNewEntryCollapse = fn)" />
+        <NavSlice @did-navigation="() => theNewEntryCollapse()" />
+      </div>
+      <AuthSplash
+        v-else
+        class="absolute md:right-1/2"
+      />
+    </Transition>
   </div>
 </template>
 
-<style></style>
+<style>
+.fade-enter-active {
+  transition: all 1.2s ease-out;
+}
+.fade-leave-active {
+  transition: all 0s ease-out;
+}
+.fade-enter,
+.fade-leave-to {
+  transform: translateY(-100px);
+  opacity: 0;
+}
+</style>

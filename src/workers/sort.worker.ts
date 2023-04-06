@@ -23,15 +23,18 @@
 // }
 // Comlink.expose(SortData);
 
-export function NosortData(data: Reading[], sort_by: Sortable, order: "asc" | "desc") {
+export function NosortData(data: Reading[], sort_by: Sortable, order: 'asc' | 'desc') {
   data.sort((a: Reading, b: Reading) => {
     if (a[sort_by] > b[sort_by]) {
-      if (order == "desc") return -1;
-      else return 1;
-    } else if (a[sort_by] < a[sort_by]) {
-      if (order == "desc") return 1;
-      else return -1;
+      if (order === 'desc')
+        return -1
+      else return 1
     }
-    return 0;
-  });
+    else if (a[sort_by] < b[sort_by]) {
+      if (order === 'desc')
+        return 1
+      else return -1
+    }
+    return 0
+  })
 }

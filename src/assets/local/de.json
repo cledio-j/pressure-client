@@ -17,7 +17,7 @@
     "entries": "Einträge",
     "days": "Tage",
     "values": "Tage nach Wert",
-    "min_max": "Maximal- und Minimalwerte",
+    "min_max": "Max- & Minwerte",
     "temperature": "Temperatur",
     "pressure": "Druck: ",
     "humidity": "Luftfeuchtigkeit: ",
@@ -57,7 +57,17 @@
     "unauthorized": "Login Fehler",
     "unauthorized_details": "Unbekannter Benutzername oder falsches Passwort. Falls gar keine Zugangsdaten eingegeben wurden, bitte Seite komplett neu laden. Wenn das nichts bringt, Clemens informieren.",
     "user_name": "Benutzername",
-    "password": "Passwort"
+    "password": "Passwort",
+    "offline_not_avail": "Diese Option ist im offline Modus nicht verfügbar.",
+    "last_entry": "Letzter Eintrag",
+    "day_before": "Vorheriger Tag",
+    "compare_to": "Vergleich mit:",
+    "all": "Alle",
+    "graphs": "Diagramme",
+    "no_video_offline": "Bilderkennung ist im offline Modus nicht verfügbar.",
+    "no_video_input": "Kein Videoinput verfügbar.",
+    "video_unavaiable": "Bilderkennung ist nict verfügbar.",
+    "wrong_pwd": "Falscher Benutzername oder Passwort"
   },
   "controls": {
     "from": "Von...",

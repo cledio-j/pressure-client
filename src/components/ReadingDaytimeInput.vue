@@ -1,16 +1,16 @@
 <script setup lang="ts">
-const props = defineProps<{ modelValue: string; frozen?: boolean }>();
+const props = defineProps<{ modelValue: string; frozen?: boolean }>()
 const emits = defineEmits<{
-  (e: "update:modelValue", neVal: number): void;
-}>();
+  (e: 'update:modelValue', neVal: number): void
+}>()
 </script>
+
 <template>
   <div class="mb-2 grid grid-cols-3 justify-items-center gap-2">
     <label
       for="inputDT"
       class="text-md justify-self-end p-2 font-medium text-gray-900"
-      >{{ $t("daytime.daytime") }}</label
-    >
+    >{{ $t("daytime.daytime") }}</label>
     <select
       id="inputDT"
       :disabled="frozen"
@@ -22,10 +22,18 @@ const emits = defineEmits<{
       <option disabled>
         {{ $t("messages.select_daytime") }}
       </option>
-      <option value="morning">{{ $t("daytime.morning") }}</option>
-      <option value="lunch">{{ $t("daytime.lunch") }}</option>
-      <option value="evening">{{ $t("daytime.evening") }}</option>
-      <option value="other">{{ $t("daytime.other") }}</option>
+      <option value="morning">
+        {{ $t("daytime.morning") }}
+      </option>
+      <option value="lunch">
+        {{ $t("daytime.lunch") }}
+      </option>
+      <option value="evening">
+        {{ $t("daytime.evening") }}
+      </option>
+      <option value="other">
+        {{ $t("daytime.other") }}
+      </option>
     </select>
   </div>
 </template>

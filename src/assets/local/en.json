@@ -57,7 +57,17 @@
     "unauthorized": "Authorization error",
     "unauthorized_details": "Unauthorized",
     "user_name": "Username",
-    "password": "Password"
+    "password": "Password",
+    "offline_not_avail": "This feature isn't available in offline mode.",
+    "last_entry": "Latest entry",
+    "day_before": "Day before",
+    "compare_to": "Compare to:",
+    "graphs": "Graphs",
+    "all": "All",
+    "no_video_offline": "Image detection is not available in offline mode.",
+    "no_video_input": "No video input device detected.",
+    "video_unavaiable": "No video input.",
+    "wrong_pwd": "Incorrect name or password"
   },
   "controls": {
     "from": "From...",

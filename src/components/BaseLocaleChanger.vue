@@ -1,4 +1,5 @@
 <script setup lang="ts"></script>
+
 <template>
   <div class="absolute top-0 right-0">
     <select v-model="$i18n.locale">

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-/// <reference types="vite-svg-loader" />
-import Refresh from "../assets/svg/refresh.svg?component";
+import Refresh from '../assets/svg/refresh.svg?component'
 </script>
+
 <template>
   <Refresh class="circle-spin" />
 </template>
+
 <style scoped>
 .circle-spin {
   animation: spin 1.2s linear infinite;

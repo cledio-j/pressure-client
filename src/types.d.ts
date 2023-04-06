@@ -1,3 +1,5 @@
+/// <reference types="vite-svg-loader" />
+
 interface Reading {
   time?: string;
   date?: string;
@@ -100,6 +102,25 @@ interface ErrorObj {
   options: ErrorAction[];
 }
 
+interface CardState {
+  [index: number]: {
+    collapse: boolean;
+    weather: boolean;
+    edit: boolean;
+  };
+}
+
+interface ValueResult {
+  confidence: ConfidenceVal
+  result: number
+}
+
+interface ImageResult {
+  diastolic_bp: ValueResult
+  systolic_bp: ValueResult
+  pulse: ValueResult
+}
+
 type HeaderKey =
   | "timestamp"
   | "day_time"
@@ -115,3 +136,5 @@ type ReadingVal = "diastolic_bp" | "systolic_bp" | "pulse";
 type DayTimeStr = "morning" | "lunch" | "evening";
 type ReadingValStr = "diastolic_bp" | "systolic_bp" | "heart_rate";
 type Sortable = "timestamp" | ReadingValStr | "id";
+type MethodString = "GET" | "DELETE" | "POST" | "PUT" | "PATCH";
+type ConfidenceVal = 'high' | 'medium' | 'low'
