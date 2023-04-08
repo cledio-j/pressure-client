@@ -65,7 +65,7 @@ onMounted(() => {
       :value="modelValue"
       :disabled="frozen"
       type="number"
-      class="col-span-2 col-start-2 w-full justify-self-center rounded-lg border border-gray-300 bg-gray-50 p-1 lg:col-span-1"
+      class="col-span-2 col-start-2 w-full justify-self-start rounded-lg border border-gray-300 bg-gray-50 p-1 lg:col-span-1"
       :class="{
         'bg-red-300': validated === 'error',
         'bg-green-200': validated === 'yes',

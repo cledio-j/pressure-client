@@ -20,7 +20,7 @@ const emits = defineEmits<{
       id="dateInput"
       :disabled="frozen"
       type="datetime-local"
-      class="w-30 col-span-2 col-start-2 justify-self-start rounded-lg border border-gray-300 bg-gray-50 p-1"
+      class="lg:col-span-1 col-start-2 justify-self-start rounded-lg border border-gray-300 bg-gray-50 p-1 col-span-2 w-full"
       :value="modelValue"
       @change="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     >
