@@ -34,6 +34,14 @@ const needValidation = ref(false)
 const wantOcr = ref(false)
 const entryForm = ref() as Ref<HTMLFormElement>
 
+const resetFn = ref<() => void | undefined>()
+
+function doReset() {
+  Object.assign(input, getInitial())
+  reset.value = !reset.value
+  resetFn.value && resetFn.value()
+}
+
 function getInitial() {
   return {
     systolic_bp: 0,
@@ -92,6 +100,7 @@ async function handleSubmit() {
       else {
         const data = await res.json()
         dataStore.addReading(data.reading)
+        doReset()
       }
     }
   }
@@ -173,16 +182,14 @@ function handleOCR(result: ImageResult) {
           <ReadingInputForm
             :data="input"
             :modified="false"
+            @interface:reset="(fn) => resetFn = fn"
           />
           <div class="my-2 grid grid-cols-3">
             <button class="ml-4 h-10 justify-self-start rounded-md p-0">
               <BaseIconButton
                 icon="undo"
                 label="reset form"
-                @click.prevent="
-                  Object.assign(input, getInitial());
-                  reset = !reset;
-                "
+                @click.prevent="doReset"
               />
             </button>
             <button
