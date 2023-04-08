@@ -47,14 +47,13 @@ function changePerPage(e: Event) {
 </script>
 
 <template>
-  <div
-    class="grid h-12 grid-cols-2 content-center items-center border border-t-0 border-gray-500 md:grid-cols-3"
+  <footer
+    class="grid h-12 grid-cols-2 items-center border border-t-0 border-gray-500 lg:grid-cols-3"
   >
-    <footer class="justify-self-end md:col-start-2">
-      <label
-        for="perPageValue"
-        class="pr-8 text-sm"
-      >{{ $t("messages.per_page") }}</label>
+    <label
+      for="perPageValue"
+      class="lg:pr-8 pl-1 text-sm"
+    >{{ $t("messages.per_page") }}
       <select
         id="perPageValue"
         class="border-b-2 border-rose-400 bg-white"
@@ -74,8 +73,10 @@ function changePerPage(e: Event) {
           50
         </option>
       </select>
-    </footer>
-    <nav class="justify-self-end">
+    </label>
+    <nav
+      class="justify-end flex flex-row items-center w-full lg:col-start-3"
+    >
       <span class="text-sm">
         {{
           `${firstRow
@@ -87,19 +88,21 @@ function changePerPage(e: Event) {
         }}</span>
       <a
         aria-label="previous"
-        class="material-symbols-outlined cursor-pointer select-none"
+        class="cursor-pointer select-none"
         :class="{ 'cursor-not-allowed text-gray-400': !isAvail(currentPage - 1) }"
         :disabled="isAvail(currentPage - 1)"
         @click="navigate(currentPage - 1)"
-      ><BaseIconButton
-        icon="arrowForward"
-        label="previous"
-        extra-classes="scale-75 rotate-180"
-        :color="!isAvail(currentPage - 1) ? 'cursor-not-allowed fill-gray-400' : ''"
-      /></a>
+      >
+        <BaseIconButton
+          icon="arrowForward"
+          label="previous"
+          extra-classes="scale-75 rotate-180"
+          :color="!isAvail(currentPage - 1) ? 'cursor-not-allowed fill-gray-400' : ''"
+        />
+      </a>
       <a
         aria-label="next"
-        class="material-symbols-outlined select-none"
+        class="select-none"
         :disabled="isAvail(currentPage + 1)"
         @click="navigate(currentPage + 1)"
       ><BaseIconButton
@@ -109,5 +112,5 @@ function changePerPage(e: Event) {
         extra-classes="scale-75"
       /></a>
     </nav>
-  </div>
+  </footer>
 </template>
