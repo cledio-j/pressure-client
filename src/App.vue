@@ -35,6 +35,11 @@ function getToken() {
   return false
 }
 
+function logout() {
+  authStore.authorized = false
+  localStorage.token = ''
+}
+
 onMounted(async () => {
   history.pushState({ botPanel: 'latest' }, '', '/#latest')
   getToken()
@@ -43,7 +48,7 @@ onMounted(async () => {
 
 <template>
   <div class="container mx-auto h-full max-w-screen-lg px-1">
-    <!-- <button @click="authStore.authorized = false, authStore.token = ''">
+    <!-- <button @click="logout()">
       LOGout
     </button> -->
     <!-- <BaseLocaleChanger></BaseLocaleChanger> -->

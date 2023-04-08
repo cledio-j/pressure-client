@@ -50,7 +50,7 @@ function doErrorAction(error: ErrorAction) {
         <BaseIconButton
           :icon="attrsForAction[item.name].icon"
           :text="$t(`controls.${item.name}`)"
-          class="border bg-rose-100 text-lg font-semibold text-red-900 shadow-sm shadow-gray-200 hover:scale-105 hover:bg-rose-200"
+          class="border bg-rose-50 text-lg font-semibold text-red-900 shadow-sm shadow-gray-200 hover:scale-105 hover:bg-rose-200"
           :color="attrsForAction[item.name].color"
           extra-classes="pr-1 pb-0.5 scale-75"
           :label="item.name"

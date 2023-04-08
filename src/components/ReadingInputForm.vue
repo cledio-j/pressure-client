@@ -38,7 +38,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="ml-2 grid grid-rows-3"
+    class="ml-2 grid grid-flow-row w-full"
     :class="{ 'border-gray-600 bg-gray-200': modified }"
   >
     <BaseDateInput

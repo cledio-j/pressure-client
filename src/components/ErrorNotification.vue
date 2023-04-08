@@ -12,7 +12,7 @@ const noteStore = useNoteStore()
       class="fixed top-2 left-[50%] translate-x-[-50%] z-[100]"
     >
       <div
-        class="flex flex-row gap-2 rounded-md bg-gray-100 bg-opacity-80 px-2 shadow-sm shadow-gray-400"
+        class="flex flex-row gap-2 rounded-md bg-gray-100 bg-opacity-95 px-2 shadow-sm shadow-gray-400"
       >
         <h2 class="font-semibold text-red-900 pt-1">
           {{ noteStore.notes[0].title }}
