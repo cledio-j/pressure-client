@@ -1,5 +1,3 @@
-
-
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
   "include": [

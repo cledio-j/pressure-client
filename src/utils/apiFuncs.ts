@@ -1,6 +1,6 @@
 export const apiUrl = import.meta.env.PROD
   ? 'https://cledioj.pythonanywhere.com/api/'
-  : 'https://192.168.178.11:5000/api/'
+  : 'http://192.168.178.11:5000/api/'
 
 export async function deleteReading(id: number, token: string) {
   return fetch(`${apiUrl}reading/delete` + `?id=${id}`, {

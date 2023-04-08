@@ -2,7 +2,7 @@ import { authStore } from '@/store'
 
 export const apiUrl = import.meta.env.PROD
   ? 'https://cledioj.pythonanywhere.com/api/'
-  : 'https://192.168.178.11:5000/api/'
+  : 'http://192.168.178.11:5000/api/'
 
 export interface fetchOptions {
   auth: boolean

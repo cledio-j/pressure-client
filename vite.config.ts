@@ -1,17 +1,16 @@
-import { fileURLToPath } from 'node:url'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgLoader from 'vite-svg-loader'
-import mkcert from 'vite-plugin-mkcert'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  server: { https: true },
+  server: { https: false },
   plugins: [
     vue(),
-    mkcert(),
+    // mkcert(),
     VueI18nPlugin({ compositionOnly: true }),
     svgLoader(),
     VitePWA({
