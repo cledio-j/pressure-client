@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import Warning from '../assets/svg/warning.svg?component'
 
 const props = defineProps<{
   name: string
@@ -19,7 +20,7 @@ function validate(newVal: number) {
     validated.value = 'error'
     return false
   }
-  else if (newVal < 40 || newVal > 200) {
+  else if (newVal < 40 || newVal > 170) {
     validated.value = 'warn'
     return true
   }
@@ -53,11 +54,11 @@ onMounted(() => {
       class="text-md relative justify-self-end p-2 font-medium text-gray-900"
       :for="name"
     >{{ name }}
-      <span
+      <Warning
         v-if="validated === 'error'"
-        class="material-symbols-outlined absolute top-2 -right-56 text-red-800 md:-right-44"
-      >warning
-      </span>
+        class="absolute top-2 -right-48 fill-red-800 md:-right-44"
+        viewBox="-10 4 42 54"
+      />
     </label>
     <input
       :id="name"
