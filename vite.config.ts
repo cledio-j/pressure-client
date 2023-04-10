@@ -1,6 +1,6 @@
+import { fileURLToPath } from 'node:url'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
-import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgLoader from 'vite-svg-loader'
@@ -18,8 +18,8 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'sw.ts',
-      injectRegister: 'inline',
-      devOptions: { enabled: false, type: 'module' },
+      injectRegister: 'auto',
+      devOptions: { enabled: true, type: 'module' },
       manifest: {
         name: 'Blutdruck',
         short_name: 'Blutdruck',

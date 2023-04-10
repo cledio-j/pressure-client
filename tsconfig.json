@@ -16,7 +16,8 @@
     "target": "ESNext",
     "lib": [
       "ESNext",
-      "DOM"
+      "DOM",
+      "WebWorker"
     ],
     "composite": true,
     "baseUrl": ".",

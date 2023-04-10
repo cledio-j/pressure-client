@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onMounted, provide, reactive, ref } from 'vue'
+import { onBeforeMount, onMounted, provide, reactive, ref, watch, watchEffect } from 'vue'
+import { useRegisterSW } from 'virtual:pwa-register/vue'
 import NewEntry from './components/TheNewEntry.vue'
 import NavSlice from './components/TheNavSlice.vue'
 import AuthSplash from './components/AuthSplash.vue'
@@ -9,6 +10,22 @@ import { useBreakpoints } from './composables/breakpoints'
 
 import { apiUrl } from './utils/apiFuncs'
 import ErrorNotification from './components/ErrorNotification.vue'
+import { Notification, useNoteStore } from './notifications'
+
+const noteStore = useNoteStore()
+
+const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW()
+
+watch(needRefresh, (newVal, oldVal) => {
+  if (newVal) {
+    noteStore.notes.push(new Notification(
+      'Update',
+      'Neue Version verfügbar',
+      [{ name: 'reload', action: updateServiceWorker }],
+    ))
+    needRefresh.value = false
+  }
+})
 
 const { width, breakpoint } = useBreakpoints()
 const token = ref('')
@@ -40,6 +57,10 @@ function logout() {
   localStorage.token = ''
 }
 
+function reload() {
+  location.reload()
+}
+
 onMounted(async () => {
   history.pushState({ botPanel: 'latest' }, '', '/#latest')
   getToken()
@@ -68,6 +89,11 @@ onMounted(async () => {
         class="absolute md:right-1/2"
       />
     </Transition>
+    <footer class=" grid grid-cols-1 content-center">
+      <button class="text-blue-700 fixed bottom-0 font-semibold underline" @click="reload">
+        {{ $t('controls.reload') }}
+      </button>
+    </footer>
   </div>
 </template>
 
