@@ -9,7 +9,7 @@ const noteStore = useNoteStore()
   <Transition name="slide-in">
     <div
       v-if="noteStore.notes.length > 0"
-      class="fixed top-2 left-[50%] translate-x-[-50%] z-[100]"
+      class="fixed top-2 mx-4 z-[100]"
     >
       <div
         class="flex flex-row gap-2 rounded-md bg-gray-100 bg-opacity-95 px-2 shadow-sm shadow-gray-400"
@@ -20,7 +20,7 @@ const noteStore = useNoteStore()
         <span class="pt-1 text-gray-700">{{ noteStore.notes[0].message }}</span>
         <button
           v-for="(item, index) in noteStore.notes[0].actions" :key="index"
-          class="underline font-semibold"
+          class="underline font-semibold text-blue-800 min-w-fit"
           @click="item.action"
         >
           {{ $t(`errorActions.${item.name}`) }}

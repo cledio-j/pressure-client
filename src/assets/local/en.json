@@ -79,6 +79,7 @@
     "cancel": "Cancel",
     "reset": "Reset",
     "delete_entry": "Delete entry",
-    "new_entry": "New entry"
+    "new_entry": "New entry",
+    "reload": "Reload"
   }
 }
