@@ -136,65 +136,65 @@ function handleModify(data: Reading, index: number) {
               {{ `${$d(new Date(item.timestamp), "long")} - ${$t(`daytime.${item.day_time}`)}` }}
             </h2>
           </div>
-          <TransitionSlideFadeUp>
-            <div
-              v-if="cardState[index].collapse"
-              class="my-grid my-1 rounded-xl"
-            >
-              <div class="absolute top-12 -left-2 md:invisible">
-                <BaseBubbleButton
-                  :icon="Cloudy"
-                  :toggle-fn="() => toggleWeather(index)"
-                  :active="cardState[index].weather"
-                />
-              </div>
-              <div class="absolute top-24 -left-2 md:invisible">
-                <BaseBubbleButton
-                  :icon="Edit"
-                  :toggle-fn="() => toggleEdit(index)"
-                  :active="cardState[index].edit"
-                />
-              </div>
-              <div>
-                <!-- leave this because I'm terrible at grid and it works like this -->
-              </div>
-              <DataValuesCard
-                class="justify-self-center md:row-span-1 md:row-start-2 md:justify-self-start md:px-0"
-                :index="index"
-                :item="item"
-                :compare-to="compareTo"
+          <!-- <TransitionSlideFadeUp> -->
+          <div
+            v-if="cardState[index].collapse"
+            class="my-grid my-1 rounded-xl"
+          >
+            <div class="absolute top-12 -left-2 md:invisible">
+              <BaseBubbleButton
+                :icon="Cloudy"
+                :toggle-fn="() => toggleWeather(index)"
+                :active="cardState[index].weather"
               />
-              <TransitionSlideFadeUp>
-                <DataWeatherCard
-                  v-if="cardState[index].weather || (width && width > 640)"
-                  class="z-3 row-start-3 ml-2 mb-2 gap-2 md:col-start-2 md:row-start-2"
-                  :weather="item.weather"
-                />
-              </TransitionSlideFadeUp>
-              <TransitionSlideFadeUp>
-                <div
-                  v-if="cardState[index].edit || (width && width > 900)"
-                  class="z-4 row-start-4 grid content-center justify-center justify-items-center gap-2 md:col-start-3 md:row-start-2"
-                  :class="{ 'row-start-2': cardState[index].edit && !cardState[index].weather }"
-                >
-                  <ReadingDeleteButton
-                    :item="item"
-                    :index="index"
-                    @delete-entry="showUndoDialogue"
-                  />
-                  <BaseIconButton
-                    class="justify-self-start bg-rose-200 px-3 shadow-sm shadow-gray-500 hover:scale-105 hover:bg-rose-300"
-                    icon="edit"
-                    label="modify-entry"
-                    color="fill-blue-600"
-                    extra-classes="scale-75"
-                    :text="$t('header.edit')"
-                    @click="setupModify(item, index)"
-                  />
-                </div>
-              </TransitionSlideFadeUp>
             </div>
-          </TransitionSlideFadeUp>
+            <div class="absolute top-24 -left-2 md:invisible">
+              <BaseBubbleButton
+                :icon="Edit"
+                :toggle-fn="() => toggleEdit(index)"
+                :active="cardState[index].edit"
+              />
+            </div>
+            <div>
+              <!-- leave this because I'm terrible at grid and it works like this -->
+            </div>
+            <DataValuesCard
+              class="justify-self-center md:row-span-1 md:row-start-2 md:justify-self-start md:px-0"
+              :index="index"
+              :item="item"
+              :compare-to="compareTo"
+            />
+            <TransitionSlideFadeUp>
+              <DataWeatherCard
+                v-if="cardState[index].weather || (width && width > 640)"
+                class="z-3 row-start-3 ml-2 mb-2 gap-2 md:col-start-2 md:row-start-2"
+                :weather="item.weather"
+              />
+            </TransitionSlideFadeUp>
+            <TransitionSlideFadeUp>
+              <div
+                v-if="cardState[index].edit || (width && width > 900)"
+                class="z-4 row-start-4 grid content-center justify-center justify-items-center gap-2 md:col-start-3 md:row-start-2"
+                :class="{ 'row-start-2': cardState[index].edit && !cardState[index].weather }"
+              >
+                <ReadingDeleteButton
+                  :item="item"
+                  :index="index"
+                  @delete-entry="showUndoDialogue"
+                />
+                <BaseIconButton
+                  class="justify-self-start bg-rose-200 px-3 shadow-sm shadow-gray-500 hover:scale-105 hover:bg-rose-300"
+                  icon="edit"
+                  label="modify-entry"
+                  color="fill-blue-600"
+                  extra-classes="scale-75"
+                  :text="$t('header.edit')"
+                  @click="setupModify(item, index)"
+                />
+              </div>
+            </TransitionSlideFadeUp>
+          </div>
+          <!-- </TransitionSlideFadeUp> -->
         </div>
       </template>
     </TransitionGroup>

@@ -8,18 +8,13 @@ const dataStore = useDataStore()
 let comparison: number
 
 function getComparison(index: number, item: Reading, val: ReadingValStr) {
-  let previous
-  if (props.compareTo === 'dayBefore') {
-    for (let i = index + 1; i >= 0; i++) {
-      if (dataStore.data[i].day_time === item.day_time) {
-        previous = dataStore.data[i]
-        break
-      }
-    }
-  }
-  else {
+  let previous: Reading | undefined
+  if (props.compareTo === 'dayBefore' && item.day_time !== 'other')
+    previous = dataStore.data.find(e => e.day_time === item.day_time)
+
+  else
     previous = dataStore.data[index + 1]
-  }
+
   if (!previous)
     return 0
   return item[val] - previous[val]
@@ -49,7 +44,8 @@ function getComparison(index: number, item: Reading, val: ReadingValStr) {
             {{ item[val] }}
           </td>
           <td class="grid h-8 w-16 grid-cols-2 place-items-center">
-            <span class="p-0 pb-3">{{ comparison > 0 ? `+${comparison}` : comparison }}</span><BaseIconButton
+            <span class="p-0 pb-3">{{ comparison > 0 ? `+${comparison}` : comparison }}</span>
+            <BaseIconButton
               icon="south"
               class="mb-2 h-8 -translate-y-0.5 scale-[0.35] cursor-default"
               :class="{ 'rotate-180': comparison > 0 }"
