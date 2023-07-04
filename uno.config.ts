@@ -16,6 +16,7 @@ export default defineConfig({
       warn: true,
       collections: {
         ms: () => import('@iconify-json/material-symbols/icons.json').then(i => i.default as any),
+        spinners: () => import('@iconify/svg-spinners/icons.json').then(i => i.default as any),
       },
     }),
     presetWebFonts({

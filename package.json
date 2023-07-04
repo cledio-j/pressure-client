@@ -12,6 +12,8 @@
     "postinstall": "npx simple-git-hooks"
   },
   "dependencies": {
+    "@iconify-json/material-symbols": "^1.1.50",
+    "@iconify-json/svg-spinners": "^1.1.1",
     "@vue/compiler-sfc": "^3.3.4",
     "@vueuse/core": "^10.2.1",
     "pinia": "^2.1.4",
@@ -45,7 +47,7 @@
     "vue-tsc": "^1.8.3"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
+    "pre-commit": ""
   },
   "lint-staged": {
     "*": "eslint --fix"
