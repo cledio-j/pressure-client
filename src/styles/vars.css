@@ -1,0 +1,40 @@
+:root {
+  --c-primary: #A64E5E;
+  --c-primary-light: #F5A9A3;
+  --c-primary-dark: #861809;
+  --c-primary-active: #EF756C;
+
+  --c-webkit-auto: #e8f0fe;
+  --c-shadow: #3b524cc4;
+
+  --c-text-base: #1A2321;
+  --c-text-title: #721408;
+  --c-text-secondary: #2B3B37;
+  --c-text-faint: #3b524cc4;
+
+  --c-bg: #F8CBC9;
+  --c-bg-dark: #334742;
+  --c-bg-light: #FDEEED;
+  --c-bg-active: #F5A9A3;
+  --c-bg-highlight: #A64E5E;
+
+  --c-success: #67C23A;
+  --c-info: rgba(0, 26, 255, 0.842);
+  --c-warning: #E6A23C;
+  --c-error: #ac0000;
+  --c-error-active: #cc0000;
+
+  --s-num-width: 3rem;
+  --s-num-height: 3rem;
+}
+
+.dark {
+  --c-primary: #950E4F;
+
+  --c-text-base: #CCD2E0;
+  --c-text-secondary: #E01577;
+
+  --c-bg: #2B3B37;
+  --c-bg-active: #0D2E59;
+
+}
