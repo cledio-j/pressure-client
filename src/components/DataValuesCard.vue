@@ -25,7 +25,9 @@ function getComparison(index: number, item: Reading, val: ReadingValStr) {
   <div
     class="mb-2 ml-2 grid bg-gradient-to-br from-white to-rose-50 px-12 shadow-md shadow-gray-400"
   >
-    <h3 class="ml-1 border-b border-dashed border-b-gray-400 font-semibold text-rose-900">
+    <h3
+      class="ml-1 border-b border-dashed border-b-gray-400 font-semibold text-rose-900"
+    >
       {{ $t("messages.values") }}
     </h3>
     <table class="z-1 ml-2 border-collapse">

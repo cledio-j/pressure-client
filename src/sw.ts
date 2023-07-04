@@ -48,18 +48,18 @@ registerRoute(getIconRoute)
 
 // registerRoute(postRoute)
 
-const queue = new Queue('syncQueue')
+// const queue = new Queue('syncQueue')
 
-self.addEventListener('fetch', (event) => {
-  const syncLogic = async () => {
-    try {
-      const response = await fetch(event.request.clone())
-      return response
-    }
-    catch (error) {
-      await queue.pushRequest({ request: event.request })
-      return error
-    }
-  }
-  event.respondWith(syncLogic())
-})
+// self.addEventListener('fetch', (event) => {
+//   const syncLogic = async () => {
+//     try {
+//       const response = await fetch(event.request.clone())
+//       return response
+//     }
+//     catch (error) {
+//       await queue.pushRequest({ request: event.request })
+//       return error
+//     }
+//   }
+//   event.respondWith(syncLogic())
+// })

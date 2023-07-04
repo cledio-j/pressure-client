@@ -1,12 +1,12 @@
-export function getStr(key: HeaderKey, item: Reading, t: any, d: any) {
+export function getStr(key: HeaderKey, item: Reading, t: any, d: any, isMobile: boolean) {
   // t and d are translation stuff from useI18n
   // gets the right string rep for Reading values (i.e. splitting timestamp to time and date)
   if (key === 'day_time') {
-    return t(`daytime.${item.day_time}`)
+    return !isMobile ? t(`daytime.${item.day_time}`) : t(`daytime.${item.day_time}-s`)
   }
   else if (key === 'date') {
     const date = item.timestamp?.split('T')[0] as string
-    return d(new Date(date), 'short')
+    return d(new Date(date), isMobile ? 'short' : 'mid')
   }
   else if (key === 'time') {
     return item.timestamp?.split('T')[1].slice(0, 5)

@@ -1,6 +1,7 @@
 {
   "header": {
-    "day_time": "Tageszeit",
+    "day_time": "TZ",
+    "day_time_s": "TZ",
     "diastolic_bp": "Dia",
     "heart_rate": "Puls",
     "systolic_bp": "Sys",
@@ -29,7 +30,12 @@
     "lunch": "Mittag",
     "evening": "Abend",
     "other": "Sonstige",
-    "daytime": "Tageszeit"
+    "daytime": "Tageszeit",
+    "morning-s": "Mo.",
+    "lunch-s": "Mi.",
+    "evening-s": "A.",
+    "other-s": "Sons."
+
   },
   "messages": {
     "choose_header": "Säulen auswählen:",

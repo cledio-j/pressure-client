@@ -72,6 +72,10 @@ function handleModify(data: Reading, index: number) {
   showCard.value = false
   dataStore.updateReading(data, index)
 }
+
+function reload() {
+  location.reload()
+}
 </script>
 
 <template>
@@ -207,6 +211,11 @@ function handleModify(data: Reading, index: number) {
         {{ compareTo === "last" ? $t("messages.last_entry") : $t("messages.day_before") }}
       </button>
     </div>
+    <footer class="grid grid-cols-1 content-center">
+      <button class="text-blue-700  font-semibold underline" @click="reload">
+        {{ $t('controls.reload') }}
+      </button>
+    </footer>
   </div>
   <div
     v-else

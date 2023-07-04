@@ -57,10 +57,6 @@ function logout() {
   localStorage.token = ''
 }
 
-function reload() {
-  location.reload()
-}
-
 onMounted(async () => {
   history.pushState({ botPanel: 'latest' }, '', '/#latest')
   getToken()
@@ -89,11 +85,6 @@ onMounted(async () => {
         class="absolute md:right-1/2"
       />
     </Transition>
-    <footer class=" grid grid-cols-1 content-center">
-      <button class="text-blue-700 fixed bottom-0 font-semibold underline" @click="reload">
-        {{ $t('controls.reload') }}
-      </button>
-    </footer>
   </div>
 </template>
 

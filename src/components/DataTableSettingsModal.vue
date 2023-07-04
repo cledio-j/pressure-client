@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import Undo from '../assets/svg/undo.svg?component'
 import Check from '../assets/svg/check.svg?component'
 import BaseModal from './BaseModal.vue'
 import BaseFromToDatePicker from './BaseFromToDatePicker.vue'
+import { useBreakpoints } from '@/composables/breakpoints'
 
 const props = defineProps<{
   showing: boolean
@@ -18,6 +19,10 @@ const emits = defineEmits<{
 
 let childInterface: () => void
 const online = ref(navigator.onLine)
+const { width } = useBreakpoints()
+const isMobile = computed(() => {
+  return width.value < 640
+})
 
 const initialHeaders = [
   { name: 'date', show: true },

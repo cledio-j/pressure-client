@@ -11,6 +11,7 @@ import BaseModal from './BaseModal.vue'
 import BaseInfoSlider from './BaseInfoSlider.vue'
 
 import TablePaginationClient from './TablePaginationClient.vue'
+import { useBreakpoints } from '@/composables/breakpoints'
 const props = defineProps<{
   headers: { name: string; show: boolean }[] | undefined
   color: boolean
@@ -29,6 +30,7 @@ const tableData = reactive({
 })
 
 const dataStore = useDataStore()
+const { width } = useBreakpoints()
 
 const sort = reactive({ sort_by: 'timestamp', order: 'desc' })
 
@@ -153,7 +155,7 @@ function addDeleted() {
                   backgroundColor: color ? decideColor(value.name, item) : '',
                 }"
               >
-                {{ getStr(value.name as HeaderKey, item, t, d) }}
+                {{ getStr(value.name as HeaderKey, item, t, d, width < 400) }}
               </td>
             </template>
           </tr>
