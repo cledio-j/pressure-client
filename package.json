@@ -8,15 +8,16 @@
     "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview",
     "test": "vitest",
-    "up": "taze major -I",
-    "postinstall": "npx simple-git-hooks"
+    "up": "taze major -I"
   },
   "dependencies": {
     "@iconify-json/material-symbols": "^1.1.50",
     "@iconify-json/svg-spinners": "^1.1.1",
+    "@types/plotly.js-basic-dist-min": "^2.12.1",
     "@vue/compiler-sfc": "^3.3.4",
     "@vueuse/core": "^10.2.1",
     "pinia": "^2.1.4",
+    "plotly.js-basic-dist-min": "^2.24.3",
     "vue": "^3.3.4",
     "vue-i18n": "9.3.0-beta.21",
     "vue-router": "^4.2.2"
@@ -25,6 +26,7 @@
     "@antfu/eslint-config": "^0.39.7",
     "@iconify-json/carbon": "^1.1.18",
     "@types/node": "^20.3.3",
+    "@types/plotly.js-basic-dist": "^1.54.1",
     "@unocss/eslint-config": "^0.53.4",
     "@unocss/reset": "^0.53.4",
     "@vitejs/plugin-vue": "^4.2.3",

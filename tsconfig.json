@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "module": "ESNext",
-    "target": "es2016",
+    "target": "ESNext",
     "lib": ["DOM", "ESNext"],
     "strict": true,
     "jsx": "preserve",
@@ -19,8 +19,12 @@
       "vite-plugin-pages/client",
       "unplugin-vue-macros/macros-global"
     ],
+    "typeRoots": ["src/types/"],
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "plotly.js-basic-dist-min": [
+        "node_modules/@types/plotly.js"
+      ]
     }
   },
   "exclude": ["dist", "node_modules"]

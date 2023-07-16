@@ -3,6 +3,6 @@
 
 <template>
   <div>
-    a
+    data
   </div>
 </template>

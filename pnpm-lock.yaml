@@ -11,6 +11,9 @@ dependencies:
   '@iconify-json/svg-spinners':
     specifier: ^1.1.1
     version: 1.1.1
+  '@types/plotly.js-basic-dist-min':
+    specifier: ^2.12.1
+    version: 2.12.1
   '@vue/compiler-sfc':
     specifier: ^3.3.4
     version: 3.3.4
@@ -20,6 +23,9 @@ dependencies:
   pinia:
     specifier: ^2.1.4
     version: 2.1.4(typescript@5.1.6)(vue@3.3.4)
+  plotly.js-basic-dist-min:
+    specifier: ^2.24.3
+    version: 2.24.3
   vue:
     specifier: ^3.3.4
     version: 3.3.4
@@ -40,6 +46,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.3.3
     version: 20.3.3
+  '@types/plotly.js-basic-dist':
+    specifier: ^1.54.1
+    version: 1.54.1
   '@unocss/eslint-config':
     specifier: ^0.53.4
     version: 0.53.4(eslint@8.44.0)(typescript@5.1.6)
@@ -858,6 +867,21 @@ packages:
   /@types/normalize-package-data@2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}
     dev: true
+
+  /@types/plotly.js-basic-dist-min@2.12.1:
+    resolution: {integrity: sha512-8jm/2TNlqbkBtym2fTS+vuBM2hkxYB8XRisUpsIRna4nIdVeJ7SFjNAof9r7USMWbp3ySC4Ij9HXsvB5f53+Ag==}
+    dependencies:
+      '@types/plotly.js': 2.12.20
+    dev: false
+
+  /@types/plotly.js-basic-dist@1.54.1:
+    resolution: {integrity: sha512-PAowclM1Z9nfTGqLn2KrN3dDXF2M9TalggShN/k/6jyUZTkxfgSoJ3HGReyUqjxsRBgUZnWRIPmLOA+sDsGWFA==}
+    dependencies:
+      '@types/plotly.js': 2.12.20
+    dev: true
+
+  /@types/plotly.js@2.12.20:
+    resolution: {integrity: sha512-ZDNAde0VqBCrcgmQQyOmWM71k1+5oWaNkfliZ4ix5IdBkjbLye1S6JIdw+XFWGAIeimpjnkLsLzMOwQ105eIOg==}
 
   /@types/semver@7.5.0:
     resolution: {integrity: sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==}
@@ -4845,6 +4869,10 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
     dev: true
+
+  /plotly.js-basic-dist-min@2.24.3:
+    resolution: {integrity: sha512-uVM6HjZZXgsR5RjVOMx9FiNx9RsjqauKgN3XAhW5yQKRxaj+0MTlKgXA2N+LXkU4a4HLHPlincxUuJ2d8BmmGw==}
+    dev: false
 
   /pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}

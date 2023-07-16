@@ -7,7 +7,10 @@ import {
 } from 'unocss'
 
 export default defineConfig({
-  shortcuts: [],
+  shortcuts: [
+    ['btn', 'cursor-pointer rounded-md bg-back p-1.75 px-3 font-500 text-tx shadow-primShadow shadow-sm transition-all hover:bg-back hover:text-primary-dark hover:shadow-primary'],
+    ['round-btn', 'flex flex-col items-center rounded-full bg-back-light p-2'],
+  ],
   presets: [
     presetUno(),
     presetAttributify(),
@@ -67,4 +70,5 @@ export default defineConfig({
       primShadow: 'var(--c-shadow)',
     },
   },
+
 })
