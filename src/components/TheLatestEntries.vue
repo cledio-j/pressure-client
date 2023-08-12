@@ -24,7 +24,8 @@ async function backgroundFetch(resource: string, length: number, start: number, 
 
 async function getData() {
   isFecthing.value = true
-  const { data, error } = await useFetch<ReadingApiResponse>('readings/get' + `?per_page=${50}`,
+  const { data, error } = await useFetch<ReadingApiResponse>(
+    'readings/get' + `?per_page=${50}`,
     { auth: true, method: 'GET', immediate: true },
   )
   if (error.value) {

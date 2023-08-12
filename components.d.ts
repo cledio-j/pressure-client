@@ -8,11 +8,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AuthForm: typeof import('./src/components/AuthForm.vue')['default']
-    BaseBubbleButton: typeof import('./src/components/BaseBubbleButton.vue')['default']
     BaseDateInput: typeof import('./src/components/BaseDateInput.vue')['default']
     BaseExpandButton: typeof import('./src/components/BaseExpandButton.vue')['default']
     BaseInput: typeof import('./src/components/BaseInput.vue')['default']
     BaseLoadingSpinner: typeof import('./src/components/BaseLoadingSpinner.vue')['default']
+    DataTableEntries: typeof import('./src/components/DataTableEntries.vue')['default']
     LatestEntriesDisplay: typeof import('./src/components/LatestEntriesDisplay.vue')['default']
     ReadingCard: typeof import('./src/components/ReadingCard.vue')['default']
     ReadingInputForm: typeof import('./src/components/ReadingInputForm.vue')['default']
@@ -21,6 +21,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StatsGraphs: typeof import('./src/components/StatsGraphs.vue')['default']
+    TheDataPanel: typeof import('./src/components/TheDataPanel.vue')['default']
     TheLatestEntries: typeof import('./src/components/TheLatestEntries.vue')['default']
     TheNavFooter: typeof import('./src/components/TheNavFooter.vue')['default']
     TheNewEntry: typeof import('./src/components/TheNewEntry.vue')['default']
