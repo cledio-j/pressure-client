@@ -140,7 +140,7 @@ export async function useFetch<T>(resource: string, opts: FetchOptions) {
 export async function usePaginatedFetch<T>(
   urls: string[],
   opts: FetchOptions,
-  afterFetch: (a: T) => void,
+  afterFetch: (a: Awaited<T>) => void | Promise<void>,
 ) {
   const fetchErrors = shallowRef<FetchError[]>([])
   const data = shallowRef<T[]>([]) // this is only filled if no afterFetch function is provided
