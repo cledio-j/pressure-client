@@ -12,22 +12,36 @@ function getHeader(): HeadersInit {
   return { Authorization: `Basic ${window.btoa(`${name.value}:${pwd.value}`)}` }
 }
 
-const { isFetching, error, data, execute } = await useFetch<TokenResponse>(
-  'user/get-token',
-  {
-    immediate: false,
-    auth: false,
-    method: 'POST',
-    headers: getHeader,
-  })
+// const { isFetching, error, data, execute } = await useFetch<TokenResponse>(
+//   'user/get-token',
+//   {
+//     immediate: false,
+//     auth: false,
+//     method: 'POST',
+//     headers: getHeader,
+//   })
 
-async function handleSubmit() {
-  await execute()
-  if (!error.value && data.value) {
-    localStorage.tokenExpiration = data.value.expires
-    localStorage.token = data.value.token
-    router.push('/')
+// async function handleSubmit() {
+//   await execute()
+//   if (!error.value && data.value) {
+//     localStorage.tokenExpiration = data.value.expires
+//     localStorage.token = data.value.token
+//     router.push('/')
+//   }
+// }
+
+async function submit() {
+  const { data, error } = await useFetch<TokenResponse>(
+    'user/get-token',
+    { immediate: true, auth: false, method: 'POST', headers: getHeader })
+  if (error.value || !data.value) {
+    // error handling
+    return
   }
+  const response = await data.value
+  localStorage.tokenExpiration = response?.expires
+  localStorage.token = response?.token
+  router.push('/')
 }
 </script>
 
@@ -47,7 +61,7 @@ async function handleSubmit() {
     <button
       type="submit"
       class="mt-2 flex flex-row items-center transition-all btn"
-      @click.stop.prevent="handleSubmit"
+      @click.stop.prevent="submit"
     >
       Submit
       <BaseLoadingSpinner v-if="isFetching" class="ml-2" />

@@ -3,11 +3,11 @@ import type { MaybeRef } from 'vue'
 import type { FetchError } from './fetch'
 import { useDataStore } from '~/stores/data'
 
-const dataSore = useDataStore()
-
 export async function useDelete(item: MaybeRef<Reading>) {
   const deleted = unref(item)
   const errors = ref<FetchError[]>([])
+
+  const dataSore = useDataStore()
 
   const { data, error } = await useFetch<DeletedReadingResponse>(
     'reading/delete' + `?id=${deleted.id}`,

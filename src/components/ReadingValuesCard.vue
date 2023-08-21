@@ -10,7 +10,7 @@ const props = defineProps<{
 
 defineEmits<{
   (e: 'edit', reading: Reading): void
-  (e: 'delete'): void
+  (e: 'delete', reading: Reading): void
 }>()
 
 const thisReading = ref<Reading>({ ...props.item })

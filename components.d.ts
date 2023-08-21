@@ -12,6 +12,7 @@ declare module 'vue' {
     BaseExpandButton: typeof import('./src/components/BaseExpandButton.vue')['default']
     BaseInput: typeof import('./src/components/BaseInput.vue')['default']
     BaseLoadingSpinner: typeof import('./src/components/BaseLoadingSpinner.vue')['default']
+    BaseSelect: typeof import('./src/components/BaseSelect.vue')['default']
     DataTableEntries: typeof import('./src/components/DataTableEntries.vue')['default']
     LatestEntriesDisplay: typeof import('./src/components/LatestEntriesDisplay.vue')['default']
     ReadingCard: typeof import('./src/components/ReadingCard.vue')['default']

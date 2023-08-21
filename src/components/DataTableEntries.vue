@@ -17,7 +17,12 @@ const lastRow = computed(() => {
   return tableState.firstRow + tableState.perPage
 })
 
-const headers = ref<Record<string, boolean | string>[]>([])
+interface Header {
+  name: keyof Reading
+  show: boolean
+}
+
+const headers = ref<Header[]>([])
 
 function getHeaders() {
   return [
@@ -44,7 +49,9 @@ onMounted(() => {
     <table class="w-full border-collapse">
       <thead>
         <template v-for="header in headers" :key="header">
-          a
+          <th v-if="header.show">
+            {{ $t(`header.${header.name}`) }}
+          </th>
         </template>
       </thead>
       <tbody>
@@ -52,7 +59,11 @@ onMounted(() => {
           v-for="reading in readings.slice(tableState.firstRow, lastRow)" :key="reading.id"
           class="cursor-pointer" hover="bg-back-light"
         >
-          a
+          <td
+            v-for="header in headers.filter(h => h.show)" :key="header.name"
+          >
+            {{ reading[header.name] }}
+          </td>
         </tr>
       </tbody>
     </table>

@@ -79,7 +79,8 @@
     "cancel": "Abbrechen",
     "reset": "Zurücksetzen",
     "delete_entry": "Eintrag löschen",
-    "new_entry": "Neuer Eintrag"
+    "new_entry": "Neuer Eintrag",
+    "now": "Jetzt"
   },
   "header.settings": "Einstellungen"
 }

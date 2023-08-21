@@ -55,6 +55,15 @@ async function patchReading(reading: Reading) {
     dataStore.replaceReading(result.reading)
 }
 
+async function handleDelete(reading: Reading) {
+  const { deleted, errors: deleteErrors } = await useDelete(reading)
+  if (deleteErrors.value.length > 0) {
+    errors.value.push(...deleteErrors.value)
+    return
+  }
+  const idx = dataStore.findIndex(deleted)
+}
+
 onMounted(
   () => {
     if (dataStore.data.length <= 0)
@@ -70,6 +79,7 @@ onMounted(
     <LatestEntriesDisplay
       :items="dataStore.latest"
       @reading-changed="patchReading"
+      @delete-reading="handleDelete"
     />
   </div>
   <div v-else class="grid grid-cols-1 items-center">
