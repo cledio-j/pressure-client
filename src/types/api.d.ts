@@ -2,8 +2,6 @@ export { }
 
 declare module 'api' {
 
-
-
   interface TokenResponse {
     token: string
     expires: string

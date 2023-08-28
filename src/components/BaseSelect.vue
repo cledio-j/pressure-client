@@ -1,19 +1,20 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { onKeyUp } from '@vueuse/core'
 
-export interface LocalOption {
+export interface LocalOption<T> {
   local: string
-  value: string
+  value: T
 }
 
 const props = defineProps<{
-  modelValue: string
-  label: string
-  options: LocalOption[]
+  modelValue: T
+  label?: string
+  options: LocalOption<T>[]
+  noLocal?: boolean
 }>()
 
 const emits = defineEmits<{
-  (e: 'update:modelValue', neVal: string): void
+  (e: 'update:modelValue', neVal: T): void
 }>()
 
 const value = computed({
@@ -29,13 +30,13 @@ const field = shallowRef<HTMLFieldSetElement>()
 const optionsOpen = ref(false)
 const hasSelected = ref(false)
 
-function makeSelection(val: string) {
+function makeSelection(val: T) {
   hasSelected.value = true
   optionsOpen.value = false
   value.value = val
 }
 
-function getLocalValue(value: string) {
+function getLocalValue(value: any) {
   const val = props.options.find(o => o.value === value)
   return val?.local
 }
@@ -54,11 +55,11 @@ onKeyUp('ArrowDown', (e) => {
   >
     <button
       type="button"
-      class="w-full flex flex-row place-content-center justify-between border border-primary-light rounded-sm p-2"
-      :class="{ 'bg-back-active': optionsOpen, 'text-tx-secondary-light': !hasSelected }"
+      class="w-full flex flex-row place-content-center justify-between border border-primary-light rounded-sm p-2 text-tx-secondary"
+      :class="{ 'bg-back-light': optionsOpen, 'text-tx-secondary-light': !hasSelected }"
       @click.prevent.stop="optionsOpen = !optionsOpen"
     >
-      {{ getLocalValue(modelValue) || 'pls select' }}
+      {{ !noLocal ? getLocalValue(modelValue) || '. . .' : modelValue }}
       <div
         class="i-ms-expand-more inline-block scale-140 transition-all"
         :class="{ 'rotate-180': optionsOpen }"
@@ -68,7 +69,7 @@ onKeyUp('ArrowDown', (e) => {
       <Transition name="slide">
         <ul
           v-show="optionsOpen"
-          class="relative z-50 cursor-pointer select-none overflow-visible border bg-back shadow-md shadow-primary-light"
+          class="relative z-50 cursor-pointer select-none overflow-visible border bg-back-light shadow-md shadow-primary-light"
         >
           <template v-for="o in options" :key="o.value">
             <button
@@ -77,7 +78,7 @@ onKeyUp('ArrowDown', (e) => {
               @click.prevent="makeSelection(o.value)"
             >
               <span class="cursor-pointer py-2 pl-4">
-                {{ o.local }}
+                {{ !noLocal ? o.local : o.value }}
               </span>
               <slot :item="o">
                 <!-- extra content -->

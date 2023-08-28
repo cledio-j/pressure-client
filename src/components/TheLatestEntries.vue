@@ -8,6 +8,8 @@ const dataStore = useDataStore()
 const isFecthing = ref(false)
 const errors = ref<FetchError[]>([])
 
+const { settings } = useSettings()
+
 async function backgroundFetch(resource: string, length: number, start: number, per_page: number) {
   const pageNums = Array.from({ length: length - 1 }, (x, i) => i + start)
   const urls = pageNums.map(p => `${resource}?page=${p}&per_page=${per_page}`)
@@ -23,6 +25,7 @@ async function backgroundFetch(resource: string, length: number, start: number, 
 }
 
 async function getData() {
+  dataStore.ready = false
   isFecthing.value = true
   const { data, error } = await useFetch<ReadingApiResponse>(
     'readings/get' + `?per_page=${50}`,
@@ -38,7 +41,8 @@ async function getData() {
   if (res)
     dataStore.updateData(res, true)
 
-  backgroundFetch('readings/get', dataStore.totalPages, 2, 50)
+  backgroundFetch('readings/get', dataStore.totalPages, 2, settings.value.table.perFetch)
+    .then(() => dataStore.ready = true)
 }
 
 async function patchReading(reading: Reading) {
@@ -62,6 +66,7 @@ async function handleDelete(reading: Reading) {
     return
   }
   const idx = dataStore.findIndex(deleted)
+  console.error(idx)
 }
 
 onMounted(

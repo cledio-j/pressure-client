@@ -1,69 +1,72 @@
 <script setup lang="ts">
 import type { Reading } from 'api'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
   readings: Reading[]
+  headers: Record<keyof Reading, boolean>
+  firstRow: number
+  lastRow: number
+  colored?: boolean
 }>()
 
-const tableState = reactive({
-  currentPage: 1,
-  perPage: 15,
-  sortBy: 'timestamp',
-  order: 'desc',
-  firstRow: 0,
+defineEmits<{ (e: 'showCard', reading: Reading): void }>()
+const { d } = useI18n()
+
+// const tableState = reactive({
+//   sortBy: 'timestamp',
+//   order: 'desc',
+// })
+
+const data = computed(() => {
+  return props.readings.slice(props.firstRow, props.lastRow)
 })
 
-const lastRow = computed(() => {
-  return tableState.firstRow + tableState.perPage
-})
-
-interface Header {
-  name: keyof Reading
-  show: boolean
+function getTime(type: 'date' | 'time', value: string) {
+  const date = new Date(value)
+  if (type === 'date')
+    return d(date, 'short')
+  else
+    return date.toISOString().slice(11, 16)
 }
-
-const headers = ref<Header[]>([])
-
-function getHeaders() {
-  return [
-    { name: 'date', show: true },
-    { name: 'time', show: true },
-    { name: 'timestamp', show: false },
-    { name: 'systolic_bp', show: true },
-    { name: 'diastolic_bp', show: true },
-    { name: 'heart_rate', show: true },
-    { name: 'day_time', show: true },
-    { name: 'user_id', show: false },
-    { name: 'id', show: false },
-    { name: 'weather', show: false },
-  ]
-}
-
-onMounted(() => {
-  headers.value = getHeaders()
-})
 </script>
 
 <template>
   <div class="max-h-screen">
     <table class="w-full border-collapse">
       <thead>
-        <template v-for="header in headers" :key="header">
-          <th v-if="header.show">
-            {{ $t(`header.${header.name}`) }}
+        <template v-for="[name, show] in Object.entries(headers)" :key="name">
+          <th
+            v-if="show"
+            class="relative cursor-default border border-back border-b-gray-400 px-1 py-2 font-semibold text-primary"
+          >
+            {{ $t(`header.${name}`) }}
           </th>
         </template>
       </thead>
       <tbody>
         <tr
-          v-for="reading in readings.slice(tableState.firstRow, lastRow)" :key="reading.id"
+          v-for="reading in data" :key="reading.id"
           class="cursor-pointer" hover="bg-back-light"
+          @click="$emit('showCard', reading)"
         >
-          <td
-            v-for="header in headers.filter(h => h.show)" :key="header.name"
+          <template
+            v-for="[name, show] in Object.entries(headers) as [keyof Reading, boolean][]"
+            :key="name"
           >
-            {{ reading[header.name] }}
-          </td>
+            <td
+              v-if="show" class="border border-gray-400 px-1"
+              :style="{
+                backgroundColor: colored ? decideColor(name, reading) : '',
+              }"
+            >
+              {{ name === 'day_time'
+                ? $t(`daytime.${reading[name]}`)
+                : name === 'date' || name === 'time'
+                  ? getTime(name, reading.timestamp)
+                  : reading[name] }}
+            </td>
+          </template>
         </tr>
       </tbody>
     </table>

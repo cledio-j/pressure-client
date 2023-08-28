@@ -18,6 +18,7 @@ export interface FetchError {
 
 type MaybeGetter<T> = T | (() => T)
 
+// @ts-expect-error -- meta.env
 export const apiUrl = import.meta.env.PROD
   ? 'https://cledioj.pythonanywhere.com/api/'
   : 'http://192.168.178.11:5000/api/'

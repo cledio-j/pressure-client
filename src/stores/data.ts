@@ -21,6 +21,7 @@ export const useDataStore = defineStore('data', () => {
   const totalPages = ref(1)
   const totalItems = ref(0)
   const showLatest = ref(10)
+  const ready = ref(false)
   const params: GetParams = reactive({
     from_date: new Date().toISOString(),
     to_date: new Date().toISOString(),
@@ -95,5 +96,6 @@ export const useDataStore = defineStore('data', () => {
     replaceReading,
     insertReading,
     findIndex,
+    ready,
   }
 })

@@ -16,13 +16,14 @@
     "latest": "Neu",
     "entries": "Einträge",
     "days": "Tage",
-    "values": "Tage nach Wert",
+    "values": "Werte",
     "min_max": "Max- & Minwerte",
     "temperature": "Temperatur",
     "pressure": "Druck: ",
     "humidity": "Luftfeuchtigkeit: ",
     "precipitation": "Niederschlag: ",
-    "cloud_cover": "Wolken: "
+    "cloud_cover": "Wolken: ",
+    "general": "Allgemein"
   },
   "daytime": {
     "morning": "Morgen",
@@ -30,6 +31,12 @@
     "evening": "Abend",
     "other": "Sonstige",
     "daytime": "Tageszeit"
+  },
+  "daytimeShort": {
+    "morning": "Mo",
+    "lunch": "Mi",
+    "evening": "Ab",
+    "other": "So"
   },
   "messages": {
     "choose_header": "Säulen auswählen:",
@@ -82,5 +89,21 @@
     "new_entry": "Neuer Eintrag",
     "now": "Jetzt"
   },
-  "header.settings": "Einstellungen"
+  "header.settings": "Einstellungen",
+  "settings": {
+    "table": "Tabellen",
+    "tableColumnsDescription": "Wähle welche Spalten in den Datentabellen gezeigt werden",
+    "tableColumns": "Tabellenspalten",
+    "title": "Einstellungen",
+    "tableDescription": "Allgemeine Einstellungen für Datentabellen",
+    "color": "Zellen einfärben?",
+    "tableDefaultView": "Standardtabelle",
+    "tablePerPage": "Zeilen pro Seite",
+    "initialFetch": "Einträge herunterladen",
+    "generalDescription": "Allgemeine Anwendungseinstellungen",
+    "language": "Anwendungssprache",
+    "de": "Deutsch",
+    "en": "English",
+    "reset": "Einstellungen zurücksetzen"
+  }
 }

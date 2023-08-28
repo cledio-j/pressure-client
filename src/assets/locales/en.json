@@ -23,7 +23,8 @@
     "humidity": "Humidity: ",
     "precipitation": "Precipitation: ",
     "cloud_cover": "Cloud cover: ",
-    "settings": "Settings"
+    "settings": "Settings",
+    "general": "General"
   },
   "daytime": {
     "morning": "Morning",
@@ -31,6 +32,12 @@
     "evening": "Evening",
     "other": "Other",
     "daytime": "Time of day"
+  },
+  "daytimeShort": {
+    "morning": "Mo",
+    "lunch": "No",
+    "evening": "Ev",
+    "other": "Ot"
   },
   "messages": {
     "choose_header": "Choose which columns to display:",
@@ -82,5 +89,21 @@
     "delete_entry": "Delete entry",
     "new_entry": "New entry",
     "now": "Now"
+  },
+  "settings": {
+    "table": "Tables",
+    "tableColumns": "Table columns",
+    "tableColumnsDescription": "Manage what columns to show in data tables",
+    "title": "Settings",
+    "tableDescription": "General settings for data tables",
+    "color": "Color fields?",
+    "tableDefaultView": "Default table view",
+    "tablePerPage": "Rows per page",
+    "initialFetch": "Entries fetched immediately",
+    "generalDescription": "General application settings",
+    "language": "Interface language",
+    "en": "English",
+    "de": "Deutsch",
+    "reset": "Reset settings"
   }
 }

@@ -34,6 +34,7 @@ export default defineConfig({
     }),
   ],
   rules: [
+    [/^color-([a-z-]+)$/, ([,c]) => ({ height: `var(--c-${c})` })],
     // css variable height
     [/^vh-([a-z-]+)$/, ([,d]) => ({ height: `var(--s-${d})` })],
     // css variable width
