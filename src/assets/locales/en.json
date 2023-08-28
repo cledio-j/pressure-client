@@ -67,15 +67,15 @@
     "user_name": "Username",
     "password": "Password",
     "offline_not_avail": "This feature isn't available in offline mode.",
-    "last_entry": "Latest entry",
-    "day_before": "Day before",
     "compare_to": "Compare to:",
     "graphs": "Graphs",
     "all": "All",
     "no_video_offline": "Image detection is not available in offline mode.",
     "no_video_input": "No video input device detected.",
     "video_unavaiable": "No video input.",
-    "wrong_pwd": "Incorrect name or password"
+    "wrong_pwd": "Incorrect name or password",
+    "dayBefore": "Day before",
+    "latest": "Latest entry"
   },
   "controls": {
     "from": "From...",
@@ -104,6 +104,10 @@
     "language": "Interface language",
     "en": "English",
     "de": "Deutsch",
-    "reset": "Reset settings"
+    "reset": "Reset settings",
+    "latest": "Newest entries",
+    "latestDescription": "Configure latest entries panel",
+    "latestCount": "Entries to show",
+    "latestExpanded": "Initially expanded"
   }
 }

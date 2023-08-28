@@ -66,15 +66,15 @@
     "user_name": "Benutzername",
     "password": "Passwort",
     "offline_not_avail": "Diese Option ist im offline Modus nicht verfügbar.",
-    "last_entry": "Letzter Eintrag",
-    "day_before": "Vorheriger Tag",
-    "compare_to": "Vergleich mit:",
+    "compare_to": "Vergleich mit",
     "all": "Alle",
     "graphs": "Diagramme",
     "no_video_offline": "Bilderkennung ist im offline Modus nicht verfügbar.",
     "no_video_input": "Kein Videoinput verfügbar.",
     "video_unavaiable": "Bilderkennung ist nict verfügbar.",
-    "wrong_pwd": "Falscher Benutzername oder Passwort"
+    "wrong_pwd": "Falscher Benutzername oder Passwort",
+    "dayBefore": "Vorheriger Tag",
+    "latest": "Letzter Eintrag"
   },
   "controls": {
     "from": "Von...",
@@ -104,6 +104,10 @@
     "language": "Anwendungssprache",
     "de": "Deutsch",
     "en": "English",
-    "reset": "Einstellungen zurücksetzen"
+    "reset": "Einstellungen zurücksetzen",
+    "latest": "Neueste Einträge",
+    "latestDescription": "Konfiguriere die Anzeige der neuesten Einträge",
+    "latestCount": "Anzahl",
+    "latestExpanded": "Aufgeklappt"
   }
 }

@@ -7,6 +7,13 @@ export const PER_PAGE_OPTS = [5, 10, 15, 25, 50, 75] as const
 export const INITIAL_FETCH_OPTS = [50, 100, 250, 500, 1000, 5000] as const
 export const VAL_KEYS = ['systolic_bp', 'diastolic_bp', 'heart_rate'] as const
 export const DAY_TIMES = ['morning', 'lunch', 'evening'] as const
+export const LATEST_COUNTS = [5, 10, 15, 20] as const
+export const LATEST_EXPANDED = [1, 3, 5, 10] as const
+
+export const ComparisonType = {
+  latest: 0,
+  dayBefore: 1,
+} as const
 
 export type StatsView = typeof ALL_STATS_VIEWS[number]
 export type PerPageOption = typeof PER_PAGE_OPTS[number]
@@ -28,6 +35,11 @@ export interface Settings {
   stats: {
     defaultView: StatsView
     graphDefaultPeriod: number
+  }
+  latest: {
+    comparison: keyof typeof ComparisonType
+    numEntries: typeof LATEST_COUNTS[number]
+    numExpanded: typeof LATEST_EXPANDED[number]
   }
   language: LocalOption
   dark: boolean
@@ -68,6 +80,11 @@ function getDefault(): Settings {
     stats: {
       defaultView: 'graph',
       graphDefaultPeriod: 100,
+    },
+    latest: {
+      comparison: 'latest',
+      numEntries: 10,
+      numExpanded: 3,
     },
     language: 'de',
     dark: false,

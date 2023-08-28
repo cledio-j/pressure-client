@@ -7,9 +7,12 @@ export {}
 declare global {
   const ALL_STATS_VIEWS: typeof import('./src/composables/settings')['ALL_STATS_VIEWS']
   const ALL_TABLE_VIEWS: typeof import('./src/composables/settings')['ALL_TABLE_VIEWS']
+  const ComparisonType: typeof import('./src/composables/settings')['ComparisonType']
   const DAY_TIMES: typeof import('./src/composables/settings')['DAY_TIMES']
   const EffectScope: typeof import('vue')['EffectScope']
   const INITIAL_FETCH_OPTS: typeof import('./src/composables/settings')['INITIAL_FETCH_OPTS']
+  const LATEST_COUNTS: typeof import('./src/composables/settings')['LATEST_COUNTS']
+  const LATEST_EXPANDED: typeof import('./src/composables/settings')['LATEST_EXPANDED']
   const LOCAL_OPTIONS: typeof import('./src/composables/settings')['LOCAL_OPTIONS']
   const PER_PAGE_OPTS: typeof import('./src/composables/settings')['PER_PAGE_OPTS']
   const VAL_KEYS: typeof import('./src/composables/settings')['VAL_KEYS']
@@ -150,6 +153,7 @@ declare global {
   const useCurrentElement: typeof import('@vueuse/core')['useCurrentElement']
   const useCycleList: typeof import('@vueuse/core')['useCycleList']
   const useDark: typeof import('@vueuse/core')['useDark']
+  const useData: typeof import('./src/composables/serverData')['useData']
   const useDateFormat: typeof import('@vueuse/core')['useDateFormat']
   const useDebounce: typeof import('@vueuse/core')['useDebounce']
   const useDebounceFn: typeof import('@vueuse/core')['useDebounceFn']
@@ -236,6 +240,7 @@ declare global {
   const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
   const useScroll: typeof import('@vueuse/core')['useScroll']
   const useScrollLock: typeof import('@vueuse/core')['useScrollLock']
+  const useServerData: typeof import('./src/composables/serverData')['useServerData']
   const useSessionStorage: typeof import('@vueuse/core')['useSessionStorage']
   const useSettings: typeof import('./src/composables/settings')['useSettings']
   const useShare: typeof import('@vueuse/core')['useShare']
@@ -308,9 +313,12 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly ALL_STATS_VIEWS: UnwrapRef<typeof import('./src/composables/settings')['ALL_STATS_VIEWS']>
     readonly ALL_TABLE_VIEWS: UnwrapRef<typeof import('./src/composables/settings')['ALL_TABLE_VIEWS']>
+    readonly ComparisonType: UnwrapRef<typeof import('./src/composables/settings')['ComparisonType']>
     readonly DAY_TIMES: UnwrapRef<typeof import('./src/composables/settings')['DAY_TIMES']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly INITIAL_FETCH_OPTS: UnwrapRef<typeof import('./src/composables/settings')['INITIAL_FETCH_OPTS']>
+    readonly LATEST_COUNTS: UnwrapRef<typeof import('./src/composables/settings')['LATEST_COUNTS']>
+    readonly LATEST_EXPANDED: UnwrapRef<typeof import('./src/composables/settings')['LATEST_EXPANDED']>
     readonly LOCAL_OPTIONS: UnwrapRef<typeof import('./src/composables/settings')['LOCAL_OPTIONS']>
     readonly PER_PAGE_OPTS: UnwrapRef<typeof import('./src/composables/settings')['PER_PAGE_OPTS']>
     readonly VAL_KEYS: UnwrapRef<typeof import('./src/composables/settings')['VAL_KEYS']>
@@ -533,6 +541,7 @@ declare module 'vue' {
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useScrollLock: UnwrapRef<typeof import('@vueuse/core')['useScrollLock']>
+    readonly useServerData: UnwrapRef<typeof import('./src/composables/serverData')['useServerData']>
     readonly useSessionStorage: UnwrapRef<typeof import('@vueuse/core')['useSessionStorage']>
     readonly useSettings: UnwrapRef<typeof import('./src/composables/settings')['useSettings']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
@@ -599,9 +608,12 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly ALL_STATS_VIEWS: UnwrapRef<typeof import('./src/composables/settings')['ALL_STATS_VIEWS']>
     readonly ALL_TABLE_VIEWS: UnwrapRef<typeof import('./src/composables/settings')['ALL_TABLE_VIEWS']>
+    readonly ComparisonType: UnwrapRef<typeof import('./src/composables/settings')['ComparisonType']>
     readonly DAY_TIMES: UnwrapRef<typeof import('./src/composables/settings')['DAY_TIMES']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly INITIAL_FETCH_OPTS: UnwrapRef<typeof import('./src/composables/settings')['INITIAL_FETCH_OPTS']>
+    readonly LATEST_COUNTS: UnwrapRef<typeof import('./src/composables/settings')['LATEST_COUNTS']>
+    readonly LATEST_EXPANDED: UnwrapRef<typeof import('./src/composables/settings')['LATEST_EXPANDED']>
     readonly LOCAL_OPTIONS: UnwrapRef<typeof import('./src/composables/settings')['LOCAL_OPTIONS']>
     readonly PER_PAGE_OPTS: UnwrapRef<typeof import('./src/composables/settings')['PER_PAGE_OPTS']>
     readonly VAL_KEYS: UnwrapRef<typeof import('./src/composables/settings')['VAL_KEYS']>
@@ -824,6 +836,7 @@ declare module '@vue/runtime-core' {
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useScrollLock: UnwrapRef<typeof import('@vueuse/core')['useScrollLock']>
+    readonly useServerData: UnwrapRef<typeof import('./src/composables/serverData')['useServerData']>
     readonly useSessionStorage: UnwrapRef<typeof import('@vueuse/core')['useSessionStorage']>
     readonly useSettings: UnwrapRef<typeof import('./src/composables/settings')['useSettings']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>

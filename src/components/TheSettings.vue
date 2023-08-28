@@ -61,5 +61,30 @@ const { reset, settings } = useSettings()
         <BaseToggle v-model:toggled="settings.table.headers[prop]" :name="$t(`header.${prop}`)" />
       </template>
     </SettingsSection>
+    <SettingsSection
+      class="ml-2 px-1"
+      :title="$t('settings.latest')"
+      :section-description="$t('settings.latestDescription')"
+    >
+      <SettingsSelectItem :title="$t('settings.latestCount')">
+        <BaseSelect
+          v-model="settings.latest.numEntries" :no-local="true"
+          :options="LATEST_COUNTS.map((o) => { return { local: o.toString(), value: o } })"
+        />
+      </SettingsSelectItem>
+      <SettingsSelectItem :title="$t('settings.latestExpanded')">
+        <BaseSelect
+          v-model="settings.latest.numExpanded" :no-local="true"
+          :options="LATEST_EXPANDED.map((o) => { return { local: o.toString(), value: o } })"
+        />
+      </SettingsSelectItem>
+      <SettingsSelectItem :title="$t('messages.compare_to')">
+        <BaseSelect
+          v-model="settings.latest.comparison"
+          :options="Object.keys(ComparisonType).map(
+            (o) => { return { local: $t(`messages.${o}`), value: o } })"
+        />
+      </SettingsSelectItem>
+    </SettingsSection>
   </div>
 </template>
