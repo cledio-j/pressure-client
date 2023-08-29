@@ -1,3 +1,5 @@
+import type { Note } from '~/stores/notifications'
+
 type HttpMethod =
   | 'GET'
   | 'PUT'
@@ -64,7 +66,7 @@ function buildOptions(opts: FetchOptions) {
 
 export async function useFetch<T>(resource: string, opts: FetchOptions) {
   const isFetching = ref(false)
-  const error = ref<undefined | FetchError>()
+  const error = ref<undefined | Note>()
   const authorized = ref(false)
 
   const auth = () => {
@@ -74,9 +76,11 @@ export async function useFetch<T>(resource: string, opts: FetchOptions) {
     catch (err) {
       if (err instanceof Error) {
         error.value = {
-          error: err.name,
+          name: err.name,
           severity: 'error',
           description: err.message,
+          actions: [],
+          original: err,
         }
       }
     }
@@ -89,7 +93,7 @@ export async function useFetch<T>(resource: string, opts: FetchOptions) {
       auth()
       if (!authorized.value) {
         error.value = {
-          error: 'Not authorized',
+          name: 'error.notAuthorized',
           severity: 'error',
         }
         return
@@ -104,26 +108,27 @@ export async function useFetch<T>(resource: string, opts: FetchOptions) {
     catch (err) {
       if (err instanceof Error) {
         error.value = {
-          error: err.name,
+          name: 'error.network',
           severity: 'error',
           description: err.message,
+          original: err,
         }
       }
       return
     }
 
-    if (!response) {
+    if (!response || !response.value) {
       error.value = {
-        error: 'Network error',
+        name: 'error.network',
         severity: 'fatal',
       }
       return
     }
     if (!response.value.ok) {
       error.value = {
-        error: 'Failed to fetch.',
+        name: 'error.fetchFailure',
         severity: 'error',
-        response: response.value,
+        original: response.value,
       }
       return
     }
@@ -143,10 +148,10 @@ export async function usePaginatedFetch<T>(
   opts: FetchOptions,
   afterFetch: (a: Awaited<T>) => void | Promise<void>,
 ) {
-  const fetchErrors = shallowRef<FetchError[]>([])
+  const fetchErrors = shallowRef<Note[]>([])
   const data = shallowRef<T[]>([]) // this is only filled if no afterFetch function is provided
 
-  const asyncError = ref()
+  const asyncError = ref<Note | undefined>()
 
   const execute = async () => {
     const responses: Promise<T | null>[] = urls.map(async (url) => {
@@ -170,8 +175,9 @@ export async function usePaginatedFetch<T>(
     catch (err) {
       if (err instanceof Error) {
         asyncError.value = {
-          error: 'Failed to process responses.',
+          name: 'error.backgroundFetchFail',
           severity: 'error',
+          actions: [],
         }
       }
     }

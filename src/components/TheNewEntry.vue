@@ -14,13 +14,16 @@ function handleError() {}
 </script>
 
 <template>
-  <div>
-    <header class="flex flex-row items-center justify-between">
-      <h1 class="px-2 pt-1 text-xl font-semibold text-tx-title">
+  <div class="">
+    <header class="flex flex-row items-center justify-between border-b bg-back-light py-1">
+      <h1
+        class="px-2 pt-1 text-xl font-semibold text-tx-title"
+        @click="expanded = !expanded"
+      >
         {{ $t('controls.new_entry') }}
       </h1>
-      <button>
-        <div class="i-ms-photo-camera text-lg text-primary-dark" />
+      <button type="button" class="border rounded-full bg-white p-1.5">
+        <div class="i-ms-photo-camera text-lg text-primary" />
       </button>
       <BaseExpandButton @toggle-expand="expanded = !expanded" />
     </header>

@@ -1,11 +1,11 @@
 import type { ModifyReadingResponse, Reading, ReadingApiResponse } from 'api'
-import type { FetchError } from './fetch'
 import { useDataStore } from '~/stores/data'
+import { useNoteStore } from '~/stores/notifications'
 
 export function useServerData() {
-  const errors = ref<FetchError[]>([])
   const isFetching = ref(false)
   const dataStore = useDataStore()
+  const { notes } = useNoteStore()
   const { settings } = useSettings()
 
   async function patchReading(reading: Reading) {
@@ -14,7 +14,7 @@ export function useServerData() {
       { auth: true, method: 'POST', immediate: true, body: JSON.stringify(reading) },
     )
     if (error.value) {
-      errors.value.push(error.value)
+      notes.push(error.value)
       return
     }
     const result = await data.value
@@ -30,7 +30,7 @@ export function useServerData() {
       { auth: true, method: 'GET', immediate: true },
     )
     if (error.value) {
-      errors.value.push(error.value)
+      notes.push(error.value)
       return
     }
 
@@ -53,12 +53,12 @@ export function useServerData() {
       { auth: true, method: 'GET' }, dataStore.updateData,
     )
     if (fetchErrors.value)
-      fetchErrors.value.forEach(e => errors.value.push(e))
+      fetchErrors.value.forEach(e => notes.push(e))
     if (asyncError.value)
-      errors.value.push(asyncError.value)
+      notes.push(asyncError.value)
     isFetching.value = false
     dataStore.removeDuplicates()
   }
 
-  return { errors, isFetching, patchReading, getData }
+  return { isFetching, patchReading, getData }
 }

@@ -58,6 +58,7 @@ export default defineConfig({
         active: 'var(--c-bg-active)',
         light: 'var(--c-bg-light)',
         highlight: 'var(--c-bg-highlight)',
+        offwhite: 'var(--c-bg-offwhite)',
       },
       tx: {
         DEFAULT: 'var(--c-text-base)',

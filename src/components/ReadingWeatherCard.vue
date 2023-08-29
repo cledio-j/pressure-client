@@ -31,7 +31,8 @@ const icons = {
       <div class="text-4xl" :class="icons[weather.icon as IconKey]" />
       <div class="flex flex-row">
         <div class="i-ms-thermostat text-2xl text-red-700" />
-        <span class="text-xl font-semibold">{{ `${weather.temperature.toFixed(1)}°C` }}</span>
+        <span class="text-xl font-semibold">{{
+          `${weather.temperature ? weather.temperature.toFixed(1) : $t('messages.missing')}°C` }}</span>
       </div>
       <span class="ml-2 text-lg">{{ $t(`messages.${weather.condition}`) }}</span>
     </div>
@@ -44,15 +45,15 @@ const icons = {
       </div>
       <div class="mx-5 flex flex-row justify-between md:mx-3">
         <span>{{ $t("header.humidity") }}</span>
-        <span class="font-semibold">{{ `${weather.relative_humidity}%` }}</span>
+        <span class="font-semibold">{{ `${weather.relative_humidity || 0}%` }}</span>
       </div>
       <div class="flex-ro mx-5 flex justify-between md:mx-3">
         <span>{{ $t("header.pressure") }}</span>
-        <span class="font-semibold">{{ `${weather.pressure}hPa` }}</span>
+        <span class="font-semibold">{{ `${weather.pressure || 0}hPa` }}</span>
       </div>
       <div class="flex-ro mx-5 flex justify-between md:mx-3">
         <span>{{ $t("header.cloud_cover") }}</span>
-        <span class="font-semibold">{{ `${weather.cloud_cover}%` }}</span>
+        <span class="font-semibold">{{ `${weather.cloud_cover || 0}%` }}</span>
       </div>
     </div>
   </div>

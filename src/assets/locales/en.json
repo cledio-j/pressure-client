@@ -75,7 +75,9 @@
     "video_unavaiable": "No video input.",
     "wrong_pwd": "Incorrect name or password",
     "dayBefore": "Day before",
-    "latest": "Latest entry"
+    "latest": "Latest entry",
+    "null": "error 404",
+    "missing": "#"
   },
   "controls": {
     "from": "From...",
@@ -109,5 +111,8 @@
     "latestDescription": "Configure latest entries panel",
     "latestCount": "Entries to show",
     "latestExpanded": "Initially expanded"
+  },
+  "error": {
+    "network": "Network failure"
   }
 }

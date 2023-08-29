@@ -21,13 +21,13 @@ declare module 'api' {
   }
 
   interface WeatherReading {
-    cloud_cover: number
-    condition: string
+    cloud_cover: number | null
+    condition: string | null
     icon: string
     precipitation: number
-    pressure: number
+    pressure: number | null
     reading_id: number
-    relative_humidity: number
+    relative_humidity: number | null
     temperature: number
     timestamp?: string
   }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { NewReadingResponse, Reading, ValueKey } from 'api'
 import { getDayTime, getLocalISO } from '../utils/dates'
-import BaseSelect from './BaseSelect.vue'
 import type { FetchError } from '~/composables/fetch'
 
 const emit = defineEmits<{
@@ -62,43 +61,57 @@ const shortcuts = settings.value.timeShortcuts
 
 <template>
   <form class="max-w-sm flex flex-col justify-center">
-    <fieldset class="mt-1 flex flex-col place-items-center">
-      <div class="flex flex-row items-center gap-2">
-        <button type="button" class="i-ms-west self-auto" @click="setYesterday" />
-        <BaseDateInput v-model:model-value="formState.timestamp" type="datetime-local" label="" />
-        <button
-          type="button" class="text-primary-dark underline"
-          @click="formState.timestamp = getLocalISO()"
-        >
-          {{ $t('controls.now') }}
-        </button>
+    <fieldset class="mt-2 flex flex-col place-items-center">
+      <div class="border border-back-light border-dashed py-1">
+        <div class="grid grid-cols-12 mb-2 place-items-center gap-2">
+          <button
+            type="button"
+            class="col-span-2 col-start-2 border rounded-full bg-back-light p-1" @click="setYesterday"
+          >
+            <div class="i-ms-west scale-125 text-primary" />
+          </button>
+          <BaseDateInput
+            v-model:model-value="formState.timestamp"
+            class="col-span-6 col-start-4" type="datetime-local" label=""
+          />
+          <button
+            type="button" class="col-start-11 text-primary-dark underline"
+            @click="formState.timestamp = getLocalISO()"
+          >
+            {{ $t('controls.now') }}
+          </button>
+        </div>
+        <menu class="flex flex-row justify-center gap-2">
+          <button
+            v-for="shortcut in shortcuts" :key="shortcut"
+            class="py-1 text-sm text-tx-title btn"
+            type="button" @click="setTime(shortcut)"
+          >
+            {{ shortcut }}
+          </button>
+        </menu>
       </div>
-      <menu class="flex flex-row gap-2">
-        <button
-          v-for="shortcut in shortcuts" :key="shortcut"
-          class="py-0.5 btn"
-          type="button" @click="setTime(shortcut)"
-        >
-          {{ shortcut }}
-        </button>
-      </menu>
       <template
         v-for="k in (['systolic_bp', 'diastolic_bp', 'heart_rate'] as ValueKey[])" :key="k"
       >
         <BaseInput v-model:val="formState[k]" type="number" :label="$t(`header.${k}`)" />
       </template>
       <BaseSelect
-        v-model="formState.day_time" :label="$t('daytime.daytime')"
+        v-model="formState.day_time"
+        class="mt-4 w-12rem" :label="$t('daytime.daytime')"
         :options="dtOptions.map(o => getLocalePair($t(`daytime.${o}`), o))"
       />
     </fieldset>
-    <menu class="mx-4 mt-1 flex flex-row justify-between">
-      <button type="button" @click="formState = getState()">
-        <div class="i-ms-undo text-2xl text-tx-title" />
+    <menu class="mt-2 flex flex-row place-items-center justify-between border-t border-dashed px-4">
+      <button
+        type="button" class="border rounded-full bg-back-light p-1"
+        @click="formState = getState()"
+      >
+        <div class="i-ms-undo text-2xl text-primary" />
       </button>
       <button
         type="submit"
-        class="m-1 bg-light px-4 py-2 font-semibold text-tx-title shadow-primShadow shadow-sm hover:bg-back-light"
+        class="my-1 text-tx btn"
         @click.stop.prevent="submit"
       >
         {{ $t('controls.enter') }}

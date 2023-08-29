@@ -42,7 +42,10 @@ const comparisonResult = computed<Record<ValueKey, number>>(() => {
         <td class="min-w-5rem">
           {{ `${$t(`header.${val}`)}: ` }}
         </td>
-        <input v-model="thisReading[val]" type="number" class="max-w-5rem" :disabled="!state.edit">
+        <input
+          v-model="thisReading[val]"
+          type="number" class="max-w-5rem" :disabled="!state.edit"
+        >
         <td class="grid grid-cols-2 min-h-2rem min-w-4rem place-items-center">
           <span class="">{{ comparisonResult[val] }}</span>
           <div
@@ -82,3 +85,16 @@ const comparisonResult = computed<Record<ValueKey, number>>(() => {
     </div>
   </table>
 </template>
+
+<style scoped>
+input[type="number"]:disabled, textarea {
+
+  background-color : rgba(255, 255, 255, 0);
+
+}
+input[type="number"]:enabled, textarea {
+
+  outline: 1px solid var(--c-primary);
+
+}
+</style>

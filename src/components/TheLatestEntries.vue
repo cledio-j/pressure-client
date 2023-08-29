@@ -32,7 +32,7 @@ async function handleDelete(reading: Reading) {
       @delete-reading="handleDelete"
     />
   </div>
-  <div v-else class="grid grid-cols-1 items-center">
+  <div v-else class="grid grid-cols-1 mt-12 w-full place-items-center">
     <BaseLoadingSpinner />
   </div>
 </template>

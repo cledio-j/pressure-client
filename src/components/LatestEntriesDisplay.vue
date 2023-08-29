@@ -79,7 +79,7 @@ watch(props.items, () => {
   <TransitionGroup name="list">
     <div
       v-for="(item, idx) of items" :key="item.id"
-      class="relative items-center justify-between text-tx-title shadow-primShadow shadow-sm transition-all duration-200"
+      class="relative items-center justify-between from-back-offwhite to-white bg-gradient-to-t text-tx-title shadow-primShadow shadow-sm transition-all duration-200"
       :class="{
         'h-[50px] ease-out': !stateMap.get(idx)?.expanded,
       }"

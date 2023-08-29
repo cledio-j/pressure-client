@@ -74,7 +74,9 @@
     "video_unavaiable": "Bilderkennung ist nict verfügbar.",
     "wrong_pwd": "Falscher Benutzername oder Passwort",
     "dayBefore": "Vorheriger Tag",
-    "latest": "Letzter Eintrag"
+    "latest": "Letzter Eintrag",
+    "null": "Fehler-404",
+    "missing": "#"
   },
   "controls": {
     "from": "Von...",
@@ -109,5 +111,8 @@
     "latestDescription": "Konfiguriere die Anzeige der neuesten Einträge",
     "latestCount": "Anzahl",
     "latestExpanded": "Aufgeklappt"
+  },
+  "error": {
+    "network": "Netzwerk Fehler"
   }
 }
