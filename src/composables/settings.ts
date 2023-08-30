@@ -10,6 +10,21 @@ export const DAY_TIMES = ['morning', 'lunch', 'evening'] as const
 export const LATEST_COUNTS = [5, 10, 15, 20] as const
 export const LATEST_EXPANDED = [1, 3, 5, 10] as const
 
+// @unocss-include
+export const WEATHER_ICONS = {
+  'cloudy': 'i-ms-cloudy text-white',
+  'clear-day': 'i-ms-clear-day text-amber',
+  'partly-cloudy-day': 'i-ms-partly-cloudy-day text-rose-200',
+  'clear-night': 'i-ms-clear-night text-slate-200',
+  'rain': 'i-ms-rainy text-cyan-200',
+  'partly-cloudy-night': 'i-ms-partly-cloudy-night text-slate-200',
+  'fog': 'i-ms-foggy text-bluegray-300',
+  'sleet': 'i-ms-rainy-snow text-blue-300',
+  'hail': 'i-ms-weather-hail text-blue-300',
+  'wind': 'i-ms-air text-white',
+  'snow': 'i-ms-cloudy-snowing text-white',
+} as const
+
 export const ComparisonType = {
   latest: 0,
   dayBefore: 1,
@@ -47,8 +62,7 @@ export interface Settings {
   daytimeOptions: string[]
   timeShortcuts: string[]
 }
-
-interface ColorSetting {
+export interface ColorSetting {
   min: number
   max: number
   delta: number

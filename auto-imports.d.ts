@@ -16,6 +16,7 @@ declare global {
   const LOCAL_OPTIONS: typeof import('./src/composables/settings')['LOCAL_OPTIONS']
   const PER_PAGE_OPTS: typeof import('./src/composables/settings')['PER_PAGE_OPTS']
   const VAL_KEYS: typeof import('./src/composables/settings')['VAL_KEYS']
+  const WEATHER_ICONS: typeof import('./src/composables/settings')['WEATHER_ICONS']
   const apiUrl: typeof import('./src/composables/fetch')['apiUrl']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
@@ -322,6 +323,7 @@ declare module 'vue' {
     readonly LOCAL_OPTIONS: UnwrapRef<typeof import('./src/composables/settings')['LOCAL_OPTIONS']>
     readonly PER_PAGE_OPTS: UnwrapRef<typeof import('./src/composables/settings')['PER_PAGE_OPTS']>
     readonly VAL_KEYS: UnwrapRef<typeof import('./src/composables/settings')['VAL_KEYS']>
+    readonly WEATHER_ICONS: UnwrapRef<typeof import('./src/composables/settings')['WEATHER_ICONS']>
     readonly apiUrl: UnwrapRef<typeof import('./src/composables/fetch')['apiUrl']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
@@ -617,6 +619,7 @@ declare module '@vue/runtime-core' {
     readonly LOCAL_OPTIONS: UnwrapRef<typeof import('./src/composables/settings')['LOCAL_OPTIONS']>
     readonly PER_PAGE_OPTS: UnwrapRef<typeof import('./src/composables/settings')['PER_PAGE_OPTS']>
     readonly VAL_KEYS: UnwrapRef<typeof import('./src/composables/settings')['VAL_KEYS']>
+    readonly WEATHER_ICONS: UnwrapRef<typeof import('./src/composables/settings')['WEATHER_ICONS']>
     readonly apiUrl: UnwrapRef<typeof import('./src/composables/fetch')['apiUrl']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>

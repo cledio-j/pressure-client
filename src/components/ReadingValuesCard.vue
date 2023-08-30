@@ -5,7 +5,6 @@ import type { Reading, ValueKey } from '~/types/api'
 const props = defineProps<{
   item: Reading
   state: CardState
-  comparison?: Reading
 }>()
 
 defineEmits<{
@@ -21,17 +20,20 @@ const hasChanged = computed(() => {
   return vals.some(v => props.item[v] !== thisReading.value[v])
 })
 
-const comparisonResult = computed<Record<ValueKey, number>>(() => {
+const comparisonResult = computed<Record<ValueKey, number> | undefined>(() => {
+  if (!props.state.comparison)
+    return
+
   return {
-    systolic_bp: !props.comparison ? 0 : props.item.systolic_bp - props.comparison.systolic_bp,
-    diastolic_bp: !props.comparison ? 0 : props.item.diastolic_bp - props.comparison.diastolic_bp,
-    heart_rate: !props.comparison ? 0 : props.item.heart_rate - props.comparison.heart_rate,
+    systolic_bp: props.item.systolic_bp - props.state.comparison.systolic_bp,
+    diastolic_bp: props.item.diastolic_bp - props.state.comparison.diastolic_bp,
+    heart_rate: props.item.heart_rate - props.state.comparison.heart_rate,
   }
 })
 </script>
 
 <template>
-  <table class="ml-2 flex flex-row border-collapse justify-center transition-all">
+  <table class="ml-2 flex flex-row justify-center transition-all">
     <tbody class="mb-1 mt-2">
       <tr
         v-for="val in vals"
@@ -46,17 +48,20 @@ const comparisonResult = computed<Record<ValueKey, number>>(() => {
           v-model="thisReading[val]"
           type="number" class="max-w-5rem" :disabled="!state.edit"
         >
-        <td class="grid grid-cols-2 min-h-2rem min-w-4rem place-items-center">
+        <td v-if="state.comparison && comparisonResult" class="grid grid-cols-2 min-h-2rem min-w-4rem place-items-center">
           <span class="">{{ comparisonResult[val] }}</span>
           <div
-            class="i-ms-south"
+            class="i-ms-east"
             :class="[{
-                       'rotate-180': comparisonResult[val] > 0,
-                       'rotate-270': comparisonResult[val] === 0,
-                     },
-                     comparisonResult[val] > 0 ? 'text-error' : 'text-success',
+              '-rotate-45 text-error': comparisonResult[val] > 0,
+              'rotate-45 text-success': comparisonResult[val] < 0,
+              'text-tx-faint': comparisonResult[val] === 0,
+            },
             ]"
           />
+        </td>
+        <td v-else>
+          {{ $t('messages.notAvailable') }}
         </td>
       </tr>
     </tbody>

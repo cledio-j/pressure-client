@@ -1,24 +1,7 @@
 <script setup lang="ts">
-import type { WeatherReading } from 'api'
+import type { IconKey, WeatherReading } from 'api'
 
 defineProps<{ weather: WeatherReading }>()
-
-type IconMap = typeof icons
-type IconKey = keyof IconMap
-
-const icons = {
-  'cloudy': 'i-ms-cloudy text-white',
-  'clear-day': 'i-ms-clear-day text-amber',
-  'partly-cloudy-day': 'i-ms-partly-cloudy-day text-rose-200',
-  'clear-night': 'i-ms-clear-night text-slate-200',
-  'rain': 'i-ms-rainy text-cyan-200',
-  'partly-cloudy-night': 'i-ms-partly-cloudy-night text-slate-200',
-  'fog': 'i-ms-foggy text-bluegray-300',
-  'sleet': 'i-ms-rainy-snow text-blue-300',
-  'hail': 'i-ms-weather-hail text-blue-300',
-  'wind': 'i-ms-air text-white',
-  'snow': 'i-ms-cloudy-snowing text-white',
-}
 </script>
 
 <template>
@@ -28,9 +11,9 @@ const icons = {
     <div
       class="grid grid-cols-3 grid-rows-1 ml-8 mt-4 w-3/4 justify-items-center justify-self-center"
     >
-      <div class="text-4xl" :class="icons[weather.icon as IconKey]" />
+      <div class="text-4xl" :class="WEATHER_ICONS[weather.icon as IconKey]" />
       <div class="flex flex-row">
-        <div class="i-ms-thermostat text-2xl text-red-700" />
+        <div class="ed-700 text-r i-ms-thermostat text-2xl" />
         <span class="text-xl font-semibold">{{
           `${weather.temperature ? weather.temperature.toFixed(1) : $t('messages.missing')}°C` }}</span>
       </div>

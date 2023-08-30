@@ -55,7 +55,7 @@ function getTime(type: 'date' | 'time', value: string) {
             :key="name"
           >
             <td
-              v-if="show" class="border border-gray-400 px-1"
+              v-if="show" class="border border-gray-400 px-1 transition-colors"
               :style="{
                 backgroundColor: colored ? decideColor(name, reading) : '',
               }"

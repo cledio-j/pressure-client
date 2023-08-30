@@ -44,6 +44,6 @@ declare module 'vue' {
     TheNewEntry: typeof import('./src/components/TheNewEntry.vue')['default']
     TheSettings: typeof import('./src/components/TheSettings.vue')['default']
     TheStatsPanel: typeof import('./src/components/TheStatsPanel.vue')['default']
-    TheTableFooter: typeof import('./src/components/TheTableFooter.vue')['default']
+    TheTableTools: typeof import('./src/components/TheTableTools.vue')['default']
   }
 }

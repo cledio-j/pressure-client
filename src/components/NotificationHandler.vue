@@ -5,7 +5,7 @@ const { notes, clear } = useNoteStore()
 </script>
 
 <template>
-  <div v-if="notes.length" class="fixed left-0 right-0 top-1rem z-50 mx-2 rounded-md bg-back px-1 text-tx">
+  <div v-if="notes.length" class="fixed left-0 right-0 top-1rem z-50 mx-2 rounded-md bg-back px-1 py-1 text-tx shadow shadow-primary-dark">
     <section v-for="(note, idx) in notes" :key="note.name">
       <header
         class="flex flex-row justify-between border-b border-primary-dark border-dashed py-1 text-lg text-tx-title"

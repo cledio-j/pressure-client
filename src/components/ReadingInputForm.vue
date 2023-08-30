@@ -102,7 +102,7 @@ const shortcuts = settings.value.timeShortcuts
         :options="dtOptions.map(o => getLocalePair($t(`daytime.${o}`), o))"
       />
     </fieldset>
-    <menu class="mt-2 flex flex-row place-items-center justify-between border-t border-dashed px-4">
+    <menu class="mt-2 flex flex-row place-items-center justify-between border-t border-dashed px-4 py-1">
       <button
         type="button" class="border rounded-full bg-back-light p-1"
         @click="formState = getState()"

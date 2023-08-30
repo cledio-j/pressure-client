@@ -29,7 +29,7 @@ function getColor(time: typeof DAY_TIMES[number], val: typeof VAL_KEYS[number]) 
     <template v-for="t in DAY_TIMES" :key="t">
       <td
         v-for="(k, i) in VAL_KEYS" :key="i"
-        class="border-collapse border px-0.5 text-center"
+        class="border-collapse border px-0.5 text-center transition-colors duration-200"
         :class="{ 'bg-back-light': row[t].length > 1 }"
         :style="{
           backgroundColor: getColor(t, k),

@@ -77,7 +77,8 @@
     "dayBefore": "Day before",
     "latest": "Latest entry",
     "null": "error 404",
-    "missing": "#"
+    "missing": "#",
+    "notAvailable": "n/a"
   },
   "controls": {
     "from": "From...",

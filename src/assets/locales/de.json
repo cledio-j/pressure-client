@@ -76,7 +76,8 @@
     "dayBefore": "Vorheriger Tag",
     "latest": "Letzter Eintrag",
     "null": "Fehler-404",
-    "missing": "#"
+    "missing": "#",
+    "notAvailable": "k. A."
   },
   "controls": {
     "from": "Von...",

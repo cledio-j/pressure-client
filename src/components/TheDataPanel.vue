@@ -59,7 +59,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <section>
+  <article>
+    <header class="flex flex-row items-center justify-between pb-2">
+      <h1 class="mx-1 pb-1 font-bold text-tx">
+        {{ $t('settings.table') }}
+      </h1>
+      <TheTableTools
+        v-model:paint="colored"
+        v-model:table-view="view"
+      />
+    </header>
     <DataTableEntries
       v-if="view === 'entries'"
       :headers="settings.table.headers"
@@ -82,9 +91,5 @@ onMounted(() => {
       :total-items="dataStore.totalAvail"
       :approx="approx"
     />
-    <TheTableFooter
-      v-model:paint="colored"
-      v-model:table-view="view"
-    />
-  </section>
+  </article>
 </template>

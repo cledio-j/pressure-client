@@ -12,7 +12,7 @@ onMounted(
 </script>
 
 <template>
-  <main>
+  <main class="mx-auto justify-center bg-light-200 container">
     <NotificationHandler />
     <RouterView />
   </main>

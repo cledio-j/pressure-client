@@ -20,8 +20,10 @@ export const useDataStore = defineStore('data', () => {
   const data = ref<Reading[]>([])
   const totalPages = ref(1)
   const totalItems = ref(0)
-  const showLatest = ref(10)
   const ready = ref(false)
+
+  const { settings } = useSettings()
+
   const params: GetParams = reactive({
     from_date: new Date().toISOString(),
     to_date: new Date().toISOString(),
@@ -34,7 +36,7 @@ export const useDataStore = defineStore('data', () => {
   const latest = computed(() => {
     return data.value.toSorted((a, b) => {
       return new Date(`${a.date}T${a.time}`) > new Date(`${b.date}T${b.time}`) ? -1 : 1
-    }).slice(0, showLatest.value)
+    }).slice(0, settings.value.latest.numEntries)
   })
   function updateParams(updated: GetParams) {
     for (const [k, v] of Object.entries(updated))
@@ -89,7 +91,6 @@ export const useDataStore = defineStore('data', () => {
     updateData,
     totalPages,
     totalAvail: totalItems,
-    showLatest,
     latest,
     hasAllData,
     removeDuplicates,

@@ -22,16 +22,19 @@ async function handleDelete(reading: Reading) {
 </script>
 
 <template>
-  <div
+  <article
     v-if="dataStore.ready"
-    class="relative grid grid-cols-1 max-w-lg transition-all"
+    class="new-shadow relative mb-2 flex flex-col gap-2 pb-2 transition-all"
   >
+    <h1 class="mx-1 font-bold text-tx">
+      {{ $t('settings.latest') }}
+    </h1>
     <LatestEntriesDisplay
       :items="dataStore.latest"
       @reading-changed="repository.patchReading"
       @delete-reading="handleDelete"
     />
-  </div>
+  </article>
   <div v-else class="grid grid-cols-1 mt-12 w-full place-items-center">
     <BaseLoadingSpinner />
   </div>

@@ -22,7 +22,7 @@ defineProps<{
           <td class="border">
             {{ $d(new Date(date), 'short') }}
           </td>
-          <DataTableRow type="values" :readings="dayReadings" />
+          <DataTableRow type="values" :readings="dayReadings" :colored="colored" />
         </tr>
       </template>
     </tbody>

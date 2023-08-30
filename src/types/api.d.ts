@@ -1,5 +1,7 @@
 export { }
 
+
+
 declare module 'api' {
 
   interface TokenResponse {
@@ -31,6 +33,9 @@ declare module 'api' {
     temperature: number
     timestamp?: string
   }
+
+  export type IconMap = typeof WEATHER_ICONS
+  export type IconKey = keyof IconMap
 
   interface ReadingApiResponse {
     data: Reading[];
