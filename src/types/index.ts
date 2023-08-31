@@ -2,6 +2,8 @@ import type { Reading } from 'api'
 
 export {}
 
+export type DayTimeVal = 'other' | 'morning' | 'lunch' | 'evening'
+
 export interface CardState {
   expanded: boolean
   weather: boolean

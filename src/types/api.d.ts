@@ -1,3 +1,5 @@
+import { DayTimeVal } from "."
+
 export { }
 
 
@@ -12,7 +14,7 @@ declare module 'api' {
   interface Reading {
     time?: string
     date?: string
-    day_time: string
+    day_time: DayTimeVal
     diastolic_bp: number
     heart_rate: number
     systolic_bp: number

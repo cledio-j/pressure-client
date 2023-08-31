@@ -10,6 +10,7 @@ const page = ref(1)
 const perPage = ref(20)
 const colored = ref(false)
 const view = ref<TableView>('entries')
+const showFilter = ref(false)
 
 const approx = computed(() => {
   return view.value !== 'entries'
@@ -64,11 +65,16 @@ onMounted(() => {
       <h1 class="mx-1 pb-1 font-bold text-tx">
         {{ $t('settings.table') }}
       </h1>
+      <button @click="showFilter = !showFilter">
+        <div class="i-ms-filter-alt-outline scale-150" />
+      </button>
+
       <TheTableTools
         v-model:paint="colored"
         v-model:table-view="view"
       />
     </header>
+    <TheTableFilter v-if="showFilter" />
     <DataTableEntries
       v-if="view === 'entries'"
       :headers="settings.table.headers"

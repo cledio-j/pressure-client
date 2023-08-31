@@ -7,6 +7,7 @@ const name: Ref<string> = ref('')
 const pwd: Ref<string> = ref('')
 
 const router = useRouter()
+const isFetching = ref(false)
 
 function getHeader(): HeadersInit {
   return { Authorization: `Basic ${window.btoa(`${name.value}:${pwd.value}`)}` }
@@ -31,6 +32,7 @@ function getHeader(): HeadersInit {
 // }
 
 async function submit() {
+  isFetching.value = true
   const { data, error } = await useFetch<TokenResponse>(
     'user/get-token',
     { immediate: true, auth: false, method: 'POST', headers: getHeader })
@@ -39,6 +41,7 @@ async function submit() {
     return
   }
   const response = await data.value
+  isFetching.value = false
   localStorage.tokenExpiration = response?.expires
   localStorage.token = response?.token
   router.push('/')
@@ -47,7 +50,6 @@ async function submit() {
 
 <template>
   <form>
-    {{ error }}
     <BaseInput
       v-model:val="name"
       type="text"
