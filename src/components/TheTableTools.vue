@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { TableView } from '~/composables/settings'
+import { ALL_TABLE_VIEWS } from '../const'
+import type { TableView } from '~/types'
 
 defineProps<{
   paint: boolean

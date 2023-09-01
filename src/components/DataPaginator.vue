@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { PER_PAGE_OPTS } from '~/const'
+
 const props = defineProps<{
   perPage: number
   page: number
@@ -13,6 +15,12 @@ defineEmits<{
 
 const firstRow = computed(() => props.perPage * (props.page - 1) + 1)
 const lastRow = computed(() => firstRow.value + props.perPage - 1)
+
+const lastRowStr = computed(() => {
+  if (props.approx)
+    return lastRow.value > props.totalItems ? Math.round(props.totalItems / 3) : lastRow.value
+  return lastRow.value > props.totalItems ? props.totalItems : lastRow.value
+})
 
 function isAvail(page: number) {
   if (page < 1 || page > props.totalItems / props.perPage)
@@ -42,9 +50,9 @@ function isAvail(page: number) {
     </div>
     <nav class="flex flex-row justify-self-end gap-2">
       <span class="text-sm">
-        {{ `${firstRow}-${lastRow}
+        {{ `${firstRow}-${lastRowStr}
         ${$t(`messages.${approx ? 'of_about' : 'of'}`)}
-        ${approx ? Math.floor(totalItems / 3) : totalItems}` }}
+        ${totalItems}` }}
       </span>
       <button
         type="button"

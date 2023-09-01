@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AuthForm: typeof import('./src/components/AuthForm.vue')['default']
+    BaseArraySelect: typeof import('./src/components/BaseArraySelect.vue')['default']
     BaseCheckbox: typeof import('./src/components/BaseCheckbox.vue')['default']
     BaseDateInput: typeof import('./src/components/BaseDateInput.vue')['default']
     BaseExpandButton: typeof import('./src/components/BaseExpandButton.vue')['default']

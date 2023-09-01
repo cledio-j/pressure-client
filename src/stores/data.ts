@@ -19,7 +19,7 @@ function deDupe<T extends { id: any }>(arr: T[]) {
 export const useDataStore = defineStore('data', () => {
   const data = ref<Reading[]>([])
   const totalPages = ref(1)
-  const totalItems = ref(0)
+  const totalAvail = ref(0)
   const ready = ref(false)
 
   const { settings } = useSettings()
@@ -32,7 +32,7 @@ export const useDataStore = defineStore('data', () => {
     order: 'desc',
     sort_by: 'timestamp',
   })
-  const hasAllData = computed(() => totalItems.value === data.value.length)
+  const hasAllData = computed(() => totalAvail.value <= (data.value.length + 2))
   const latest = computed(() => {
     return data.value.toSorted((a, b) => {
       return new Date(`${a.date}T${a.time}`) > new Date(`${b.date}T${b.time}`) ? -1 : 1
@@ -47,12 +47,12 @@ export const useDataStore = defineStore('data', () => {
     updated.data.forEach(e => e.timestamp = e.timestamp.slice(0, -3))
     data.value = data.value.concat(updated.data)
     totalPages.value = updated.meta.total_pages
-    totalItems.value = updated.meta.total
+    totalAvail.value = updated.meta.total
     if (refreshParams)
       updateParams(updated.params)
   }
   function removeDuplicates() {
-    if (data.value.length > totalItems.value)
+    if (data.value.length > totalAvail.value)
       data.value = deDupe(data.value)
   }
   function replaceReading(reading: Reading) {
@@ -90,7 +90,7 @@ export const useDataStore = defineStore('data', () => {
     params,
     updateData,
     totalPages,
-    totalAvail: totalItems,
+    totalAvail,
     latest,
     hasAllData,
     removeDuplicates,

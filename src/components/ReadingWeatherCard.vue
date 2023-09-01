@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { IconKey, WeatherReading } from 'api'
+import type { WeatherReading } from 'api'
+import { WEATHER_ICONS } from '~/const'
 
 defineProps<{ weather: WeatherReading }>()
 </script>
@@ -11,7 +12,7 @@ defineProps<{ weather: WeatherReading }>()
     <div
       class="grid grid-cols-3 grid-rows-1 ml-8 mt-4 w-3/4 justify-items-center justify-self-center"
     >
-      <div class="text-4xl" :class="WEATHER_ICONS[weather.icon as IconKey]" />
+      <div class="text-4xl" :class="WEATHER_ICONS[weather.icon]" />
       <div class="flex flex-row">
         <div class="ed-700 text-r i-ms-thermostat text-2xl" />
         <span class="text-xl font-semibold">{{

@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import type { NewReadingResponse, Reading, ValueKey } from 'api'
+import type { NewReading } from 'api'
 import { getDayTime, getLocalISO } from '../utils/dates'
-import type { FetchError } from '~/composables/fetch'
-
-const emit = defineEmits<{
-  (e: 'error', err: FetchError): void
-  (e: 'newReading', reading: Reading): void
-}>()
+import { VAL_KEYS } from '~/const'
 
 const { settings } = useSettings()
+const repository = useServerData()
 
 const dtOptions = settings.value.daytimeOptions
 
-function getState() {
+function getState(): NewReading {
   return {
     timestamp: getLocalISO(),
     systolic_bp: undefined,
@@ -22,20 +18,12 @@ function getState() {
   }
 }
 
-const formState = ref(getState())
+const formState = ref<NewReading>(getState())
 
 async function submit() {
-  const { data, error } = await useFetch<NewReadingResponse>(
-    'reading/put',
-    { auth: true, method: 'PUT', immediate: true, body: JSON.stringify(formState.value) },
-  )
-  if (error && error.value) {
-    emit('error', error.value)
-    return
-  }
-  const result = await data.value
-  if (result && result.success)
-    emit('newReading', result.reading)
+  repository.putReading(formState.value).then(() => {
+    formState.value = getState()
+  })
 }
 
 function setYesterday() {
@@ -92,7 +80,7 @@ const shortcuts = settings.value.timeShortcuts
         </menu>
       </div>
       <template
-        v-for="k in (['systolic_bp', 'diastolic_bp', 'heart_rate'] as ValueKey[])" :key="k"
+        v-for="k in VAL_KEYS" :key="k"
       >
         <BaseInput v-model:val="formState[k]" type="number" :label="$t(`header.${k}`)" />
       </template>
@@ -102,7 +90,9 @@ const shortcuts = settings.value.timeShortcuts
         :options="dtOptions.map(o => getLocalePair($t(`daytime.${o}`), o))"
       />
     </fieldset>
-    <menu class="mt-2 flex flex-row place-items-center justify-between border-t border-dashed px-4 py-1">
+    <menu
+      class="mt-2 flex flex-row place-items-center justify-between border-t border-dashed px-4 py-1"
+    >
       <button
         type="button" class="border rounded-full bg-back-light p-1"
         @click="formState = getState()"

@@ -1,4 +1,7 @@
-import type { ModifyReadingResponse, Reading, ReadingApiResponse } from 'api'
+import type {
+  ModifyReadingResponse,
+  NewReading, NewReadingResponse, Reading, ReadingApiResponse,
+} from 'api'
 import { useDataStore } from '~/stores/data'
 import { useNoteStore } from '~/stores/notifications'
 
@@ -22,11 +25,27 @@ export function useServerData() {
       dataStore.replaceReading(result.reading)
   }
 
+  async function putReading(reading: NewReading) {
+    const { data, error } = await useFetch<NewReadingResponse>(
+      'reading/put',
+      { auth: true, method: 'PUT', immediate: true, body: JSON.stringify(reading) },
+    )
+    if (error.value) {
+      notes.push(error.value)
+      return
+    }
+    const result = await data.value
+    if (result && result.success) {
+      result.reading.timestamp.slice(0, -3)
+      dataStore.insertReading(result.reading)
+    }
+  }
+
   async function getData() {
     dataStore.ready = false
     isFetching.value = true
     const { data, error } = await useFetch<ReadingApiResponse>(
-      'readings/get' + `?per_page=${50}`,
+      'readings/get' + `?per_page=${settings.value.table.perFetch}`,
       { auth: true, method: 'GET', immediate: true },
     )
     if (error.value) {
@@ -39,8 +58,9 @@ export function useServerData() {
     if (res)
       dataStore.updateData(res, true)
 
+    dataStore.ready = true
+
     backgroundFetch('readings/get', dataStore.totalPages, 2, settings.value.table.perFetch)
-      .then(() => dataStore.ready = true)
   }
 
   async function backgroundFetch(
@@ -60,5 +80,5 @@ export function useServerData() {
     dataStore.removeDuplicates()
   }
 
-  return { isFetching, patchReading, getData }
+  return { isFetching, patchReading, getData, putReading }
 }

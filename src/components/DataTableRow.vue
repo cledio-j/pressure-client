@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VAL_KEYS } from '../composables/settings'
+import { DAY_TIMES, VAL_KEYS } from '../const'
 import type { DayReadings } from './TheDataPanel.vue'
 
 const props = defineProps<{

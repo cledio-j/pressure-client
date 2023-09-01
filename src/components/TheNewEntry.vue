@@ -1,16 +1,5 @@
 <script setup lang="ts">
-import type { Reading } from 'api'
-import { useDataStore } from '~/stores/data'
-
 const expanded = ref(true)
-const dataStore = useDataStore()
-
-function handleNew(reading: Reading) {
-  reading.timestamp.slice(0, -3)
-  dataStore.insertReading(reading)
-}
-
-function handleError() {}
 </script>
 
 <template>
@@ -27,7 +16,7 @@ function handleError() {}
       </button>
       <BaseExpandButton @toggle-expand="expanded = !expanded" />
     </header>
-    <ReadingInputForm v-if="expanded" @new-reading="handleNew" @error="handleError" />
+    <ReadingInputForm v-if="expanded" />
   </div>
 </template>
 

@@ -91,7 +91,11 @@
     "reset": "Reset",
     "delete_entry": "Delete entry",
     "new_entry": "New entry",
-    "now": "Now"
+    "now": "Now",
+    "all": "All",
+    "filterDayTime": "Select times of day to include",
+    "filterValue": "Filter values",
+    "applyFilter": "Apply filter"
   },
   "settings": {
     "table": "Tables",

@@ -1,4 +1,5 @@
 import { DayTimeVal } from "."
+import {WEATHER_ICONS} from '../const'
 
 export { }
 
@@ -27,13 +28,21 @@ declare module 'api' {
   interface WeatherReading {
     cloud_cover: number | null
     condition: string | null
-    icon: string
+    icon: IconKey
     precipitation: number
     pressure: number | null
     reading_id: number
     relative_humidity: number | null
     temperature: number
     timestamp?: string
+  }
+
+  interface NewReading {
+    timestamp: string
+    systolic_bp?: number
+    diastolic_bp?: number
+    heart_rate?: number
+    day_time: DayTimeVal
   }
 
   export type IconMap = typeof WEATHER_ICONS

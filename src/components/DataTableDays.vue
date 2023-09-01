@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DayReadings } from './TheDataPanel.vue'
+import { DAY_TIMES, VAL_KEYS } from '~/const'
 
 defineProps<{
   days: [string, DayReadings][]

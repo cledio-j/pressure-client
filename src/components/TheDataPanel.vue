@@ -1,10 +1,31 @@
 <script setup lang="ts">
 import type { Reading } from 'api'
-import type { TableView } from '~/composables/settings'
 import { useDataStore } from '~/stores/data'
+import type { Filter, TableView } from '~/types'
+import { VAL_KEYS } from '~/const'
 
 const dataStore = useDataStore()
 const { settings } = useSettings()
+const noFilter = (d: Reading[]) => d
+
+const filterFn = ref<((data: Reading[]) => Reading[])>(noFilter)
+
+const dayMap = ref(new Map<string, DayReadings>())
+const filteredData = computed(() => {
+  return filterFn.value(dataStore.data)
+})
+
+watch([() => dataStore.hasAllData, () => filteredData.value], () => {
+  if (!dataStore.hasAllData)
+    // since this can be time consuming it should only happen once all data is in
+    return
+  makeDayMap(filteredData.value)
+})
+
+watchOnce(() => dataStore.ready, () => {
+  // this makes sure the first page is available immediately
+  makeDayMap(filteredData.value)
+})
 
 const page = ref(1)
 const perPage = ref(20)
@@ -26,31 +47,55 @@ export interface DayReadings {
   other: Set<Reading>
 }
 
-const dayMap = new Map<string, DayReadings>()
-
 const days = computed(() => {
-  return Array.from(dayMap.entries()).slice(firstRow.value, lastRow.value)
+  return Array.from(dayMap.value.entries()).slice(firstRow.value, lastRow.value)
 })
 
-watchEffect(() => {
-  if (!dataStore.ready)
+function applyFilter(fil: Filter, defaultFilter: Filter) {
+  const f = toRaw(fil)
+  if (JSON.stringify(f) === JSON.stringify(toRaw(defaultFilter))) {
+    filterFn.value = noFilter
     return
-  dayMap.clear()
-  dataStore.data.forEach((r) => {
+  }
+
+  const filter = (data: Reading[]) => {
+    const filtered = data.filter((r) => {
+      // checks all conditions of the filter
+      const passed: Array<boolean> = []
+      for (const key of VAL_KEYS)
+        passed.push(r[key] >= f[key][0] && r[key] <= f[key][1])
+      passed.push(f.day_time.includes(r.day_time))
+      const d = new Date(r.timestamp).getTime()
+      passed.push(
+        d >= new Date(f.date[0]).getTime()
+        && d <= new Date(f.date[1]).getTime(),
+      )
+      return passed.every(Boolean)
+    })
+    return filtered
+  }
+  filterFn.value = filter
+}
+
+function makeDayMap(data: Reading[]) {
+  dayMap.value.clear()
+
+  data.forEach((r) => {
     const d = r.timestamp.slice(0, 10)
-    if (!dayMap.has(d)) {
-      dayMap.set(d, {
+    if (!dayMap.value.has(d)) {
+      dayMap.value.set(d, {
         morning: new Set(),
         lunch: new Set(),
         evening: new Set(),
         other: new Set(),
       })
     }
-    const v = dayMap.get(d)
+    const v = dayMap.value.get(d)
     v![r.day_time as keyof DayReadings].add(r)
   })
+
   console.error(dayMap)
-})
+}
 
 onMounted(() => {
   perPage.value = settings.value.table.perPage
@@ -74,11 +119,11 @@ onMounted(() => {
         v-model:table-view="view"
       />
     </header>
-    <TheTableFilter v-if="showFilter" />
+    <TheTableFilter v-if="showFilter" @apply-filter="applyFilter" />
     <DataTableEntries
       v-if="view === 'entries'"
       :headers="settings.table.headers"
-      :readings="dataStore.data"
+      :readings="filteredData"
       :first-row="firstRow"
       :last-row="lastRow"
       :colored="colored"
@@ -94,7 +139,7 @@ onMounted(() => {
     <DataPaginator
       v-model:per-page="perPage"
       v-model:page="page"
-      :total-items="dataStore.totalAvail"
+      :total-items="!approx ? filteredData.length : dayMap.size"
       :approx="approx"
     />
   </article>

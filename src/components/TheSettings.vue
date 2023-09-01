@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import * as c from '../const'
+
 const { reset, settings } = useSettings()
 </script>
 
@@ -15,7 +17,7 @@ const { reset, settings } = useSettings()
         <SettingsSelectItem :title="$t('settings.language')">
           <BaseSelect
             v-model="settings.language"
-            :options="LOCAL_OPTIONS.map((v) => { return { local: $t(`settings.${v}`), value: v } })"
+            :options="c.LOCAL_OPTIONS.map((v) => { return { local: $t(`settings.${v}`), value: v } })"
           />
         </SettingsSelectItem>
         <button type="button" class="flex flex-row items-center self-center gap-1 btn" @click="reset()">
@@ -36,19 +38,19 @@ const { reset, settings } = useSettings()
         <BaseSelect
           v-model="settings.table.defaultView"
           class="w-full"
-          :options="ALL_TABLE_VIEWS.map((v) => { return { local: $t(`header.${v}`), value: v } })"
+          :options="c.ALL_TABLE_VIEWS.map((v) => { return { local: $t(`header.${v}`), value: v } })"
         />
       </SettingsSelectItem>
       <SettingsSelectItem :title="$t('settings.tablePerPage')">
         <BaseSelect
           v-model="settings.table.perPage" :no-local="true"
-          :options="PER_PAGE_OPTS.map((o) => { return { local: o.toString(), value: o } })"
+          :options="c.PER_PAGE_OPTS.map((o) => { return { local: o.toString(), value: o } })"
         />
       </SettingsSelectItem>
       <SettingsSelectItem :title="$t('settings.initialFetch')">
         <BaseSelect
           v-model="settings.table.initialFetch" :no-local="true"
-          :options="INITIAL_FETCH_OPTS.map((o) => { return { local: o.toString(), value: o } })"
+          :options="c.INITIAL_FETCH_OPTS.map((o) => { return { local: o.toString(), value: o } })"
         />
       </SettingsSelectItem>
     </SettingsSection>
@@ -69,19 +71,19 @@ const { reset, settings } = useSettings()
       <SettingsSelectItem :title="$t('settings.latestCount')">
         <BaseSelect
           v-model="settings.latest.numEntries" :no-local="true"
-          :options="LATEST_COUNTS.map((o) => { return { local: o.toString(), value: o } })"
+          :options="c.LATEST_COUNTS.map((o) => { return { local: o.toString(), value: o } })"
         />
       </SettingsSelectItem>
       <SettingsSelectItem :title="$t('settings.latestExpanded')">
         <BaseSelect
           v-model="settings.latest.numExpanded" :no-local="true"
-          :options="LATEST_EXPANDED.map((o) => { return { local: o.toString(), value: o } })"
+          :options="c.LATEST_EXPANDED.map((o) => { return { local: o.toString(), value: o } })"
         />
       </SettingsSelectItem>
       <SettingsSelectItem :title="$t('messages.compare_to')">
         <BaseSelect
           v-model="settings.latest.comparison"
-          :options="Object.keys(ComparisonType).map(
+          :options="Object.keys(c.ComparisonType).map(
             (o) => { return { local: $t(`messages.${o}`), value: o } })"
         />
       </SettingsSelectItem>

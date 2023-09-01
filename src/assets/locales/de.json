@@ -82,7 +82,7 @@
   "controls": {
     "from": "Von...",
     "to": "Bis...",
-    "filter_by_date": "Filtern nach Datum:",
+    "filter_by_date": "Datum filtern",
     "confirm": "Bestätigen",
     "enter": "Eintragen",
     "retry": "Erneut versuchen",
@@ -90,7 +90,11 @@
     "reset": "Zurücksetzen",
     "delete_entry": "Eintrag löschen",
     "new_entry": "Neuer Eintrag",
-    "now": "Jetzt"
+    "now": "Jetzt",
+    "all": "Alle",
+    "filterDayTime": "Angezeigte Tageszeiten",
+    "filterValue": "Werte filtern",
+    "applyFilter": "Filter anwenden"
   },
   "header.settings": "Einstellungen",
   "settings": {
