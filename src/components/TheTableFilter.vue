@@ -5,7 +5,13 @@ import { xDaysFromNow } from '~/utils/dates'
 
 defineEmits<{ (e: 'applyFilter', filter: Filter, noFilter: Filter): void }>()
 
-const ranges = {
+interface RangeType {
+  systolic_bp: [number, number]
+  diastolic_bp: [number, number]
+  heart_rate: [number, number]
+}
+
+const ranges: RangeType = {
   systolic_bp: [30, 200],
   diastolic_bp: [20, 150],
   heart_rate: [20, 200],

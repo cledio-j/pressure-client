@@ -17,3 +17,4 @@ dist-ssr
 .vite-ssg-temp
 dev-dist
 .stylelintrc.json
+stylelintrc.json

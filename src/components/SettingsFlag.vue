@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   name: string
   value: boolean
 }>()
@@ -7,6 +7,6 @@ const props = defineProps<{
 
 <template>
   <div>
-    <BaseToggle :toggled="value" />
+    <BaseToggle :name="name" :toggled="value" />
   </div>
 </template>

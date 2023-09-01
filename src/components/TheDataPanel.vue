@@ -122,7 +122,7 @@ onMounted(() => {
     <TheTableFilter v-if="showFilter" @apply-filter="applyFilter" />
     <DataTableEntries
       v-if="view === 'entries'"
-      :headers="settings.table.headers"
+      :headers="settings.table.headers as Record<keyof Reading, boolean>"
       :readings="filteredData"
       :first-row="firstRow"
       :last-row="lastRow"

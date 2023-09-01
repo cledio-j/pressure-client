@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Reading } from 'api'
 
-const props = defineProps<{
+defineProps<{
   reading: Reading
 }>()
 </script>

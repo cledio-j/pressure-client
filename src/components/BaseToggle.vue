@@ -2,7 +2,7 @@
 const props = defineProps<{
   name: string
   description?: string
-  toggled: boolean
+  toggled?: boolean
 }>()
 
 const emit = defineEmits<{ (e: 'update:toggled', val: boolean): void }>()

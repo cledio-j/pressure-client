@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="T">
 const props = defineProps<{
   modelValue: T[]
-  options: T[]
+  options: Readonly<T[]>
   localLabels: string[]
 }>()
 
