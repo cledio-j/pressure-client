@@ -18,6 +18,7 @@ declare module 'vue' {
     BaseToggle: typeof import('./src/components/BaseToggle.vue')['default']
     BaseTwoValSlider: typeof import('./src/components/BaseTwoValSlider.vue')['default']
     DataPaginator: typeof import('./src/components/DataPaginator.vue')['default']
+    DataTableComplex: typeof import('./src/components/DataTableComplex.vue')['default']
     DataTableDays: typeof import('./src/components/DataTableDays.vue')['default']
     DataTableEntries: typeof import('./src/components/DataTableEntries.vue')['default']
     DataTableRow: typeof import('./src/components/DataTableRow.vue')['default']
