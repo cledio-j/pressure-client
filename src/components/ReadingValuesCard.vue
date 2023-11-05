@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CardState } from '~/types'
 import type { Reading, ValueKey } from '~/types/api'
+import { VAL_KEYS } from '~/const'
 
 const props = defineProps<{
   item: Reading
@@ -17,7 +18,7 @@ const thisReading = ref<Reading>({ ...props.item })
 const vals: ValueKey[] = ['systolic_bp', 'diastolic_bp', 'heart_rate']
 
 const hasChanged = computed(() => {
-  return vals.some(v => props.item[v] !== thisReading.value[v])
+  return VAL_KEYS.some(v => props.item[v] !== thisReading.value[v])
 })
 
 const comparisonResult = computed<Record<ValueKey, number> | undefined>(() => {

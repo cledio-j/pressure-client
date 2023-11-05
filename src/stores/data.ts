@@ -22,6 +22,8 @@ export const useDataStore = defineStore('data', () => {
   const totalAvail = ref(0)
   const ready = ref(false)
 
+  const uuidSet = ref<Set<string>>(new Set())
+
   const { settings } = useSettings()
 
   const params: GetParams = reactive({
@@ -36,7 +38,7 @@ export const useDataStore = defineStore('data', () => {
   const latest = computed(() => {
     return data.value.toSorted((a, b) => {
       return new Date(`${a.date}T${a.time}`) > new Date(`${b.date}T${b.time}`) ? -1 : 1
-    }).slice(0, settings.value.latest.numEntries)
+    }).slice(0, settings.latest.numEntries)
   })
   function updateParams(updated: GetParams) {
     for (const [k, v] of Object.entries(updated))
@@ -44,7 +46,10 @@ export const useDataStore = defineStore('data', () => {
       params[k] = v
   }
   function updateData(updated: ReadingApiResponse, refreshParams = false) {
-    updated.data.forEach(e => e.timestamp = e.timestamp.slice(0, -3))
+    updated.data.filter((r) => {
+      r.timestamp = r.timestamp.slice(0, -3)
+      return !uuidSet.value.has(r.uuid)
+    })
     data.value = data.value.concat(updated.data)
     totalPages.value = updated.meta.total_pages
     totalAvail.value = updated.meta.total
@@ -56,10 +61,14 @@ export const useDataStore = defineStore('data', () => {
       data.value = deDupe(data.value)
   }
   function replaceReading(reading: Reading) {
-    const idx = data.value.findIndex(e => e.id === reading.id)
+    const idx = data.value.findIndex(e => e.uuid === reading.uuid)
     Object.assign(data.value[idx], reading)
   }
   function insertReading(reading: Reading) {
+    if (uuidSet.value.has(reading.uuid)) {
+      replaceReading(reading)
+      return
+    }
     // in most situations we insert near the beginning of the array, so the binary insertion
     // is kind of pointless. But, this is much more reliably fast for the rare cases when we insert
     // at the middle/end
@@ -76,7 +85,7 @@ export const useDataStore = defineStore('data', () => {
     const idx = binaryInsert<Reading>(data.value, reading, gt) || 0
     data.value.splice(idx, 0, reading)
   }
-  function findIndex(reading: Reading) {
+  function binFindIndex(reading: Reading) {
     const getter = (a: Reading) => {
       if (params.sort_by === 'timestamp')
         return new Date(a.timestamp)
@@ -96,7 +105,7 @@ export const useDataStore = defineStore('data', () => {
     removeDuplicates,
     replaceReading,
     insertReading,
-    findIndex,
+    binFindIndex,
     ready,
   }
 })

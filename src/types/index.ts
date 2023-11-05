@@ -1,4 +1,5 @@
 import type { Reading } from 'api'
+import type { MaybeRef } from 'vue'
 import type * as c from '../const'
 
 export type DayTimeVal = typeof c.ALL_DAY_TIMES[number]
@@ -8,14 +9,28 @@ export type InitialFetchOption = typeof c.INITIAL_FETCH_OPTS[number]
 export type TableView = typeof c.ALL_TABLE_VIEWS[number]
 export type LocalOption = typeof c.LOCAL_OPTIONS[number]
 
+export interface Repository {
+  isBusy: Ref<boolean>
+  ready: Ref<boolean>
+  patchReading: (r: Reading) => Promise<Reading | undefined>
+  putReading: (r: Reading) => Promise<Reading | undefined>
+  deleteReading: (r: MaybeRef<Reading>) => Promise<Reading | undefined>
+  getData: () => void
+}
+
 export interface CardState {
   expanded: boolean
   weather: boolean
   edit: boolean
-  comparison: Reading | null
+  comparison: Reading | undefined
 }
 
 export interface Settings {
+  ranges: {
+    systolic_bp: [number, number]
+    diastolic_bp: [number, number]
+    heart_rate: [number, number]
+  }
   table: {
     headers: { [key in keyof Reading]: boolean }
     color: boolean
@@ -34,6 +49,9 @@ export interface Settings {
     comparison: keyof typeof ComparisonType
     numEntries: typeof LATEST_COUNTS[number]
     numExpanded: typeof LATEST_EXPANDED[number]
+  }
+  data: {
+    preferred: 'local' | 'server' | 'all'
   }
   language: LocalOption
   dark: boolean

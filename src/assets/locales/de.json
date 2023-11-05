@@ -23,7 +23,9 @@
     "humidity": "Luftfeuchtigkeit: ",
     "precipitation": "Niederschlag: ",
     "cloud_cover": "Wolken: ",
-    "general": "Allgemein"
+    "general": "Allgemein",
+    "created": "Erstellt",
+    "uuid": "Einmalige ID"
   },
   "daytime": {
     "morning": "Morgen",
@@ -86,15 +88,18 @@
     "confirm": "Bestätigen",
     "enter": "Eintragen",
     "retry": "Erneut versuchen",
-    "cancel": "Abbrechen",
-    "reset": "Zurücksetzen",
+    "cancel": "Zurrück",
+    "reset": "Reset",
     "delete_entry": "Eintrag löschen",
     "new_entry": "Neuer Eintrag",
     "now": "Jetzt",
     "all": "Alle",
     "filterDayTime": "Angezeigte Tageszeiten",
     "filterValue": "Werte filtern",
-    "applyFilter": "Filter anwenden"
+    "applyFilter": "Filter anwenden",
+    "unsavedChanges": "Hier drücken um Veränderungen zu speichern",
+    "close": "Schließen",
+    "changeHere": "Hier können Einträge bearbeitet werden"
   },
   "header.settings": "Einstellungen",
   "settings": {

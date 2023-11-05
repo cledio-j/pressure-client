@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useDataStore } from '~/stores/data'
+
+const dataStore = useDataStore()
 </script>
 
 <template>
@@ -7,10 +10,15 @@
       {{ $t('header.statistics') }}
     </h1>
     <StatsGraphs
+      v-if="dataStore.hasAllData"
+      :data="dataStore.data"
       class="transition-all"
     />
-    <StatsMinMax
+    <div v-else class="flex flex-row items-center">
+      <BaseLoadingSpinner />
+    </div>
+    <!-- <StatsMinMax
       class="justify-self-center"
-    />
+    /> -->
   </article>
 </template>

@@ -12,7 +12,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="grid grid-cols-4 items-center gap-2">
+  <div class="flex flex-row gap-2">
     <label
       v-if="label"
       class="justify-start p-2 text-sm text-tx"

@@ -21,23 +21,45 @@ defineEmits<{
       :options="ALL_TABLE_VIEWS.map((v) => { return { local: $t(`header.${v}`), value: v } })"
       @update:model-value="(newVal: TableView) => $emit('update:tableView', newVal)"
     />
-    <button class="border rounded-full bg-back-offwhite px-2.5">
-      <div
-        class="i-ms-format-color-fill scale-150 transition-colors duration-200"
-        :class="[paint ? 'rainbow' : 'text-tx-faint']"
-        @click="$emit('update:paint', !paint)"
-      />
+    <button
+      class="relative border rounded-full bg-white transition-all"
+      :class="{ 'rainbow-btn ': paint }"
+    >
+      <div class="z-2 rounded-full bg-white p-3">
+        <div
+          class="i-ms-format-color-fill z-3 scale-125 transition-colors duration-200"
+          :class="[paint ? 'rainbow' : 'text-tx']"
+          @click="$emit('update:paint', !paint)"
+        />
+      </div>
     </button>
   </menu>
 </template>
 
 <style scoped>
-.rainbow {
-  background-image:
-    linear-gradient(
+menu {
+  --c-rainbow: linear-gradient(
       112deg in oklab,
       rgb(100% 0% 0%) 24% 0%, rgb(0% 100% 0%) 83% 100%
-    )
-  ;
+    );
+}
+.rainbow {
+  background-image: var(--c-rainbow);
+}
+.rainbow-btn {
+  bckground-clip: padding-box;
+  border: solid 1px transparent;
+  box-sizing: border-box;
+  align-items: center;
+  z-index: 1;
+}
+.rainbow-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: -1;
+  margin: -2px;
+  border-radius: inherit;
+  background: var(--c-rainbow);
 }
 </style>

@@ -1,26 +1,52 @@
 <script setup lang="ts">
-import type { NewReading } from 'api'
+import type { NewReading, Reading } from 'api'
 import { getDayTime, getLocalISO } from '../utils/dates'
 import { VAL_KEYS } from '~/const'
+
+const props = defineProps<{ initial?: Reading }>()
 
 const { settings } = useSettings()
 const repository = useServerData()
 
-const dtOptions = settings.value.daytimeOptions
+const dtOptions = settings.daytimeOptions
 
 function getState(): NewReading {
-  return {
-    timestamp: getLocalISO(),
-    systolic_bp: undefined,
-    diastolic_bp: undefined,
-    heart_rate: undefined,
-    day_time: getDayTime(),
+  if (props.initial) {
+    return props.initial
+  }
+  else {
+    return {
+      timestamp: getLocalISO(),
+      systolic_bp: undefined,
+      diastolic_bp: undefined,
+      heart_rate: undefined,
+      day_time: getDayTime(),
+    }
   }
 }
 
 const formState = ref<NewReading>(getState())
 
+const valid = reactive({
+  systolic_bp: true,
+  diastolic_bp: true,
+  heart_rate: true,
+})
+
+function validate() {
+  const inRange = (range: [number, number], value?: number) => {
+    if (!value)
+      return false
+    return value >= range[0] && value <= range[1]
+  }
+  for (const val of VAL_KEYS)
+    valid[val] = inRange(settings.ranges[val], formState.value[val])
+}
+
 async function submit() {
+  validate()
+  if (!Object.values(valid).every(Boolean))
+    return
   repository.putReading(formState.value).then(() => {
     formState.value = getState()
   })
@@ -44,26 +70,30 @@ function getLocalePair(local: string, value: string) {
   return { local, value }
 }
 
-const shortcuts = settings.value.timeShortcuts
+function reset() {
+  formState.value = getState()
+}
+
+const shortcuts = settings.timeShortcuts
 </script>
 
 <template>
-  <form class="max-w-sm flex flex-col justify-center">
+  <form class="max-w-sm flex flex-col">
     <fieldset class="mt-2 flex flex-col place-items-center">
       <div class="border border-back-light border-dashed py-1">
-        <div class="grid grid-cols-12 mb-2 place-items-center gap-2">
+        <div class="grid grid-cols-6 mx-2 mb-2 justify-items-start gap-2">
           <button
-            type="button"
-            class="col-span-2 col-start-2 border rounded-full bg-back-light p-1" @click="setYesterday"
+            type="button" aria-label="Set day before"
+            class="col-span-1 col-start-1 border rounded-full bg-back-light p-1" @click="setYesterday"
           >
-            <div class="i-ms-west scale-125 text-primary" />
+            <div class="i-ms-west text-2xl text-primary" />
           </button>
           <BaseDateInput
             v-model:model-value="formState.timestamp"
-            class="col-span-6 col-start-4" type="datetime-local" label=""
+            class="col-span-3 col-start-2" type="datetime-local" label=""
           />
           <button
-            type="button" class="col-start-11 text-primary-dark underline"
+            type="button" class="col-start-6 text-primary-dark underline"
             @click="formState.timestamp = getLocalISO()"
           >
             {{ $t('controls.now') }}
@@ -82,7 +112,12 @@ const shortcuts = settings.value.timeShortcuts
       <template
         v-for="k in VAL_KEYS" :key="k"
       >
-        <BaseInput v-model:val="formState[k]" type="number" :label="$t(`header.${k}`)" />
+        <BaseInput
+          v-model:val="formState[k]" type="number" :label="$t(`header.${k}`)"
+          :class="{ ' shadow-sm shadow-error': !valid[k] }"
+        >
+          <div v-if="!valid[k]" class="i-ms-warning-outline absolute right-5 top-5 text-xl text-error" />
+        </BaseInput>
       </template>
       <BaseSelect
         v-model="formState.day_time"
@@ -90,22 +125,24 @@ const shortcuts = settings.value.timeShortcuts
         :options="dtOptions.map(o => getLocalePair($t(`daytime.${o}`), o))"
       />
     </fieldset>
-    <menu
-      class="mt-2 flex flex-row place-items-center justify-between border-t border-dashed px-4 py-1"
-    >
-      <button
-        type="button" class="border rounded-full bg-back-light p-1"
-        @click="formState = getState()"
+    <slot name="botMenu" :state="formState" :reset="reset">
+      <menu
+        class="mt-2 flex flex-row place-items-center justify-between border-t border-dashed from-white to-back-light bg-gradient-to-b px-4 py-1"
       >
-        <div class="i-ms-undo text-2xl text-primary" />
-      </button>
-      <button
-        type="submit"
-        class="my-1 text-tx btn"
-        @click.stop.prevent="submit"
-      >
-        {{ $t('controls.enter') }}
-      </button>
-    </menu>
+        <button
+          type="button" aria-label="Reset form" class="border rounded-full bg-white p-1"
+          @click="reset"
+        >
+          <div class="i-ms-undo text-2xl text-primary" />
+        </button>
+        <button
+          type="submit"
+          class="my-1 text-tx btn"
+          @click.stop.prevent="submit"
+        >
+          {{ $t('controls.enter') }}
+        </button>
+      </menu>
+    </slot>
   </form>
 </template>

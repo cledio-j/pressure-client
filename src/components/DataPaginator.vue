@@ -31,7 +31,7 @@ function isAvail(page: number) {
 </script>
 
 <template>
-  <div class="flex flex-row items-center justify-between border border-t-0 border-gray-400 px-1 py-1">
+  <div class="flex flex-row items-center justify-between border border-t-0 border-gray-400 px-1 py-3">
     <div>
       <label
         for="perPageValue"
@@ -48,7 +48,7 @@ function isAvail(page: number) {
         </option>
       </select>
     </div>
-    <nav class="flex flex-row justify-self-end gap-2">
+    <nav class="flex flex-row items-center justify-self-end gap-4">
       <span class="text-sm">
         {{ `${firstRow}-${lastRowStr}
         ${$t(`messages.${approx ? 'of_about' : 'of'}`)}
@@ -57,22 +57,22 @@ function isAvail(page: number) {
       <button
         type="button"
         aria-label="previous"
-        class="cursor-pointer select-none text-tx disabled:cursor-not-allowed disabled:text-tx-faint"
+        class="cursor-pointer select-none text-primary disabled:cursor-not-allowed disabled:text-tx-faint"
         :disabled="!isAvail(page - 1)"
         @click="$emit('update:page', page - 1)"
       >
         <div
-          class="i-ms-arrow-back scale-125"
+          class="i-ms-arrow-back text-2xl"
         />
       </button>
       <button
         aria-label="next"
         type="button"
-        class="cursor-pointer select-none text-tx disabled:cursor-not-allowed disabled:text-tx-faint"
+        class="cursor-pointer select-none text-primary disabled:cursor-not-allowed disabled:text-tx-faint"
         :disabled="!isAvail(page + 1)"
         @click="$emit('update:page', page + 1)"
       >
-        <div class="i-ms-arrow-forward scale-125" />
+        <div class="i-ms-arrow-forward text-2xl" />
       </button>
     </nav>
   </div>

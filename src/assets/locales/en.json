@@ -24,7 +24,9 @@
     "precipitation": "Precipitation: ",
     "cloud_cover": "Cloud cover: ",
     "settings": "Settings",
-    "general": "General"
+    "general": "General",
+    "created": "Created",
+    "uuid": "Unique ID"
   },
   "daytime": {
     "morning": "Morning",
@@ -95,7 +97,10 @@
     "all": "All",
     "filterDayTime": "Select times of day to include",
     "filterValue": "Filter values",
-    "applyFilter": "Apply filter"
+    "applyFilter": "Apply filter",
+    "unsavedChanges": "Press confirm to save changes",
+    "changeHere": "Values can be changed here!",
+    "close": "Close"
   },
   "settings": {
     "table": "Tables",

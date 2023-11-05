@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import * as Plotly from 'plotly.js-basic-dist-min'
 import { useI18n } from 'vue-i18n'
-import { useDataStore } from '../stores/data'
+import type { Reading } from 'api'
 
+const props = defineProps<{ data: Reading[] }>()
 const { t } = useI18n()
-const dataStore = useDataStore()
 const graphOne = ref()
 
 const rangeOptions = {
@@ -58,11 +58,28 @@ const config: Partial<Plotly.Config> = {
   responsive: true,
 }
 
-const data = ref<any>()
+function sum(arr: number[]) {
+  return arr.reduce((a, b) => a + b, 0)
+}
 
-function makeData() {
-  const sysArrEvening: (number | null)[] = []
-  const diaArrEvening: (number | null)[] = []
+function movingAverage(data: number[], interval: number) {
+  const result: number[] = []
+  data.forEach((_d, idx) => {
+    const relevant = data.slice(Math.max(idx - interval, 0), Math.min(idx + interval, data.length))
+    result.push(sum(relevant) / relevant.length)
+  })
+  return result
+}
+
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  if (value === null || value === undefined)
+    return false
+  return true
+}
+
+function makeData(data: Reading[]) {
+  const sysArrEvening: number[] = []
+  const diaArrEvening: number[] = []
   const sysArrLunch: (number | null)[] = []
   const diaArrLunch: (number | null)[] = []
   const sysArrMorning: (number | null)[] = []
@@ -70,8 +87,9 @@ function makeData() {
   const tempArr: (number | null)[] = []
   const totalSysArr: (number | null)[] = []
   const totalDiaArr: (number | null)[] = []
+
   const xArr: string[] = []
-  dataStore.data.forEach((e) => {
+  data.forEach((e) => {
     xArr.push(e.timestamp)
     totalSysArr.push(e.systolic_bp)
     totalDiaArr.push(e.diastolic_bp)
@@ -93,6 +111,9 @@ function makeData() {
       [sysArrEvening, diaArrEvening, sysArrLunch, diaArrLunch].forEach(e => e.push(null))
     }
   })
+
+  const sysMoving = movingAverage(totalSysArr.filter(notEmpty), 12)
+  const diaMoving = movingAverage(totalDiaArr.filter(notEmpty), 12)
   return [
     {
       x: xArr,
@@ -104,11 +125,27 @@ function makeData() {
     },
     {
       x: xArr,
+      y: sysMoving,
+      type: 'scatter',
+      line: { shape: 'linear' },
+      mode: 'line',
+      name: 'Sys moving',
+    },
+    {
+      x: xArr,
       y: totalDiaArr,
       type: 'scatter',
       line: { shape: 'linear', width: 2, color: 'rgb(219, 64, 82)' },
       mode: 'line',
       name: 'Dia',
+    },
+    {
+      x: xArr,
+      y: diaMoving,
+      type: 'scatter',
+      line: { shape: 'linear', color: 'rgb(59, 167, 118)' },
+      mode: 'line',
+      name: 'Dia moving',
     },
     {
       x: xArr,
@@ -183,15 +220,15 @@ function makeData() {
   ]
 }
 
-watch(dataStore.data, () => data.value = makeData(), { immediate: true })
+const gData = computed<any>(() => {
+  return makeData(props.data)
+})
 
 function makePlot() {
-  Plotly.react(graphOne.value, data.value, layout, config)
+  Plotly.react(graphOne.value, gData.value, layout, config)
 }
 
-onMounted(() => {
-  makePlot()
-})
+onMounted(() => makePlot())
 </script>
 
 <template>

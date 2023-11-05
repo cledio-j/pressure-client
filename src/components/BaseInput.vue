@@ -3,7 +3,6 @@ const props = defineProps<{
   label: string
   type: FieldType
   val: T
-  classes?: string
 }>()
 
 const emits = defineEmits<{ (e: 'update:val', val: T): void }>()
@@ -28,7 +27,7 @@ const value = computed({
 
 <template>
   <fieldset
-    class="relative max-h-[3.5rem] flex flex-row items-center border-b text-lg transition-all"
+    class="relative max-h-[3.5rem] flex flex-row items-center overflow-hidden scroll-initial border-b text-lg transition-all"
   >
     <input
       :id="label"
@@ -36,6 +35,7 @@ const value = computed({
       class="w-full rounded-1 bg-back-light py-0.5 pl-1 text-primary-dark outline-none transition-all focus:bg-back"
       :class="{ 'mt-4': label }"
       :type="type"
+      :aria-labelledby="`${label}extra`"
       :filled="filled"
     >
     <slot>
@@ -43,6 +43,7 @@ const value = computed({
     </slot>
     <label
       v-if="label"
+      :id="`${label}extra`"
       class="absolute left-1 top-4.5 text-tx-faint transition-all duration-200"
       :for="label"
     >{{ label }}

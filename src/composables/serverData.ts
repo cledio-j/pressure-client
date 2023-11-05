@@ -1,12 +1,19 @@
 import type {
+  DeletedReadingResponse,
   ModifyReadingResponse,
-  NewReading, NewReadingResponse, Reading, ReadingApiResponse,
+  NewReading,
+  NewReadingResponse,
+  Reading,
+  ReadingApiResponse,
 } from 'api'
+import type { MaybeRef } from 'vue'
 import { useDataStore } from '~/stores/data'
 import { useNoteStore } from '~/stores/notifications'
+import type { Repository } from '~/types'
 
-export function useServerData() {
-  const isFetching = ref(false)
+export function useServerData(): Repository {
+  const isBusy = ref(false)
+  const ready = ref(true)
   const dataStore = useDataStore()
   const { notes } = useNoteStore()
   const { settings } = useSettings()
@@ -21,8 +28,10 @@ export function useServerData() {
       return
     }
     const result = await data.value
-    if (result && result.success)
+    if (result && result.success) {
       dataStore.replaceReading(result.reading)
+      return result.reading
+    }
   }
 
   async function putReading(reading: NewReading) {
@@ -38,14 +47,35 @@ export function useServerData() {
     if (result && result.success) {
       result.reading.timestamp.slice(0, -3)
       dataStore.insertReading(result.reading)
+      return result.reading
     }
+  }
+
+  async function deleteReading(reading: MaybeRef<Reading>) {
+    const deleted = unref(reading)
+
+    const { data, error } = await useFetch<DeletedReadingResponse>(
+      'reading/delete' + `?id=${deleted.id}`,
+      { auth: true, method: 'DELETE', immediate: true })
+
+    if (error.value) {
+      notes.push(error.value)
+      return
+    }
+    const response = await data.value
+    if (response && response.success) {
+      const idx = dataStore.binFindIndex(deleted)
+      dataStore.data.splice(idx, 1)
+    }
+
+    return deleted
   }
 
   async function getData() {
     dataStore.ready = false
-    isFetching.value = true
+    isBusy.value = true
     const { data, error } = await useFetch<ReadingApiResponse>(
-      'readings/get' + `?per_page=${settings.value.table.perFetch}`,
+      'readings/get' + `?per_page=${settings.table.perFetch}`,
       { auth: true, method: 'GET', immediate: true },
     )
     if (error.value) {
@@ -54,13 +84,13 @@ export function useServerData() {
     }
 
     const res = await data.value
-    isFetching.value = false
+    isBusy.value = false
     if (res)
       dataStore.updateData(res, true)
 
     dataStore.ready = true
 
-    backgroundFetch('readings/get', dataStore.totalPages, 2, settings.value.table.perFetch)
+    backgroundFetch('readings/get', dataStore.totalPages, 2, settings.table.perFetch)
   }
 
   async function backgroundFetch(
@@ -68,7 +98,7 @@ export function useServerData() {
     const pageNums = Array.from({ length: length - 1 }, (x, i) => i + start)
     const urls = pageNums.map(p => `${resource}?page=${p}&per_page=${per_page}`)
 
-    isFetching.value = true
+    isBusy.value = true
     const { fetchErrors, asyncError } = await usePaginatedFetch<ReadingApiResponse>(urls,
       { auth: true, method: 'GET' }, dataStore.updateData,
     )
@@ -76,9 +106,16 @@ export function useServerData() {
       fetchErrors.value.forEach(e => notes.push(e))
     if (asyncError.value)
       notes.push(asyncError.value)
-    isFetching.value = false
+    isBusy.value = false
     dataStore.removeDuplicates()
   }
 
-  return { isFetching, patchReading, getData, putReading }
+  return {
+    ready,
+    deleteReading,
+    isBusy,
+    patchReading,
+    getData,
+    putReading,
+  }
 }

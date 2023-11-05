@@ -1,5 +1,5 @@
 import { DayTimeVal } from "."
-import {WEATHER_ICONS} from '../const'
+import { WEATHER_ICONS } from '../const'
 
 export { }
 
@@ -20,8 +20,10 @@ declare module 'api' {
     heart_rate: number
     systolic_bp: number
     timestamp: string
+    created: string
+    uuid: Readonly<string>
     user_id: number
-    id: number
+    id: Readonly<number>
     weather: WeatherReading
   }
 

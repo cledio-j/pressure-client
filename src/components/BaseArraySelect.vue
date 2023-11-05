@@ -25,7 +25,7 @@ function flipOption(opt: T) {
       v-for="(opt, idx) in options" :key="idx" type="button"
       class="rounded-md p-1 ring transition-all duration-100"
       :class="{
-        'bg-back-light ring-primary-light  text-tx ring-3': modelValue.includes(opt),
+        'bg-back-light ring-primary-light  text-tx ring-2': modelValue.includes(opt),
         'bg-back-offwhite text-tx-faint ring-tx-faint ring-1': !modelValue.includes(opt),
       }"
       @click="flipOption(opt)"

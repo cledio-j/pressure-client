@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Reading } from 'api'
 import { DAY_TIMES, VAL_KEYS } from '../const'
 import type { DayReadings } from './TheDataPanel.vue'
 
@@ -7,6 +8,8 @@ const props = defineProps<{
   type: 'values' | 'days'
   colored: boolean
 }>()
+
+defineEmits<{ (e: 'expandReading', reading?: Reading): void }>()
 
 const row = computed(() => {
   return {
@@ -25,36 +28,41 @@ function getColor(time: typeof DAY_TIMES[number], val: typeof VAL_KEYS[number]) 
 </script>
 
 <template>
-  <template v-if="type === 'days'">
-    <template v-for="t in DAY_TIMES" :key="t">
-      <td
-        v-for="(k, i) in VAL_KEYS" :key="i"
-        class="border-collapse border px-0.5 text-center transition-colors duration-200"
-        :class="{ 'bg-back-light': row[t].length > 1 }"
-        :style="{
-          backgroundColor: getColor(t, k),
-        }"
-      >
-        {{ row[t].length ? row[t][0][k] : '' }}
+  <tr class="w-100svw">
+    <slot />
+    <template v-if="type === 'days'">
+      <template v-for="t in DAY_TIMES" :key="t">
+        <td
+          v-for="(k, i) in VAL_KEYS" :key="i"
+          class="border-collapse border px-0.5 text-center transition-colors duration-200"
+          :class="{ 'bg-back-light': row[t].length > 1 }"
+          :style="{
+            backgroundColor: getColor(t, k),
+          }"
+          @click="$emit('expandReading', row[t][0])"
+        >
+          {{ row[t].length ? row[t][0][k] : '' }}
         <!-- <div v-if="row.other.length > 0">
           a
         </div> -->
-      </td>
+        </td>
+      </template>
     </template>
-  </template>
-  <template v-else-if="type === 'values'">
-    <template v-for="(k, _i) in VAL_KEYS" :key="_i">
-      <td
-        v-for="t in DAY_TIMES" :key="t"
-        class="border-collapse border px-0.5 text-center"
-        :style="{
-          backgroundColor: getColor(t, k),
-        }"
-      >
-        {{ row[t].length ? row[t][0][k] : '' }}
-      </td>
+    <template v-else-if="type === 'values'">
+      <template v-for="(k, _i) in VAL_KEYS" :key="_i">
+        <td
+          v-for="t in DAY_TIMES" :key="t"
+          class="w-3rem border-collapse border px-0.5 text-center md:w-4rem"
+          :style="{
+            backgroundColor: getColor(t, k),
+          }"
+          @click="$emit('expandReading', row[t][0])"
+        >
+          {{ row[t].length ? row[t][0][k] : '' }}
+        </td>
+      </template>
     </template>
-  </template>
+  </tr>
 </template>
 
 <style scoped>

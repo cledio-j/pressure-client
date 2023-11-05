@@ -33,7 +33,7 @@ const filter = ref<Filter>(getInitialFilter())
 </script>
 
 <template>
-  <form class="mx-2 max-w-sm min-h-12rem w-full flex flex-col items-start gap-1">
+  <form class="mx-2 min-h-12rem flex flex-col items-start gap-1">
     <section class="flex flex-col gap-1">
       <h3 class="font-semibold text-tx">
         {{ $t('controls.filterValue') }}
@@ -54,7 +54,7 @@ const filter = ref<Filter>(getInitialFilter())
       </h3>
       <BaseArraySelect
         v-model="filter.day_time"
-        class="mx-2 mt-2 flex flex-row justify-between gap-3" :options="ALL_DAY_TIMES"
+        class="mx-2 mt-2 flex flex-row flex-wrap justify-between gap-2" :options="ALL_DAY_TIMES"
         :local-labels="ALL_DAY_TIMES.map(d => $t(`daytime.${d}`))"
       />
     </section>

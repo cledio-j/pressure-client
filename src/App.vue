@@ -12,8 +12,14 @@ onMounted(
 </script>
 
 <template>
-  <main class="mx-auto justify-center bg-light-200 container">
+  <main class="min-h-100svh bg-light-200 container md:mx-auto">
     <NotificationHandler />
     <RouterView />
   </main>
 </template>
+
+<style>
+html {
+  background-color: rgba(255, 255, 255);
+}
+</style>

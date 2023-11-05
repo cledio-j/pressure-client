@@ -2,6 +2,11 @@ import type { Settings } from '~/types'
 
 function getDefault(): Settings {
   return {
+    ranges: {
+      diastolic_bp: [20, 180],
+      systolic_bp: [40, 200],
+      heart_rate: [20, 200],
+    },
     table: {
       headers: {
         date: true,
@@ -12,6 +17,8 @@ function getDefault(): Settings {
         heart_rate: true,
         day_time: true,
         user_id: false,
+        created: false,
+        uuid: false,
         id: false,
         weather: false,
       },
@@ -55,17 +62,19 @@ export function useSettings() {
 
   const local = getLocalStorage()
 
-  const settings = ref(local || defaults)
+  const settings = reactive(local || defaults)
 
   const update = (newSettings: Settings) => {
     localStorage.setItem('localSettings', JSON.stringify(newSettings))
   }
 
   const reset = () => {
-    settings.value = defaults
+    Object.assign(settings, defaults)
   }
 
-  watchEffect(() => update(settings.value))
+  watch(settings, () => {
+    update(settings)
+  })
 
   return { defaults, settings, update, reset }
 }

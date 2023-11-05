@@ -3,15 +3,15 @@ const expanded = ref(true)
 </script>
 
 <template>
-  <div class="top-shadow mb-2">
-    <header class="flex flex-row items-center justify-between bg-back-light py-1">
+  <div class="top-shadow mb-2 flex flex-col items-center">
+    <header class="w-full flex flex-row items-center justify-between bg-back-light py-1">
       <h1
         class="px-2 pt-1 text-xl font-semibold text-tx-title"
         @click="expanded = !expanded"
       >
         {{ $t('controls.new_entry') }}
       </h1>
-      <button type="button" class="border rounded-full bg-white p-1.5">
+      <button type="button" aria-label="OCR" class="border rounded-full bg-white p-1.5">
         <div class="i-ms-photo-camera text-lg text-primary" />
       </button>
       <BaseExpandButton @toggle-expand="expanded = !expanded" />

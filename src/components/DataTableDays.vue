@@ -13,8 +13,8 @@ defineProps<{
     <TableDoubleHeader
       :titles="DAY_TIMES"
       :sub-titles="VAL_KEYS"
-      local-title-prefix="daytime"
       local-sub-title-prefix="header"
+      local-title-prefix="daytime"
     />
     <tbody>
       <template v-for="[date, dayReadings] in days" :key="date">

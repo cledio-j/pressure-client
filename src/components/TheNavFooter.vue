@@ -3,7 +3,7 @@
 
 <template>
   <nav
-    class="nav-shadow fixed bottom-0 left-0 right-0 h-3rem flex flex-row justify-center bg-back-light pt-1 text-sm"
+    class="nav-shadow fixed bottom-0 left-0 right-0 z-50 h-3rem flex flex-row justify-center bg-back-light pt-1 text-sm"
   >
     <ul class="grid grid-cols-4 w-full text-xs">
       <NavButton to="/" :text="$t('header.latest')" icon="i-ms-timeline" />
@@ -18,7 +18,7 @@
 .nav-shadow {
     box-shadow: 0px -1px 3px var(--c-primary-light);
 }
-div {
+nav {
   font-size: 1.25rem;
   line-height: 1.75rem;
   color: var(--c-primary-dark)

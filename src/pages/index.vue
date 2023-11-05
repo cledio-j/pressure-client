@@ -12,7 +12,7 @@ defineOptions({
     <TheNewEntry />
   </Suspense>
   <RouterView v-slot="{ Component }">
-    <KeepAlive exclude="Settings">
+    <KeepAlive :exclude="['DataPanel']">
       <component :is="Component" />
     </KeepAlive>
   </RouterView>

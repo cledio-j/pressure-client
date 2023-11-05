@@ -3,8 +3,8 @@ import type { Reading } from 'api'
 const { settings } = useSettings()
 
 const ranges = {
-  sys: settings.value.table.colorSys,
-  dia: settings.value.table.colorDia,
+  sys: settings.table.colorSys,
+  dia: settings.table.colorDia,
 }
 
 function calcPercent(key: 'sys' | 'dia', value: number) {
