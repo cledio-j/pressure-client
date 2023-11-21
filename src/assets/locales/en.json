@@ -123,6 +123,8 @@
     "latestExpanded": "Initially expanded"
   },
   "error": {
-    "network": "Network failure"
+    "network": "Network failure",
+    "notAuthorized": "Not authorized",
+    "noAuthDescription": "Please login to view this page."
   }
 }

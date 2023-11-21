@@ -23,7 +23,7 @@ type MaybeGetter<T> = T | (() => T)
 // @ts-expect-error -- meta.env
 export const apiUrl = import.meta.env.PROD
   ? 'https://cledioj.pythonanywhere.com/api/'
-  : 'http://192.168.178.40:5000/api/'
+  : 'http://192.168.178.37:5000/api/'
 
 export interface FetchOptions {
   auth: boolean
@@ -40,7 +40,7 @@ function getToken() {
     authorized.value = true
     return { token: ref(localStorage.token), authorized }
   }
-  throw new Error('not authorized')
+  // throw new Error('not authorized')
 }
 
 function buildOptions(opts: FetchOptions) {
@@ -53,8 +53,10 @@ function buildOptions(opts: FetchOptions) {
 
   if (opts.auth) {
     const token = getToken()
-    o.headers = Object.assign(o.headers || {},
-      { Authorization: `Bearer ${token.token.value}` })
+    if (token) {
+      o.headers = Object.assign(o.headers || {},
+        { Authorization: `Bearer ${token.token.value}` })
+    }
   }
 
   if (opts.contentType) {
@@ -71,7 +73,7 @@ export async function useFetch<T>(resource: string, opts: FetchOptions) {
 
   const auth = () => {
     try {
-      authorized.value = getToken().authorized.value
+      authorized.value = getToken()?.authorized.value || false
     }
     catch (err) {
       if (err instanceof Error) {
@@ -92,9 +94,12 @@ export async function useFetch<T>(resource: string, opts: FetchOptions) {
     if (opts.auth) {
       auth()
       if (!authorized.value) {
+        const router = useRouter()
         error.value = {
           name: 'error.notAuthorized',
           severity: 'error',
+          description: 'error.noAuthDescription',
+          actions: [{ name: 'Login', action: () => router.push('/auth'), close: true }],
         }
         return
       }

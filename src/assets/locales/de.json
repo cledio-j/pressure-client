@@ -123,6 +123,8 @@
     "latestExpanded": "Aufgeklappt"
   },
   "error": {
-    "network": "Netzwerk Fehler"
+    "network": "Netzwerk Fehler",
+    "notAuthorized": "Nicht eingeloggt!",
+    "noAuthDescription": "Bitte einloggen um diese Seite zu benutzen."
   }
 }

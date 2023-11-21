@@ -1,7 +1,14 @@
 <script setup lang="ts">
+import type { NoteAction } from '~/stores/notifications'
 import { useNoteStore } from '~/stores/notifications'
 
 const { notes, clear } = useNoteStore()
+
+function executeAction(action: NoteAction, idx: number) {
+  action.action()
+  if (action.close)
+    notes.splice(idx, 1)
+}
 </script>
 
 <template>
@@ -23,7 +30,7 @@ const { notes, clear } = useNoteStore()
           <div class="i-ms-close text-xl" />
         </button>
       </header>
-      <span class="text-tx">{{ note.description || '' }}</span>
+      <span class="py-2 text-tx">{{ $t(note.description || '') }}</span>
       <menu
         v-if="note.actions && note.actions.length"
         class="flex flex-row"
@@ -33,7 +40,7 @@ const { notes, clear } = useNoteStore()
           :key="action.name"
           type="button"
           class="btn"
-          @click="action.action"
+          @click="executeAction(action, idx)"
         >
           <div v-if="action.icon" :class="[action.icon]" />
           {{ action.name }}

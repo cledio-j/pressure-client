@@ -5,6 +5,7 @@ export interface NoteAction {
   description?: string
   icon?: string
   action: ((arg0?: any) => void) | ((arg0?: any) => Promise<void>)
+  close?: boolean
 }
 
 export interface Note {

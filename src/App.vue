@@ -4,11 +4,12 @@ import { useDataStore } from './stores/data'
 const dataStore = useDataStore()
 const { getData } = useServerData()
 
-onMounted(
-  () => {
-    if (!dataStore.ready)
-      getData()
-  })
+function load() {
+  if (!dataStore.ready)
+    getData()
+}
+
+onMounted(() => load())
 </script>
 
 <template>
