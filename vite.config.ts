@@ -18,6 +18,7 @@ export default defineConfig({
       '~/': `${path.resolve(__dirname, 'src')}/`,
     },
   },
+  base: '/pressure-client/',
   plugins: [
     VueMacros({
       defineOptions: false,
