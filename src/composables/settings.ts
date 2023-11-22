@@ -39,6 +39,9 @@ function getDefault(): Settings {
       numEntries: 10,
       numExpanded: 3,
     },
+    data: {
+      preferred: 'server',
+    },
     language: 'de',
     dark: false,
     lastUpdated: new Date(),

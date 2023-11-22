@@ -44,7 +44,7 @@ function validate() {
 }
 
 async function submit() {
-  validate()
+  // validate()
   if (!Object.values(valid).every(Boolean))
     return
   repository.putReading(formState.value).then(() => {

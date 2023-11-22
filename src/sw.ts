@@ -1,7 +1,7 @@
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { Route, registerRoute } from 'workbox-routing'
-import { CacheFirst, NetworkOnly } from 'workbox-strategies'
+import { CacheFirst, NetworkFirst, NetworkOnly } from 'workbox-strategies'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -11,7 +11,7 @@ precacheAndRoute(self.__WB_MANIFEST)
 // CacheFirst offline functionality
 const getReadingsRoute = new Route(({ request }) => {
   return request.url.includes('/readings/get')
-}, new CacheFirst())
+}, new NetworkFirst())
 
 const getIconRoute = new Route(({ request }) => {
   return request.url.includes('assets/svg')
