@@ -51,7 +51,10 @@ export interface Settings {
     numExpanded: typeof LATEST_EXPANDED[number]
   }
   data: {
-    preferred: 'local' | 'server' | 'all'
+    preferred: 'local' | 'server'
+    server: boolean
+    local: boolean
+    lastSync?: Date | number
   }
   language: LocalOption
   dark: boolean

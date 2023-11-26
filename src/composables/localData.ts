@@ -5,12 +5,14 @@ import type { Schema } from '../utils/idb'
 import { open } from '../utils/idb'
 import type { Repository } from '~/types'
 import { useNoteStore } from '~/stores/notifications'
+import { useDataStore } from '~/stores/data'
 
 export function useLocalData(): Repository {
   const isBusy = ref(false)
   const ready = ref(false)
 
   const { notes } = useNoteStore()
+  const store = useDataStore()
 
   const db = ref<IDBPDatabase<Schema>>()
 
@@ -83,7 +85,12 @@ export function useLocalData(): Repository {
   }
 
   async function getData() {
+    store.ready = false
 
+    if (!db.value)
+      throw new Error('no DB')
+
+    store.data = await db.value.getAll('readings')
   }
 
   return { isBusy, ready, patchReading, putReading, deleteReading, getData }

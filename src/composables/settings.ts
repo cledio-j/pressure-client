@@ -41,6 +41,9 @@ function getDefault(): Settings {
     },
     data: {
       preferred: 'server',
+      server: true,
+      local: true,
+      lastSync: undefined,
     },
     language: 'de',
     dark: false,
